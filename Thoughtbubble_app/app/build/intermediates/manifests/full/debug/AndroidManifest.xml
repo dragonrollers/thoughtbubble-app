@@ -25,6 +25,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="edu.stanford.cs147.thoughtbubble_app.ProfilePage" />
+        <activity android:name="edu.stanford.cs147.thoughtbubble_app.Ask" />
+        <activity android:name="edu.stanford.cs147.thoughtbubble_app.Answer" />
     </application>
 
 </manifest>

@@ -1,6 +1,10 @@
 [
     {
-        "merged": "/Users/Jenny/Desktop/thoughtbubble-app/Thoughtbubble_app/app/build/intermediates/res/merged/debug/mipmap-xxxhdpi/ic_launcher.png",
-        "source": "/Users/Jenny/Desktop/thoughtbubble-app/Thoughtbubble_app/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
+        "merged": "C:\\Users\\Jenny\\Desktop\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi\\ic_launcher.png",
+        "source": "C:\\Users\\Jenny\\Desktop\\thoughtbubble-app\\Thoughtbubble_app\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Grace\\Documents\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi\\ic_launcher.png",
+        "source": "C:\\Users\\Grace\\Documents\\thoughtbubble-app\\Thoughtbubble_app\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
     }
 ]
