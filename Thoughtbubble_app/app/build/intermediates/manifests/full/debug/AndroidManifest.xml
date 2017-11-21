@@ -28,6 +28,7 @@
         <activity android:name="edu.stanford.cs147.thoughtbubble_app.ProfilePage" />
         <activity android:name="edu.stanford.cs147.thoughtbubble_app.Ask" />
         <activity android:name="edu.stanford.cs147.thoughtbubble_app.Answer" />
+        <activity android:name="edu.stanford.cs147.thoughtbubble_app.AskSelectActivity" />
     </application>
 
 </manifest>

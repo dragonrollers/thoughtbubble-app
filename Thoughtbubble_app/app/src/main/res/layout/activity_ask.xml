@@ -13,8 +13,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:orientation="vertical">
 
         <TextView
@@ -25,12 +25,13 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text = "--select--"/>
+            android:text = "--select--"
+            android:id="@+id/ask_select_button"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="5"
         android:orientation="vertical">
 
@@ -44,6 +45,25 @@
             android:layout_height="match_parent"
             android:background="@color/tbLightGrey"
             />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation = "horizontal"
+        android:layout_weight="1">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/ask_cancel"
+            android:text="Cancel"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/ask_send"
+            android:text="Send"/>
     </LinearLayout>
 
 </LinearLayout>
