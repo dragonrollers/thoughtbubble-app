@@ -44,6 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/tbLightGrey"
+            android:id="@+id/ask_input_text"
             />
     </LinearLayout>
 

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class Ask extends AppCompatActivity {
@@ -50,11 +51,17 @@ public class Ask extends AppCompatActivity {
                     startActivityForResult(selectIntent, SELECT_END_CODE);
                 } else {
                     //TODO: Database helper method is a stub
-                    DBH.writeAskToDatabase(null, sendTo);
+                    //TODO: error checking, don't allow sending of blank messages
+                    DBH.writeAskToDatabase(getInputText(), sendTo);
                     finish();
                 }
             }
         });
+    }
+
+    private String getInputText(){
+        EditText askText = (EditText) findViewById(R.id.ask_input_text);
+        return askText.getText().toString();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -66,7 +73,7 @@ public class Ask extends AppCompatActivity {
             Toast.makeText(this, "Send To: " + sendTo, Toast.LENGTH_SHORT).show();
         }
         if (requestCode == SELECT_END_CODE) {
-            DBH.writeAskToDatabase(null, sendTo);
+            DBH.writeAskToDatabase(getInputText(), sendTo);
             finish();
         }
     }
