@@ -20,7 +20,8 @@
         <activity android:name=".AnswerUnansweredActivity" />
         <activity android:name=".AskSelectActivity" />
         <activity android:name=".AnswerAnsweredActivity" />
-        <activity android:name=".SeeDetailedQuestion"></activity>
+        <activity android:name=".SeeDetailedQuestion" />
+        <activity android:name=".AnswerWriteActivity"></activity>
     </application>
 
 </manifest>

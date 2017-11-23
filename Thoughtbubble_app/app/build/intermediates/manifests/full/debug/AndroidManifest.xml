@@ -31,6 +31,7 @@
         <activity android:name="edu.stanford.cs147.thoughtbubble_app.AskSelectActivity" />
         <activity android:name="edu.stanford.cs147.thoughtbubble_app.AnswerAnsweredActivity" />
         <activity android:name="edu.stanford.cs147.thoughtbubble_app.SeeDetailedQuestion" />
+        <activity android:name="edu.stanford.cs147.thoughtbubble_app.AnswerWriteActivity" />
     </application>
 
 </manifest>
