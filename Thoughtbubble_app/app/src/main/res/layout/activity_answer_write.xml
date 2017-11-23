@@ -52,7 +52,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your Revised Question" />
+            android:text="Your Answer" />
 
         <EditText
             android:layout_width="wrap_content"
