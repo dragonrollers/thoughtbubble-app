@@ -4,12 +4,12 @@
         "source": "C:\\Users\\Jenny\\Desktop\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\select_dialog_singlechoice_material.xml"
     },
     {
-        "merged": "C:\\Users\\Jenny\\Desktop\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_bar_view_list_nav_layout.xml",
-        "source": "C:\\Users\\Jenny\\Desktop\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_action_bar_view_list_nav_layout.xml"
-    },
-    {
         "merged": "C:\\Users\\Grace\\Documents\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_ask_select.xml",
         "source": "C:\\Users\\Grace\\Documents\\thoughtbubble-app\\Thoughtbubble_app\\app\\src\\main\\res\\layout\\activity_ask_select.xml"
+    },
+    {
+        "merged": "C:\\Users\\Jenny\\Desktop\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_bar_view_list_nav_layout.xml",
+        "source": "C:\\Users\\Jenny\\Desktop\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_action_bar_view_list_nav_layout.xml"
     },
     {
         "merged": "C:\\Users\\Jenny\\Desktop\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_part_time.xml",
@@ -28,12 +28,12 @@
         "source": "C:\\Users\\Jenny\\Desktop\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_action_bar_up_container.xml"
     },
     {
-        "merged": "C:\\Users\\Grace\\Documents\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_part_time.xml",
-        "source": "C:\\Users\\Grace\\Documents\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\notification_template_part_time.xml"
-    },
-    {
         "merged": "C:\\Users\\Grace\\Documents\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\res\\merged\\debug\\layout\\support_simple_spinner_dropdown_item.xml",
         "source": "C:\\Users\\Grace\\Documents\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\support_simple_spinner_dropdown_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\Grace\\Documents\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_part_time.xml",
+        "source": "C:\\Users\\Grace\\Documents\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\notification_template_part_time.xml"
     },
     {
         "merged": "C:\\Users\\Jenny\\Desktop\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_screen_toolbar.xml",
@@ -270,6 +270,10 @@
     {
         "merged": "C:\\Users\\Jenny\\Desktop\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_screen_simple_overlay_action_mode.xml",
         "source": "C:\\Users\\Jenny\\Desktop\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout\\abc_screen_simple_overlay_action_mode.xml"
+    },
+    {
+        "merged": "C:\\Users\\Grace\\Documents\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_see_detailed_question.xml",
+        "source": "C:\\Users\\Grace\\Documents\\thoughtbubble-app\\Thoughtbubble_app\\app\\src\\main\\res\\layout\\activity_see_detailed_question.xml"
     },
     {
         "merged": "C:\\Users\\Grace\\Documents\\thoughtbubble-app\\Thoughtbubble_app\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_screen_toolbar.xml",

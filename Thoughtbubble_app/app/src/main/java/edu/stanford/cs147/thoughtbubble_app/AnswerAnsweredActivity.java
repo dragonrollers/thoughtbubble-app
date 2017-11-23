@@ -33,8 +33,8 @@ public class AnswerAnsweredActivity extends AppCompatActivity implements Adapter
     public void onItemClick(AdapterView<?> list, View row, int index, long rowID) {
         String clickedName = answeredQArray.get(index);
         Intent intent = new Intent();
-        //get the id of the item
-
+        //TODO: add the question id as an int to the intent
+        //TODO: launch the question activity
     }
 
     /**
