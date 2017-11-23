@@ -13,7 +13,7 @@ public class ProfilePage extends AppCompatActivity {
 
         loadProfileText();
     }
-    
+
     private void loadProfileText() {
         //TODO: load these from databases using the id of the user
         String name = "Sample Name";
