@@ -32,9 +32,10 @@ public class AnswerAnsweredActivity extends AppCompatActivity implements Adapter
     @Override
     public void onItemClick(AdapterView<?> list, View row, int index, long rowID) {
         String clickedName = answeredQArray.get(index);
-        Intent intent = new Intent();
+        Intent writeAnswerActivity = new Intent(this, AnswerWriteActivity.class);
         //TODO: add the question id as an int to the intent
-        //TODO: launch the question activity
+        writeAnswerActivity.putExtra("questionID", 123);
+        startActivity(writeAnswerActivity);
     }
 
     /**

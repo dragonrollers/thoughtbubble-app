@@ -32,8 +32,10 @@ public class AnswerUnansweredActivity extends AppCompatActivity implements Adapt
     @Override
     public void onItemClick(AdapterView<?> list, View row, int index, long rowID) {
         String clickedName = unansweredQArray.get(index);
-        Intent intent = new Intent();
-        //get the id of the item
+        Intent writeAnswerActivity = new Intent(this, AnswerWriteActivity.class);
+        //TODO: add the question id as an int to the intent
+        writeAnswerActivity.putExtra("questionID", 123);
+        startActivity(writeAnswerActivity);
 
     }
 
