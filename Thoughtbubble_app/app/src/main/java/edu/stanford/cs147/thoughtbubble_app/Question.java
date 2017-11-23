@@ -5,68 +5,28 @@ package edu.stanford.cs147.thoughtbubble_app;
  */
 
 public class Question {
-    private String questionText;
-    private String answerText;
-    private String answerName;
-    private int questionID;
+    public String questionText;
+    public String answerText;
+    public String critiqueText;
+    public String timestamp;
+    public int answererID;
+    public int questionerID;
+    public int questionID;
 
-    public Question(String questionText) {
-        this.questionText = questionText;
-        this.answerText = null;
-        this.answerName = null;
-        this.questionID = -1;
-    }
-
-    public Question(String questionText, int questionID) {
-        this.questionText = questionText;
-        this.answerText = null;
-        this.answerName = null;
-        this.questionID = questionID;
-    }
-
-    public Question(String questionText, String answerText, String answerName) {
+    /**
+     * CONSTRUCTOR: question
+     * ---------------------
+     * This constructor is intended for Questions which have been pulled from the
+     * database. Thus, all fields should be able to be filled. If there is no
+     * critique text, then a null string can be passed in instead.
+     */
+    public Question(String questionText, String answerText, String critiqueText, String timestamp, int answererID, int questionerID, int questionID) {
         this.questionText = questionText;
         this.answerText = answerText;
-        this.answerName = answerName;
-        this.questionID = -1;
-    }
-
-    public Question(String questionText, String answerText, String answerName, int questionID) {
-        this.questionText = questionText;
-        this.answerText = answerText;
-        this.answerName = answerName;
+        this.critiqueText = critiqueText;
+        this.timestamp = timestamp;
+        this.answererID = answererID;
+        this.questionerID = questionerID;
         this.questionID = questionID;
-    }
-
-    public void setQuestionText(String questionText) {
-        this.questionText = questionText;
-    }
-
-    public void setAnswerText(String answerText) {
-        this.answerText = answerText;
-    }
-
-    public void setAnswerName(String answerName) {
-        this.answerName = answerName;
-    }
-
-    public void setQuestionID(int questionID) {
-        this.questionID = questionID;
-    }
-
-    public String getQuestionText() {
-        return this.questionText;
-    }
-
-    public String getAnswerText() {
-        return this.answerText;
-    }
-
-    public String getAnswerName() {
-        return this.answerName;
-    }
-
-    public int getQuestionID() {
-        return this.questionID;
     }
 }
