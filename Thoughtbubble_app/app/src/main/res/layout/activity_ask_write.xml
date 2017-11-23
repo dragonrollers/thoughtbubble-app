@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingBottom="0dp"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="16dp"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="0dp"
     tools:context="edu.stanford.cs147.thoughtbubble_app.AskWriteActivity">
 
     <LinearLayout
@@ -21,57 +21,65 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="To"
-            android:textSize="18dp"/>
+            android:textSize="18dp" />
 
         <Button
+            android:id="@+id/ask_select_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text = "--select--"
-            android:textSize="18dp"
-            android:id="@+id/ask_select_button"/>
+            android:text="--select--"
+            android:textSize="18dp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5"
+        android:layout_weight="4"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
             android:text="Your Question"
-            android:textSize="18dp"
-            android:paddingBottom="8dp"/>
+            android:textSize="18dp" />
 
         <EditText
+            android:id="@+id/ask_input_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/tbLightGrey"
-            android:id="@+id/ask_input_text"
-            />
+            android:background="@color/tbLightGrey" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation = "horizontal"
         android:layout_weight="1"
-        android:paddingBottom="0dp">
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingTop="16dp">
+
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="18dp"
             android:id="@+id/ask_cancel"
-            android:text="Cancel"/>
-        <Button
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
             android:layout_weight="1"
-            android:textSize="18dp"
+            android:background="@drawable/whitetealbutton"
+            android:text="Cancel"
+            android:textColor="@color/tbTeal"
+            android:textSize="18dp" />
+
+        <Button
             android:id="@+id/ask_send"
-            android:text="Send"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/tealtealbutton"
+            android:text="Send"
+            android:textColor="@color/colorWhite"
+            android:textSize="18dp" />
     </LinearLayout>
 
 </LinearLayout>
