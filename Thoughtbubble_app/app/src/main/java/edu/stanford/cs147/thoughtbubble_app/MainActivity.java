@@ -19,12 +19,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void AnswerPage(View view) {
-        Intent intent = new Intent(this, Answer.class);
+        Intent intent = new Intent(this, AnswerUnansweredActivity.class);
         startActivity(intent);
     }
 
     public void AskPage(View view) {
-        Intent intent = new Intent(this, Ask.class);
+        Intent intent = new Intent(this, AskWriteActivity.class);
         startActivity(intent);
     }
 

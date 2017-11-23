@@ -16,8 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ProfilePage" />
-        <activity android:name=".Ask" />
-        <activity android:name=".Answer" />
+        <activity android:name=".AskWriteActivity" />
+        <activity android:name=".AnswerUnansweredActivity" />
         <activity android:name=".AskSelectActivity"></activity>
     </application>
 

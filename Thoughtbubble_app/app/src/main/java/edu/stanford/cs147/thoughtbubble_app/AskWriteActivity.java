@@ -1,7 +1,6 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class Ask extends AppCompatActivity {
+public class AskWriteActivity extends AppCompatActivity {
 
     private String sendTo;
     private int SELECT_CONT_CODE = 111;
@@ -28,7 +27,7 @@ public class Ask extends AppCompatActivity {
         Button selectButton = (Button) findViewById(R.id.ask_select_button);
         selectButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent selectIntent = new Intent(Ask.this, AskSelectActivity.class);
+                Intent selectIntent = new Intent(AskWriteActivity.this, AskSelectActivity.class);
                 startActivityForResult(selectIntent, SELECT_CONT_CODE);
             }
         });
@@ -47,7 +46,7 @@ public class Ask extends AppCompatActivity {
 
                 if (sendTo == null) {
                     //A sendee has not been set, so we launch the select activity
-                    Intent selectIntent = new Intent(Ask.this, AskSelectActivity.class);
+                    Intent selectIntent = new Intent(AskWriteActivity.this, AskSelectActivity.class);
                     startActivityForResult(selectIntent, SELECT_END_CODE);
                 } else {
                     //TODO: Database helper method is a stub

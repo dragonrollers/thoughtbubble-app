@@ -3,7 +3,7 @@ package edu.stanford.cs147.thoughtbubble_app;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class Answer extends AppCompatActivity {
+public class AnswerUnansweredActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
