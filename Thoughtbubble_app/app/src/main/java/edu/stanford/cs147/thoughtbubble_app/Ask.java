@@ -59,7 +59,7 @@ public class Ask extends AppCompatActivity {
         });
     }
 
-    private String getInputText(){
+    private String getInputText() {
         EditText askText = (EditText) findViewById(R.id.ask_input_text);
         return askText.getText().toString();
     }
@@ -70,6 +70,8 @@ public class Ask extends AppCompatActivity {
             //Came back from select activity
             sendTo = intent.getStringExtra("sendTo");
             //TODO: remove this, the toast text is for testing
+            Button selectButton = (Button) findViewById(R.id.ask_select_button);
+            selectButton.setText(sendTo);
             Toast.makeText(this, "Send To: " + sendTo, Toast.LENGTH_SHORT).show();
         }
         if (requestCode == SELECT_END_CODE) {
