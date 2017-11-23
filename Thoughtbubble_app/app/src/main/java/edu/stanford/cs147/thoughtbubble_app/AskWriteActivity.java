@@ -10,10 +10,12 @@ import android.widget.Toast;
 
 public class AskWriteActivity extends AppCompatActivity {
 
-    private String sendTo;
-    private int SELECT_CONT_CODE = 111;
-    private int SELECT_END_CODE = 222;
     private DatabaseHelper DBH;
+    private String sendTo;
+
+    //These request codes help identify which activity returned to this current activity
+    private int SELECT_CONT_CODE = 111; //Select activity returned, continue to write question
+    private int SELECT_END_CODE = 222; //Select activity returned, send question and exit
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,15 +60,30 @@ public class AskWriteActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * METHOD: getInputText
+     * --------------------
+     * Helper function that retrieves whatever the user answered into the input text box
+     * @return
+     */
     private String getInputText() {
         EditText askText = (EditText) findViewById(R.id.ask_input_text);
         return askText.getText().toString();
     }
 
+    /**
+     * METHOD: onActivityResult
+     * ------------------------
+     * This method will be called when an activity called with startActivityForResult returns.
+     * It's used to handle the two different cases of return from the select person activity
+     * @param requestCode
+     * @param resultCode
+     * @param intent
+     */
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == SELECT_CONT_CODE || requestCode == SELECT_END_CODE) {
-            //Came back from select activity
+            //Came back from select activity, load results into sendTo variable
             sendTo = intent.getStringExtra("sendTo");
             //TODO: remove this, the toast text is for testing
             Button selectButton = (Button) findViewById(R.id.ask_select_button);
@@ -74,6 +91,8 @@ public class AskWriteActivity extends AppCompatActivity {
             Toast.makeText(this, "Send To: " + sendTo, Toast.LENGTH_SHORT).show();
         }
         if (requestCode == SELECT_END_CODE) {
+            //was reached by hitting send, then launching the select person activity so the current
+            //activity should just write to database and return
             DBH.writeAskToDatabase(getInputText(), sendTo);
             finish();
         }
