@@ -20,11 +20,13 @@ public class AnswerAnsweredActivity extends AppCompatActivity implements Adapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer_answered);
 
+        answeredQArray = new ArrayList<>(); //TODO: actually load the answered question list
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_list_item_1, answeredQArray
         );
 
-        ListView list = (ListView) findViewById(R.id.ask_friends_list);
+        ListView list = (ListView) findViewById(R.id.ask_answered_list);
         list.setOnItemClickListener(this);
         list.setAdapter(adapter);
     }
