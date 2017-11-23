@@ -32,19 +32,7 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
         );
 
         ListView list = (ListView) findViewById(R.id.ask_friends_list);
-        list.setOnItemClickListener(
-                this
-//                new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                        String clickedName = myArray.get(position);
-//                        Intent intent = new Intent();
-//                        intent.putExtra("sendTo", clickedName);
-//                        setResult(RESULT_OK, intent);
-//                        finish();
-//                    }
-//                }
-        );
+        list.setOnItemClickListener(this);
         list.setAdapter(adapter);
     }
 
@@ -57,11 +45,4 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
         finish();
     }
 
-    //TODO: remove
-    public void SendDummyResult(View view) {
-        Intent intent = new Intent();
-        intent.putExtra("sendTo", "Dummy");
-        setResult(RESULT_OK, intent);
-        finish();
-    }
 }
