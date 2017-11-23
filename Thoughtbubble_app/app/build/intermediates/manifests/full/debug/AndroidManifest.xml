@@ -26,9 +26,10 @@
             </intent-filter>
         </activity>
         <activity android:name="edu.stanford.cs147.thoughtbubble_app.ProfilePage" />
-        <activity android:name="edu.stanford.cs147.thoughtbubble_app.Ask" />
-        <activity android:name="edu.stanford.cs147.thoughtbubble_app.Answer" />
+        <activity android:name="edu.stanford.cs147.thoughtbubble_app.AskWriteActivity" />
+        <activity android:name="edu.stanford.cs147.thoughtbubble_app.AnswerUnansweredActivity" />
         <activity android:name="edu.stanford.cs147.thoughtbubble_app.AskSelectActivity" />
+        <activity android:name="edu.stanford.cs147.thoughtbubble_app.AnswerAnsweredActivity" />
     </application>
 
 </manifest>
