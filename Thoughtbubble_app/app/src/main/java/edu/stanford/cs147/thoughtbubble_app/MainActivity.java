@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void AnswerPage(View view) {
-        Intent intent = new Intent(this, AnswerUnansweredActivity.class);
+        Intent intent = new Intent(this, AnswerListActivity.class);
         startActivity(intent);
     }
 
