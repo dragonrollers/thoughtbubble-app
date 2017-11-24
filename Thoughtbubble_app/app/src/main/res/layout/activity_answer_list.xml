@@ -12,9 +12,10 @@
     tools:context="edu.stanford.cs147.thoughtbubble_app.AnswerListActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:orientation="horizontal"
+        android:layout_gravity="right"
         android:paddingBottom="16dp">
 
         <TextView
