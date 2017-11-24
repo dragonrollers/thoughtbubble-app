@@ -17,9 +17,8 @@
         </activity>
         <activity android:name=".ProfilePage" />
         <activity android:name=".AskWriteActivity" />
-        <activity android:name=".AnswerUnansweredActivity" />
+        <activity android:name=".AnswerListActivity" />
         <activity android:name=".AskSelectActivity" />
-        <activity android:name=".AnswerAnsweredActivity" />
         <activity android:name=".SeeDetailedQuestion" />
         <activity android:name=".AnswerWriteActivity"></activity>
     </application>
