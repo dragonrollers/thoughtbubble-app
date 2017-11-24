@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class AnswerWriteActivity extends AppCompatActivity {
@@ -59,6 +60,7 @@ public class AnswerWriteActivity extends AppCompatActivity {
         String revisedQuestionText = revisedQuestion.getText().toString();
         String answerText = answer.getText().toString();
 
+        Toast.makeText(this, "Answer Sent!", Toast.LENGTH_SHORT).show();
         //TODO: load these fields into the database
         finish();
     }

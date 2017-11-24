@@ -54,6 +54,7 @@ public class AskWriteActivity extends AppCompatActivity {
                     //TODO: Database helper method is a stub
                     //TODO: error checking, don't allow sending of blank messages
                     DBH.writeAskToDatabase(getInputText(), sendTo);
+                    Toast.makeText(AskWriteActivity.this, "Ask Sent!", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -64,6 +65,7 @@ public class AskWriteActivity extends AppCompatActivity {
      * METHOD: getInputText
      * --------------------
      * Helper function that retrieves whatever the user answered into the input text box
+     *
      * @return
      */
     private String getInputText() {
@@ -76,6 +78,7 @@ public class AskWriteActivity extends AppCompatActivity {
      * ------------------------
      * This method will be called when an activity called with startActivityForResult returns.
      * It's used to handle the two different cases of return from the select person activity
+     *
      * @param requestCode
      * @param resultCode
      * @param intent
@@ -94,6 +97,7 @@ public class AskWriteActivity extends AppCompatActivity {
             //was reached by hitting send, then launching the select person activity so the current
             //activity should just write to database and return
             DBH.writeAskToDatabase(getInputText(), sendTo);
+            Toast.makeText(this, "Ask Sent!", Toast.LENGTH_SHORT).show();
             finish();
         }
     }

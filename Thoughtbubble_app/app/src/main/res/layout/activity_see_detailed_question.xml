@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
     android:orientation="vertical"
     android:paddingBottom="16dp"
     android:paddingLeft="16dp"
@@ -14,13 +15,18 @@
         android:id="@+id/detailedQ_question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -35,14 +41,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="2">
+        android:layout_weight="2"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thoughts (Private)"
-            android:paddingBottom="8dp"/>
+            android:paddingBottom="8dp"
+            android:text="Thoughts (Private)" />
 
         <EditText
             android:id="@+id/detailedQ_thought_input"
@@ -51,9 +57,10 @@
             android:background="@color/tbLightGrey" />
 
     </LinearLayout>
+
     <Button
+        android:id="@+id/discoverQ_saveThought_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save to Board"
-        android:id="@+id/discoverQ_saveThought_button"/>
+        android:text="Save to Board" />
 </LinearLayout>
