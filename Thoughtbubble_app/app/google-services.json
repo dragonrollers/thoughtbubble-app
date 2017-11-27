@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "447113437472",
+    "firebase_url": "https://thoughtbubble-app.firebaseio.com",
+    "project_id": "thoughtbubble-app",
+    "storage_bucket": "thoughtbubble-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447113437472:android:a6c6005d5b8f538e",
+        "android_client_info": {
+          "package_name": "edu.stanford.cs147.thoughtbubble_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "447113437472-7uvp7uffir54tivle892o80red4c33l9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.stanford.cs147.thoughtbubble_app",
+            "certificate_hash": "ecb801c26e5ee7eee21fc52e3a3ab535c6cc1ed6"
+          }
+        },
+        {
+          "client_id": "447113437472-qti5jnnsbdj38ujdivpcgdsq5gbb2lku.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.stanford.cs147.thoughtbubble_app",
+            "certificate_hash": "ab2f33f9e5537fd6700c101d34b41a8edd64651a"
+          }
+        },
+        {
+          "client_id": "447113437472-3hred4k3riaem14vsm4ji42uqgupinmd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBP2FZAqcetoftawrxXwXMsYVTRbrqYgj8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "447113437472-3hred4k3riaem14vsm4ji42uqgupinmd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
