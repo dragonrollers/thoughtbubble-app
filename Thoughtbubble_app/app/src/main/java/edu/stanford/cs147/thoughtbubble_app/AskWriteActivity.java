@@ -3,14 +3,21 @@ package edu.stanford.cs147.thoughtbubble_app;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
 public class AskWriteActivity extends AppCompatActivity {
 
     private DatabaseHelper DBH;
+
+
     private String sendTo;
 
     //These request codes help identify which activity returned to this current activity
@@ -101,4 +108,6 @@ public class AskWriteActivity extends AppCompatActivity {
             finish();
         }
     }
+
+
 }

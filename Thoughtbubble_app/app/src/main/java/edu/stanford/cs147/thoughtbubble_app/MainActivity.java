@@ -3,34 +3,53 @@ package edu.stanford.cs147.thoughtbubble_app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
+    // For debugging
+    private static final String TAG = "MainActivity";
+
+    // Firebase
+    private DatabaseHelper mDatabaseHelper;
+    private ChildEventListener allQuestionsListener;
+
     ArrayList<String> questionArray;
+    private ArrayAdapter<String> questionAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        questionArray = new ArrayList<>();
+        questionArray = new ArrayList<String>();
         questionArray.add("Question 1");
         questionArray.add("Question 2");
         questionArray.add("Question 3");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+        questionAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_list_item_1, questionArray
         );
 
         ListView list = (ListView) findViewById(R.id.feed_list);
         list.setOnItemClickListener(this);
-        list.setAdapter(adapter);
+        list.setAdapter(questionAdapter);
+
+
+        Log.d(TAG, "About to create database helper");
+        mDatabaseHelper = DatabaseHelper.getInstance();
+        attachAllQuestionsReadListener();
+
     }
 
     @Override
@@ -61,4 +80,43 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void DiscoverPage(View view) {
         // controlled by the main page
     }
+
+
+    // This listener listens for any content added to the "questions" child of the database and when anything
+    // is added, the question's text is added to the questionAdapter on the Discover page
+    private void attachAllQuestionsReadListener(){
+        if (allQuestionsListener == null) { // It start out null eventually when we add authentication
+            allQuestionsListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Log.d(TAG, "IN ATTACH DATABASE READ LISTENER"); // For debugging
+                    Question question = dataSnapshot.getValue(Question.class);
+                    Log.d(TAG, question.toString()); // For debugging
+
+                    // TODO store more than just question text in question array
+                    questionAdapter.add(question.questionText);
+                }
+
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+
+                public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
+                public void onCancelled(DatabaseError databaseError) {}
+            };
+
+            mDatabaseHelper.questions.addChildEventListener(allQuestionsListener);
+        }
+    }
+
+    // Method to detatch the AllQuestionsReadListener (really just an example of how we would detatch such a listener)
+    // Methods like this will be used once we do authentication
+    private void detachAllQuestionsReadListener(){
+        if (allQuestionsListener != null) {
+            mDatabaseHelper.questions.removeEventListener(allQuestionsListener);
+            allQuestionsListener = null;
+        }
+    }
+
 }
