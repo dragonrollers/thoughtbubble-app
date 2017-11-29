@@ -1,17 +1,12 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 
 public class AskWriteActivity extends AppCompatActivity {
 
@@ -59,7 +54,6 @@ public class AskWriteActivity extends AppCompatActivity {
                     Intent selectIntent = new Intent(AskWriteActivity.this, AskSelectActivity.class);
                     startActivityForResult(selectIntent, SELECT_END_CODE);
                 } else {
-                    //TODO: Database helper method is a stub
                     //TODO: error checking, don't allow sending of blank messages
                     DBH.writeAskToDatabase(getInputText(), sendTo[0]);
                     Toast.makeText(AskWriteActivity.this, "Ask Sent!", Toast.LENGTH_SHORT).show();

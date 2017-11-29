@@ -3,7 +3,6 @@ package edu.stanford.cs147.thoughtbubble_app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         list.setAdapter(questionAdapter);
 
 
-        Log.d(TAG, "About to create database helper");
+        // Attach a listener to the adapter to populate it with the questions in the DB
         mDatabaseHelper = DatabaseHelper.getInstance();
         attachAllQuestionsReadListener();
 
@@ -88,10 +87,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if (allQuestionsListener == null) { // It start out null eventually when we add authentication
             allQuestionsListener = new ChildEventListener() {
                 @Override
+
+                // Whenever a child is added to the "questions" part of the database, add the new question to the adapter
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Log.d(TAG, "IN ATTACH DATABASE READ LISTENER"); // For debugging
+
                     Question question = dataSnapshot.getValue(Question.class);
-                    Log.d(TAG, question.toString()); // For debugging
 
                     // TODO store more than just question text in question array
                     questionAdapter.add(question.questionText);

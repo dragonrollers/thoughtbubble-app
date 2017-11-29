@@ -34,19 +34,14 @@ class DatabaseHelper {
     private ArrayList<Question> questionArray = new ArrayList<Question>();
 
     private DatabaseHelper() {
-        Log.d(TAG, "BEGIN DATABASE HELPER");
 
-        //TODO: initialize class here by establishing a connection to the db
-        // Write a message to the database
+        // Create references to the database in various places
         this.database = FirebaseDatabase.getInstance();
-
-
-        Log.d(TAG, "BEGIN DATABASE HELPER2");
 
         databaseReference = database.getReference();
         questions = database.getReference().child("questions");
         users = database.getReference().child("users");
-        Log.d(TAG, "END DATABASE HELPER");
+
     }
 
 
@@ -61,14 +56,16 @@ class DatabaseHelper {
         // TODO change once we have auth
         String thisUserID = THIS_USER_ID;
 
+        // Create Question object from given data
         Question newQuestion = new Question();
         newQuestion.setQuestionText(questionText);
         newQuestion.setAnswererID(sendToID);
         newQuestion.setQuestionerID(thisUserID);
 
-
         // TODO eventually
         //Date timestamp = Calendar.getInstance().getTime();
+
+
 
 
         // Update all relevant parts of the database atomically
@@ -76,16 +73,21 @@ class DatabaseHelper {
         DatabaseReference newQuestionRef = questions.push();
         String newQuestionKey = newQuestionRef.getKey();
 
+
+
         // Create data to update
         Map updatedData = new HashMap();
 
+        // The question itself
         String questionDataPath = "questions" + newQuestionKey;
         updatedData.put(questionDataPath, newQuestion);
 
+        // For the question asker
         String newOutgoingQuestionKey = users.child(thisUserID).push().getKey();
         String questionerDataPath = "users/" + thisUserID + "/outgoingQuestions/" + newOutgoingQuestionKey;
         updatedData.put(questionerDataPath, newQuestionKey);
 
+        // For the question answerer
         String newIncomingQuestionKey = users.child(sendToID).push().getKey();
         String answererDataPath = "users/" + sendToID + "/incomingQuestions/" + newIncomingQuestionKey;
         updatedData.put(answererDataPath, newQuestionKey);

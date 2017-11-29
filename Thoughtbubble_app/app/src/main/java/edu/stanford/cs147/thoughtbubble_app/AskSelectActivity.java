@@ -1,15 +1,14 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,6 +51,7 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
         myArray.add("Jenny");
 
         //TODO: will have to use a different layout in order to accomodate more than one string
+        // TODO this is cleared and repopulated w/info from the db with the listener - do we need myArray anymore?
         friendsAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_list_item_1, myArray
         );
@@ -60,6 +60,8 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
         list.setOnItemClickListener(this); //connects onItemClick function to clicking list items
         list.setAdapter(friendsAdapter); //displays the list in the xml
 
+
+        // Attach a listener to the friends list in the DB to populate the adapter
         friendsArray = new ArrayList<String[]>();
         DBH = DatabaseHelper.getInstance();
         attachFriendsReadListener();
@@ -93,16 +95,20 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
     //      ^ That might not be the best practice, so we can change if necessary!
     private void attachFriendsReadListener(){
         if (friendsListener == null) { // It start out null eventually when we add authentication
+
+            // Define the listener
             friendsListener = new ValueEventListener() {
 
                 @Override
                 // TODO is there a better way to do this that doesn't require pulling the whole list every time?
+                // Whenever any data changes in the friends list, clear the adapter and populate it with the updated data
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Log.d(TAG, "IN ATTACH FRIENDS READ LISTENER");
 
+                    // Get the updated friends list
                     GenericTypeIndicator<ArrayList<HashMap<String, String>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, String>>>() {};
                     ArrayList<HashMap<String, String>> friendList = dataSnapshot.getValue(t);
 
+                    // Populate the adapter with the updated data
                     friendsAdapter.clear();
                     for (HashMap<String, String> h : friendList){
                         friendsAdapter.add(h.get("friendName"));
@@ -119,6 +125,7 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
             };
 
 
+            // Actually attach the listener
             DatabaseReference friends = DBH.users.child(THIS_USER_ID).child("friends");
             friends.addValueEventListener(friendsListener);
 
