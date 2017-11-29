@@ -10,10 +10,13 @@ public class Question {
     public String answerText;
     public String critiqueText;
     public String timestamp;
-    public int answererID;
-    public int questionerID;
-    public int questionID;
+    public String answererID;
+    public String questionerID;
+    public String questionID;
 
+
+    // Bonnie: It seems like the way Android pulls from the DB is to create an empty object and use the set methods
+    //      to fill in the content, so we might not need the other constructor unless it's useful for us otherwise
     public Question (){}
 
     /**
@@ -23,7 +26,7 @@ public class Question {
      * database. Thus, all fields should be able to be filled. If there is no
      * critique text, then a null string can be passed in instead.
      */
-    public Question(String questionText, String answerText, String critiqueText, String timestamp, int answererID, int askerID) {
+    public Question(String questionText, String answerText, String critiqueText, String timestamp, String answererID, String askerID) {
         this.questionText = questionText;
         this.answerText = answerText;
         this.critiqueText = critiqueText;
@@ -34,6 +37,8 @@ public class Question {
         // Not sure if we'll actually need this in this class, might be enough to store only in DB
         //this.questionID = questionID;
     }
+
+
 
     public String getQuestionText() {
         return questionText;
@@ -67,19 +72,19 @@ public class Question {
         this.timestamp = timestamp;
     }
 
-    public int getQuestionerID() {
+    public String getQuestionerID() {
         return questionerID;
     }
 
-    public void setQuestionerID(int ID) {
+    public void setQuestionerID(String ID) {
         this.questionerID = ID;
     }
 
-    public int getAnswererID() {
+    public String getAnswererID() {
         return answererID;
     }
 
-    public void setAnswererID(int ID) {
+    public void setAnswererID(String ID) {
         this.answererID = ID;
     }
 

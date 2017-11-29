@@ -32,6 +32,7 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
     private ValueEventListener friendsListener;
 
     private ArrayAdapter<String> friendsAdapter;
+    private ArrayList<String[]> friendsArray; // For holding the ID and name of the friends displayed
 
     ArrayList<String> myArray;
 
@@ -59,6 +60,7 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
         list.setOnItemClickListener(this); //connects onItemClick function to clicking list items
         list.setAdapter(friendsAdapter); //displays the list in the xml
 
+        friendsArray = new ArrayList<String[]>();
         DBH = DatabaseHelper.getInstance();
         attachFriendsReadListener();
 
@@ -77,10 +79,10 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
      */
     @Override
     public void onItemClick(AdapterView<?> list, View row, int index, long rowID) {
-        String clickedName = myArray.get(index);
+        // clickedFriend[0] is ID, [1] is full name
+        String[] clickedFriend = friendsArray.get(index);
         Intent intent = new Intent();
-        intent.putExtra("sendTo", clickedName);
-        //TODO: should probably also send back the ID for good measure
+        intent.putExtra("sendTo", clickedFriend);
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -98,12 +100,14 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Log.d(TAG, "IN ATTACH FRIENDS READ LISTENER");
 
-                    GenericTypeIndicator<ArrayList<HashMap<String, Object>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, Object>>>() {};
-                    ArrayList<HashMap<String, Object>> friendList = dataSnapshot.getValue(t);
+                    GenericTypeIndicator<ArrayList<HashMap<String, String>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, String>>>() {};
+                    ArrayList<HashMap<String, String>> friendList = dataSnapshot.getValue(t);
 
                     friendsAdapter.clear();
-                    for (HashMap<String, Object> h : friendList){
-                        friendsAdapter.add((String)h.get("friendName"));
+                    for (HashMap<String, String> h : friendList){
+                        friendsAdapter.add(h.get("friendName"));
+                        String[] friend = {h.get("friendID"), h.get("friendName")};
+                        friendsArray.add(friend);
                     }
 
                 }

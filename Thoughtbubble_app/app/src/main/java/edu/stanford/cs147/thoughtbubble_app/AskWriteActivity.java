@@ -18,7 +18,8 @@ public class AskWriteActivity extends AppCompatActivity {
     private DatabaseHelper DBH;
 
 
-    private String sendTo;
+    // sendTo[0] is ID, sendTo[1] is full name
+    private String[] sendTo;
 
     //These request codes help identify which activity returned to this current activity
     private int SELECT_CONT_CODE = 111; //Select activity returned, continue to write question
@@ -60,7 +61,7 @@ public class AskWriteActivity extends AppCompatActivity {
                 } else {
                     //TODO: Database helper method is a stub
                     //TODO: error checking, don't allow sending of blank messages
-                    DBH.writeAskToDatabase(getInputText(), sendTo);
+                    DBH.writeAskToDatabase(getInputText(), sendTo[0]);
                     Toast.makeText(AskWriteActivity.this, "Ask Sent!", Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -94,16 +95,16 @@ public class AskWriteActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == SELECT_CONT_CODE || requestCode == SELECT_END_CODE) {
             //Came back from select activity, load results into sendTo variable
-            sendTo = intent.getStringExtra("sendTo");
+            sendTo = intent.getStringArrayExtra("sendTo");
             //TODO: remove this, the toast text is for testing
             Button selectButton = (Button) findViewById(R.id.ask_select_button);
-            selectButton.setText(sendTo);
-            Toast.makeText(this, "Send To: " + sendTo, Toast.LENGTH_SHORT).show();
+            selectButton.setText(sendTo[1]);
+            Toast.makeText(this, "Send To: " + sendTo[1], Toast.LENGTH_SHORT).show();
         }
         if (requestCode == SELECT_END_CODE) {
             //was reached by hitting send, then launching the select person activity so the current
             //activity should just write to database and return
-            DBH.writeAskToDatabase(getInputText(), sendTo);
+            DBH.writeAskToDatabase(getInputText(), sendTo[0]);
             Toast.makeText(this, "Ask Sent!", Toast.LENGTH_SHORT).show();
             finish();
         }
