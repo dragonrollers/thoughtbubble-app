@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     // This listener listens for any content added to the "questions" child of the database and when anything
     // is added, the question's text is added to the questionAdapter on the Discover page
+    // TODO properly implement child removed/changed methods, or choose a different listener if more appropriate
     private void attachAllQuestionsReadListener(){
         if (allQuestionsListener == null) { // It start out null eventually when we add authentication
             allQuestionsListener = new ChildEventListener() {
