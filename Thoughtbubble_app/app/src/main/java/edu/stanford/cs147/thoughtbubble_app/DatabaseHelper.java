@@ -79,7 +79,7 @@ class DatabaseHelper {
         // Create data to update
         Map updatedData = new HashMap();
 
-        String questionDataPath = "questions" + newQuestionKey;
+        String questionDataPath = "questions/" + newQuestionKey;
         updatedData.put(questionDataPath, newQuestion);
 
         String newOutgoingQuestionKey = users.child(thisUserID).push().getKey();
