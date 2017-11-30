@@ -1,11 +1,13 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class AskWriteActivity extends AppCompatActivity {
@@ -24,6 +26,20 @@ public class AskWriteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ask_write);
+
+        // Setting the color of the top bar -- pretty hacky -- do not touch this block//
+        int unselected = Color.parseColor("#00cca3");
+        int selected = Color.parseColor("#016d57");
+        TextView profile = (TextView) findViewById(R.id.Profile);
+        TextView ask = (TextView) findViewById(R.id.Ask);
+        TextView discover = (TextView) findViewById(R.id.Discover);
+        TextView answer = (TextView) findViewById(R.id.Answer);
+        profile.setBackgroundColor(unselected);
+        ask.setBackgroundColor(selected);
+        answer.setBackgroundColor(unselected);
+        discover.setBackgroundColor(unselected);
+        // Setting the color of the top bar -- pretty hacky -- do not touch this block//
+
 
         sendTo = null;
         DBH = DatabaseHelper.getInstance();
@@ -102,6 +118,26 @@ public class AskWriteActivity extends AppCompatActivity {
             Toast.makeText(this, "Ask Sent!", Toast.LENGTH_SHORT).show();
             finish();
         }
+    }
+
+    public void ProfilePage(View view) {
+        Intent intent = new Intent(this, ProfilePage.class);
+        startActivity(intent);
+    }
+
+    public void AnswerPage(View view) {
+        Intent intent = new Intent(this, AnswerListActivity.class);
+        startActivity(intent);
+    }
+
+    public void AskPage(View view) {
+        Intent intent = new Intent(this, AskWriteActivity.class);
+        startActivity(intent);
+    }
+
+    public void DiscoverPage(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 

@@ -1,6 +1,7 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,6 +43,20 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ask_select);
+
+        // Setting the color of the top bar -- pretty hacky -- do not touch this block//
+        int unselected = Color.parseColor("#00cca3");
+        int selected = Color.parseColor("#016d57");
+        TextView profile = (TextView) findViewById(R.id.Profile);
+        TextView ask = (TextView) findViewById(R.id.Ask);
+        TextView discover = (TextView) findViewById(R.id.Discover);
+        TextView answer = (TextView) findViewById(R.id.Answer);
+        profile.setBackgroundColor(unselected);
+        ask.setBackgroundColor(selected);
+        answer.setBackgroundColor(unselected);
+        discover.setBackgroundColor(unselected);
+        // Setting the color of the top bar -- pretty hacky -- do not touch this block//
+
 
         //TODO: actually replace this with the real list
         //Tester list
@@ -132,5 +148,26 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
 
         }
     }
+
+    public void ProfilePage(View view) {
+        Intent intent = new Intent(this, ProfilePage.class);
+        startActivity(intent);
+    }
+
+    public void AnswerPage(View view) {
+        Intent intent = new Intent(this, AnswerListActivity.class);
+        startActivity(intent);
+    }
+
+    public void AskPage(View view) {
+        Intent intent = new Intent(this, AskWriteActivity.class);
+        startActivity(intent);
+    }
+
+    public void DiscoverPage(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
 
 }

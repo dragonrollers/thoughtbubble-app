@@ -1,12 +1,14 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +33,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Setting the color of the top bar -- pretty hacky -- do not touch this block//
+        int unselected = Color.parseColor("#00cca3");
+        int selected = Color.parseColor("#016d57");
+        TextView profile = (TextView) findViewById(R.id.Profile);
+        TextView ask = (TextView) findViewById(R.id.Ask);
+        TextView discover = (TextView) findViewById(R.id.Discover);
+        TextView answer = (TextView) findViewById(R.id.Answer);
+        profile.setBackgroundColor(unselected);
+        ask.setBackgroundColor(unselected);
+        answer.setBackgroundColor(unselected);
+        discover.setBackgroundColor(selected);
+        // Setting the color of the top bar -- pretty hacky -- do not touch this block//
+
         questionArray = new ArrayList<String>();
         questionArray.add("Question 1");
         questionArray.add("Question 2");
@@ -43,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         ListView list = (ListView) findViewById(R.id.feed_list);
         list.setOnItemClickListener(this);
         list.setAdapter(questionAdapter);
+
 
 
         // Attach a listener to the adapter to populate it with the questions in the DB

@@ -5,11 +5,50 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
     android:orientation="vertical"
-    android:paddingBottom="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
     tools:context="edu.stanford.cs147.thoughtbubble_app.SeeDetailedQuestion">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="50dp">
+
+        <Button
+            android:id="@+id/Profile"
+            android:layout_width="fill_parent"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:onClick="ProfilePage"
+            android:text="User" />
+
+        <Button
+            android:id="@+id/Discover"
+            android:layout_width="fill_parent"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:onClick="DiscoverPage"
+            android:text="Discover" />
+
+        <Button
+            android:id="@+id/Ask"
+            android:layout_width="fill_parent"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:onClick="AskPage"
+            android:text="Ask" />
+
+        <Button
+            android:id="@+id/Answer"
+            android:layout_width="fill_parent"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:onClick="AnswerPage"
+            android:text="Answer" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/detailedQ_question"
