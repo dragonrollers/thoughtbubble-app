@@ -42,6 +42,17 @@ public class ProfilePage extends AppCompatActivity {
         topicsField.setText(topics);
     }
 
+
+    public void gotoPrivateProfile(View view) {
+        // place holder for the private profile
+    }
+
+    public void gotoPublicProfile(View view) {
+        Intent intent = new Intent(this, PublicProfilePage.class);
+        startActivity(intent);
+        // place holder for the public profile
+    }
+
     public void ProfilePage(View view) {
         Intent intent = new Intent(this, ProfilePage.class);
         startActivity(intent);

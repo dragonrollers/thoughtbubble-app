@@ -20,7 +20,8 @@
         <activity android:name=".AnswerListActivity" />
         <activity android:name=".AskSelectActivity" />
         <activity android:name=".SeeDetailedQuestion" />
-        <activity android:name=".AnswerWriteActivity"></activity>
+        <activity android:name=".AnswerWriteActivity" />
+        <activity android:name=".PublicProfilePage"></activity>
     </application>
 
 </manifest>

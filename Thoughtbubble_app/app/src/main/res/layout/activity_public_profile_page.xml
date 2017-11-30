@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_profile_page"
+    android:id="@+id/activity_public_profile_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -10,7 +10,7 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     android:background="@color/colorWhite"
-    tools:context="edu.stanford.cs147.thoughtbubble_app.ProfilePage">
+    tools:context="edu.stanford.cs147.thoughtbubble_app.PublicProfilePage">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -114,11 +114,17 @@
         android:orientation="horizontal"
         android:layout_gravity="right"
         android:paddingBottom="16dp">
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Profile"
+            android:text="Ask Question"
             android:textSize="18dp" />
     </LinearLayout>
 
@@ -132,29 +138,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your Recent Questions"
-            android:layout_weight="1"
+            android:text="Recent Answers"
+            android:layout_margin="40dp"
             android:textSize="18dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="View More"
-            android:layout_weight="0.05"
-            android:textSize="18dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Your Collections"
             android:textSize="18dp" />
     </LinearLayout>
+
 </LinearLayout>
