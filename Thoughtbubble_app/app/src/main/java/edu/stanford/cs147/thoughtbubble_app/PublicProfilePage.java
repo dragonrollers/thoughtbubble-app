@@ -2,12 +2,15 @@ package edu.stanford.cs147.thoughtbubble_app;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PublicProfilePage extends AppCompatActivity {
+
+    private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,16 @@ public class PublicProfilePage extends AppCompatActivity {
         answer.setBackgroundColor(unselected);
         discover.setBackgroundColor(unselected);
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
+        fillUserInformation();
+    }
+
+    private void fillUserInformation(){
+        // TODO: Here, please let us read the firebase data!
+
+        // user profile image
+        mImageView = (ImageView) findViewById(R.id.profile_image);
+        mImageView.setImageResource(R.drawable.elsa);
+
 
     }
 
