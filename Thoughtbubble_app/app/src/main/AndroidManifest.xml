@@ -22,6 +22,21 @@
         <activity android:name=".SeeDetailedQuestion" />
         <activity android:name=".AnswerWriteActivity" />
         <activity android:name=".PublicProfilePage"></activity>
+
+
+        <!-- For facebook -->
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+
     </application>
+
+
+    <!-- For facebook -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" android:protectionLevel="signature" />
+    <meta-data android:name="com.facebook.sdk.ApplicationId"
+        android:value="@string/facebook_app_id"/>
 
 </manifest>

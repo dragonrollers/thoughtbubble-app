@@ -10,6 +10,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // Recommended by FirebaseUI auth
+        resConfigs "auto"
     }
     buildTypes {
         release {
@@ -23,10 +26,11 @@ dependencies {
     // For Firebase database
     implementation 'com.google.firebase:firebase-database:11.0.4'
 
+
+
     // For Firebase authentication
     compile 'com.google.firebase:firebase-auth:11.0.4'
     compile "com.google.android.gms:play-services-auth:11.0.4"
-
 
     // Following is version 2.2.0 instead of 3.1.0 because it has the correct dependencies
     // For some reason version 2.3.0 threw weird errors but 2.2.0 is working fine
@@ -34,7 +38,15 @@ dependencies {
     compile 'com.firebaseui:firebase-ui-auth:2.2.0'
 
     // Required only if Facebook login support is required
-    compile('com.facebook.android:facebook-android-sdk:4.27.0')
+    compile('com.facebook.android:facebook-android-sdk:4.26.0')
+
+
+
+
+    // Facebook
+    // TODO currently causes runtime error when doing gradle build
+    //compile 'com.facebook.android:facebook-login:[4,5)'
+
 
 
     compile fileTree(dir: 'libs', include: ['*.jar'])

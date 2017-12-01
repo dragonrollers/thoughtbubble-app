@@ -3,27 +3,43 @@ package edu.stanford.cs147.thoughtbubble_app;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     // For debugging
     private static final String TAG = "MainActivity";
 
-    // Firebase
+    // Firebase database
     private DatabaseHelper mDatabaseHelper;
     private ChildEventListener allQuestionsListener;
+
+    // Firebase auth
+    private FirebaseAuth auth;
+    private FirebaseAuth.AuthStateListener authListener;
+    // Choose an arbitrary request code value
+    private static final int RC_SIGN_IN = 123;
 
     ArrayList<String> questionArray;
     private ArrayAdapter<String> questionAdapter;
@@ -31,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
 
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
@@ -64,6 +82,42 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Attach a listener to the adapter to populate it with the questions in the DB
         mDatabaseHelper = DatabaseHelper.getInstance();
         attachAllQuestionsReadListener();
+
+
+        // Authentication
+        auth = FirebaseAuth.getInstance();
+        authListener = new FirebaseAuth.AuthStateListener(){
+            @Override
+            // This firebaseAuth contains whether or not user is signed in or not
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // user is signed in
+                    Log.d(TAG, "USER ALREADY SIGNED IN: " + user.getDisplayName());
+                    onSignedInInitialize();
+
+                } else {
+                    // user is signed out
+                    Log.d(TAG, "USER NOT SIGNED IN");
+                    onSignedOutCleanup();
+
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(false)
+                                    .setAvailableProviders(Arrays.asList(
+                                            new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build()
+                                            // Uncomment line below for Facebook
+                                            //new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()
+                                            )
+                                    )
+                                    .build(),
+                            RC_SIGN_IN);
+
+                }
+
+            }
+        };
 
     }
 
@@ -135,5 +189,71 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             allQuestionsListener = null;
         }
     }
+
+
+    // Auth
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(MainActivity.this, "Signed in!", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(MainActivity.this, "Sign-in canceled", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
+    // Sign-out menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sign_out_menu:
+                // sign out
+                AuthUI.getInstance().signOut(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        auth.addAuthStateListener(authListener);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        if (authListener != null) {
+            auth.removeAuthStateListener(authListener);
+        }
+        detachAllQuestionsReadListener();
+        questionAdapter.clear();
+
+    }
+
+    private void onSignedInInitialize(){
+        // Can pass in something from authentication and et any variables that need to be set
+        attachAllQuestionsReadListener();
+
+    }
+
+    private void onSignedOutCleanup(){
+        questionAdapter.clear();
+        detachAllQuestionsReadListener();
+
+    }
+
+
 
 }
