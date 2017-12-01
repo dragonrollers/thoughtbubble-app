@@ -22,7 +22,7 @@
         <activity android:name=".SeeDetailedQuestion" />
         <activity android:name=".AnswerWriteActivity" />
         <activity android:name=".PublicProfilePage" />
-        <activity android:name=".IndivBoard"></activity>
+        
     </application>
 
 </manifest>
