@@ -40,6 +40,7 @@ public class ProfilePage extends AppCompatActivity {
         // board page
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new CustomPagerAdapter(this));
+        viewPager.setPageMargin(64);
 
         loadProfileText();
         loadProfileImage();
