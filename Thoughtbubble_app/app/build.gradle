@@ -30,6 +30,9 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.3.1'
     testCompile 'junit:junit:4.12'
+
+    // board fragmented view
+    compile 'com.android.support:support-v4:25.4.0'
 }
 
 // For Firebase
