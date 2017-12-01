@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,9 +24,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // Firebase
     private DatabaseHelper mDatabaseHelper;
     private ChildEventListener allQuestionsListener;
-
-    // profile image
-    private ImageView mImageView;
 
     ArrayList<String> questionArray;
     private ArrayAdapter<String> questionAdapter;
@@ -68,18 +64,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Attach a listener to the adapter to populate it with the questions in the DB
         mDatabaseHelper = DatabaseHelper.getInstance();
         attachAllQuestionsReadListener();
-
-        fillUserInformation();
-
-    }
-
-    private void fillUserInformation(){
-        // TODO: Here, please let us read the firebase data!
-
-        // user profile image
-        mImageView = (ImageView) findViewById(R.id.profile_image);
-        mImageView.setImageResource(R.drawable.elsa);
-
 
     }
 

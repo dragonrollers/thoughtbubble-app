@@ -2,12 +2,17 @@ package edu.stanford.cs147.thoughtbubble_app;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ProfilePage extends AppCompatActivity {
+
+
+    // profile image
+    private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,7 @@ public class ProfilePage extends AppCompatActivity {
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
 
         loadProfileText();
+        loadProfileImage();
     }
 
     private void loadProfileText() {
@@ -40,6 +46,12 @@ public class ProfilePage extends AppCompatActivity {
 
         TextView topicsField = (TextView) findViewById(R.id.profile_topics);
         topicsField.setText(topics);
+    }
+
+    private void loadProfileImage(){
+        // TODO: load images from database
+        mImageView = (ImageView) findViewById(R.id.profile_image);
+        mImageView.setImageResource(R.drawable.elsa);
     }
 
 

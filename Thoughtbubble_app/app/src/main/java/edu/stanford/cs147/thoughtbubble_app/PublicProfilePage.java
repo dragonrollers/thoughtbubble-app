@@ -28,17 +28,27 @@ public class PublicProfilePage extends AppCompatActivity {
         answer.setBackgroundColor(unselected);
         discover.setBackgroundColor(unselected);
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
-        fillUserInformation();
+
+        loadProfileText();
+        loadProfileImage();
     }
 
-    private void fillUserInformation(){
-        // TODO: Here, please let us read the firebase data!
+    private void loadProfileText() {
+        //TODO: load these from databases using the id of the user
+        String name = "Sample Name";
+        String topics = "Sample Interest 1, Sample Interest 2, Sample Interest 3";
 
-        // user profile image
+        TextView nameField = (TextView) findViewById(R.id.profile_name);
+        nameField.setText(name);
+
+        TextView topicsField = (TextView) findViewById(R.id.profile_topics);
+        topicsField.setText(topics);
+    }
+
+    private void loadProfileImage(){
+        // TODO: load images from database
         mImageView = (ImageView) findViewById(R.id.profile_image);
         mImageView.setImageResource(R.drawable.elsa);
-
-
     }
 
     public void gotoPrivateProfile(View view) {
