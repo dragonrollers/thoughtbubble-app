@@ -59,6 +59,9 @@ public class PublicProfilePage extends AppCompatActivity {
 
 
     public void gotoPublicProfile(View view) {
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
         // placeholder for now
     }
 }
