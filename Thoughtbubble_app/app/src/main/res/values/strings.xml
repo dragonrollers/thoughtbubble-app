@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Thoughtbubble_app</string>
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <!-- TODO check to make sure that these app ID strings are okay -->
+    <string name="facebook_application_id" translatable="false">Thoughtbubble_app</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fbThoughtbubble_app</string>
 </resources>

@@ -20,8 +20,22 @@ android {
 }
 
 dependencies {
-    // For Firebase
+    // For Firebase database
     implementation 'com.google.firebase:firebase-database:11.0.4'
+
+    // For Firebase authentication
+    compile 'com.google.firebase:firebase-auth:11.0.4'
+    compile "com.google.android.gms:play-services-auth:11.0.4"
+
+
+    // Following is version 2.2.0 instead of 3.1.0 because it has the correct dependencies
+    // For some reason version 2.3.0 threw weird errors but 2.2.0 is working fine
+    // See https://github.com/firebase/FirebaseUI-Android for more info
+    compile 'com.firebaseui:firebase-ui-auth:2.2.0'
+
+    // Required only if Facebook login support is required
+    compile('com.facebook.android:facebook-android-sdk:4.27.0')
+
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
