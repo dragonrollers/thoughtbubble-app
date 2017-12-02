@@ -10,8 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 public class ProfilePage extends AppCompatActivity {
 
@@ -44,6 +47,62 @@ public class ProfilePage extends AppCompatActivity {
 
         loadProfileText();
         loadProfileImage();
+    }
+
+    public void EnableSave(View view) {
+
+        System.out.println("HERE");
+
+        TextSwitcher switcher = (TextSwitcher) findViewById(R.id.save_edit_switcher);
+        SwitchEditSave(view);
+        // TODO: Save these things to the database
+
+        // This is a new name.
+        EditText et=(EditText)findViewById(R.id.hidden_edit_view);
+        System.out.println("HERE11");
+        String newName = et.getText().toString();
+        System.out.println("HERE22");
+        TextView myTV = (TextView) findViewById(R.id.profile_name);
+        System.out.println("HERE33");
+        myTV.setText(newName);
+        System.out.println("HERE44");
+
+        System.out.println("HERE2");
+
+
+        // Save button disabled, change to edit button
+        TextView switcher_cur_view = (TextView) switcher.getCurrentView();
+        switcher.showNext();
+        ViewSwitcher switcher2 = (ViewSwitcher) findViewById(R.id.my_switcher);
+        switcher2.showNext();
+        System.out.println("HERE3");
+    }
+
+    private void SwitchEditSave(View view){
+        TextSwitcher switcher = (TextSwitcher) findViewById(R.id.save_edit_switcher);
+        TextView switcher_cur_view = (TextView) switcher.getCurrentView();
+        String switch_string = switcher_cur_view.getText().toString().replaceAll("\\s+","");
+        System.out.println(switch_string);
+        if (switch_string.equals("EditProfile")){
+            System.out.println("I AM HERE");
+            switcher.showNext();
+        }
+    }
+
+    public void EditProfile(View view) {
+        SwitchEditSave(view);
+        EditName(view);
+    }
+
+
+    public void EditName(View view) {
+        ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
+        switcher.showNext(); //or switcher.showPrevious();
+        TextView myTV = (TextView) switcher.findViewById(R.id.profile_name);
+        EditText et=(EditText)findViewById(R.id.hidden_edit_view);
+        String newName = et.getText().toString();
+        myTV.setText(newName);
+        SwitchEditSave(view);
     }
 
     // for the board view
@@ -89,17 +148,6 @@ public class ProfilePage extends AppCompatActivity {
         // TODO: load images from database
         mImageView = (ImageView) findViewById(R.id.profile_image);
         mImageView.setImageResource(R.drawable.elsa);
-    }
-
-
-    public void gotoPrivateProfile(View view) {
-        // place holder for the private profile
-    }
-
-    public void gotoPublicProfile(View view) {
-        Intent intent = new Intent(this, PublicProfilePage.class);
-        startActivity(intent);
-        // place holder for the public profile
     }
 
     public void ProfilePage(View view) {
