@@ -2,8 +2,9 @@ package edu.stanford.cs147.thoughtbubble_app;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,17 +12,36 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 public class AnswerListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+
+    private String TAG = "AnswerList Activity";
+
+    // TODO Change this once we have authentication
+    // *******NOTE THAT THIS IS DIFFERENT THAN THE USER THAT IS ASKING QUESTIONS (for demonstration purposes)*********
+    private String THIS_USER_ID = "1";
 
     ArrayList<String> questionArray;
     ArrayAdapter<String> adapter;
     boolean unansweredView;
 
+    // Firebase
+    private DatabaseHelper mDatabaseHelper;
+    private ChildEventListener unansweredQuestionsListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mDatabaseHelper = DatabaseHelper.getInstance();
+
         setContentView(R.layout.activity_answer_list);
 
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
@@ -47,7 +67,14 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
         list.setOnItemClickListener(this);
         list.setAdapter(adapter);
 
+        Log.d(TAG, "ABOUT TO ATTACH UNANSWERED LISTENER");
+        // Attach a listener to the adapter to populate it with the questions in the DB
+        attachUnansweredQuestionsReadListener();
+
         switchToUnansweredHeader();
+
+
+
     }
 
     @Override
@@ -78,10 +105,11 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
         dummyData.add("UnansweredQuestion 5");
 
         questionArray = dummyData;
+
     }
 
     private void loadAnsweredQuestions() {
-        System.out.println("LOAD ANSWERED QUESTINOS WAS CALLED");
+        System.out.println("LOAD ANSWERED QUESTIONS WAS CALLED");
         //TODO: the next lines of array creation should be replaced by pulling the
         //actual list of answered questions from the database
         ArrayList<String> dummyData = new ArrayList<>();
@@ -90,6 +118,8 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
         dummyData.add("AnsweredQuestion 3");
 
         questionArray = dummyData;
+
+
     }
 
     private void switchToUnansweredHeader() {
@@ -116,6 +146,10 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
         adapter.addAll(questionArray);
         adapter.notifyDataSetChanged();
         switchToUnansweredHeader();
+
+        Log.d(TAG, "ABOUT TO ATTACH UNANSWERED LISTENER");
+        // Attach a listener to the adapter to populate it with the questions in the DB
+        attachUnansweredQuestionsReadListener();
     }
 
     private void loadAnsweredContent() {
@@ -172,6 +206,57 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
     public void DiscoverPage(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+
+    // This listener listens for any content added to the "questions" child of the database and when anything
+    // is added, the question's text is added to the questionAdapter on the Discover page
+    // TODO properly implement child removed/changed methods, or choose a different listener if more appropriate
+    private void attachUnansweredQuestionsReadListener(){
+        if (unansweredQuestionsListener == null) {
+            unansweredQuestionsListener = new ChildEventListener() {
+                @Override
+
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Log.d(TAG, "IN ON CHILD ADDED");
+
+                    String questionKey = dataSnapshot.getValue(String.class);
+
+                    DatabaseReference thisQuestion = mDatabaseHelper.questions.child(questionKey);
+
+                    // Get the question from that part of the database
+                    thisQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Log.d(TAG, "IN SINGLE VALUE EVENT LISTENER");
+
+                            Question question = dataSnapshot.getValue(Question.class);
+
+                            // TODO add more than just question text
+                            adapter.add(question.questionText);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+
+                public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
+                public void onCancelled(DatabaseError databaseError) {}
+            };
+
+            DatabaseReference incomingQuestions = mDatabaseHelper.users.child(THIS_USER_ID).child("incomingQuestions");
+            incomingQuestions.addChildEventListener(unansweredQuestionsListener);
+        }
     }
 
 }

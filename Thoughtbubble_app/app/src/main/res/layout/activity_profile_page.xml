@@ -85,14 +85,9 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Image Goes Here"
-            android:textSize="45dp" />
+            android:id="@+id/profile_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
 
         <TextView
             android:id="@+id/profile_name"
@@ -156,5 +151,20 @@
             android:layout_height="wrap_content"
             android:text="Your Collections"
             android:textSize="18dp" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            android:clipToPadding="false"
+            android:gravity="center"
+            android:paddingLeft="36dp"
+            android:paddingRight="36dp"
+            />
+
     </LinearLayout>
+
 </LinearLayout>

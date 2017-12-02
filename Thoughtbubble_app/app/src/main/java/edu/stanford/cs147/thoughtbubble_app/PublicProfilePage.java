@@ -2,12 +2,15 @@ package edu.stanford.cs147.thoughtbubble_app;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PublicProfilePage extends AppCompatActivity {
+
+    private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +29,26 @@ public class PublicProfilePage extends AppCompatActivity {
         discover.setBackgroundColor(unselected);
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
 
+        loadProfileText();
+        loadProfileImage();
+    }
+
+    private void loadProfileText() {
+        //TODO: load these from databases using the id of the user
+        String name = "Sample Name";
+        String topics = "Sample Interest 1, Sample Interest 2, Sample Interest 3";
+
+        TextView nameField = (TextView) findViewById(R.id.profile_name);
+        nameField.setText(name);
+
+        TextView topicsField = (TextView) findViewById(R.id.profile_topics);
+        topicsField.setText(topics);
+    }
+
+    private void loadProfileImage(){
+        // TODO: load images from database
+        mImageView = (ImageView) findViewById(R.id.profile_image);
+        mImageView.setImageResource(R.drawable.elsa);
     }
 
     public void gotoPrivateProfile(View view) {
@@ -36,6 +59,9 @@ public class PublicProfilePage extends AppCompatActivity {
 
 
     public void gotoPublicProfile(View view) {
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
         // placeholder for now
     }
 }

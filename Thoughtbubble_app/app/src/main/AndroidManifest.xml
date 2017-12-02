@@ -21,7 +21,7 @@
         <activity android:name=".AskSelectActivity" />
         <activity android:name=".SeeDetailedQuestion" />
         <activity android:name=".AnswerWriteActivity" />
-        <activity android:name=".PublicProfilePage"></activity>
+        <activity android:name=".PublicProfilePage" />
 
 
         <!-- For facebook -->
