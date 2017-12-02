@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // For debugging
     private static final String TAG = "MainActivity";
 
+    // BONNIE IS TESTING A THING
+
     // Firebase
     private DatabaseHelper mDatabaseHelper;
     private ChildEventListener allQuestionsListener;
