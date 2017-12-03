@@ -24,23 +24,26 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
     private String TAG = "AnswerList Activity";
 
-    // TODO Change this once we have authentication
-    // *******NOTE THAT THIS IS DIFFERENT THAN THE USER THAT IS ASKING QUESTIONS (for demonstration purposes)*********
-    private String THIS_USER_ID = "1";
 
     ArrayList<String> questionArray;
     ArrayAdapter<String> adapter;
     boolean unansweredView;
 
-    // Firebase
+    // Firebase database
     private DatabaseHelper mDatabaseHelper;
     private ChildEventListener unansweredQuestionsListener;
+    private ChildEventListener answeredQuestionsListener;
+    private DatabaseReference incomingQuestions;
+
+    // Authentication
+    private AuthenticationHelper authHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mDatabaseHelper = DatabaseHelper.getInstance();
+        authHelper = AuthenticationHelper.getInstance();
 
         setContentView(R.layout.activity_answer_list);
 
@@ -58,18 +61,17 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
 
         unansweredView = true;
+        questionArray = new ArrayList<>();
         loadUnansweredQuestions();
         adapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_list_item_1, questionArray
         );
 
+
         ListView list = (ListView) findViewById(R.id.ask_unanswered_list);
         list.setOnItemClickListener(this);
         list.setAdapter(adapter);
 
-        Log.d(TAG, "ABOUT TO ATTACH UNANSWERED LISTENER");
-        // Attach a listener to the adapter to populate it with the questions in the DB
-        attachUnansweredQuestionsReadListener();
 
         switchToUnansweredHeader();
 
@@ -95,29 +97,51 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
     }
 
     private void loadUnansweredQuestions() {
-        //TODO: the next lines of array creation should be replaced by pulling the
-        //actual list of unanswered questions from the database
-        ArrayList<String> dummyData = new ArrayList<>();
-        dummyData.add("UnansweredQuestion 1");
-        dummyData.add("UnansweredQuestion 2");
-        dummyData.add("UnansweredQuestion 3");
-        dummyData.add("UnansweredQuestion 4");
-        dummyData.add("UnansweredQuestion 5");
+        // TODO if no unanswered questions, display something appropriate!
+        questionArray.clear();
 
-        questionArray = dummyData;
+        // If there are any incoming questions, attach a listener to the adapter to populate it with the questions in the DB
+        Log.d(TAG, "ABOUT TO ATTACH UNANSWERED LISTENER");
+        Log.d(TAG, "THIS USER ID " + authHelper.thisUserID);
+        incomingQuestions = mDatabaseHelper.users.child(authHelper.thisUserID).child("incomingQuestions");
+        incomingQuestions.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    detachAnsweredQuestionsReadListener();
+                    attachUnansweredQuestionsReadListener();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "Problem with to database: " + databaseError.toString());
+            }
+        });
 
     }
 
     private void loadAnsweredQuestions() {
         System.out.println("LOAD ANSWERED QUESTIONS WAS CALLED");
-        //TODO: the next lines of array creation should be replaced by pulling the
-        //actual list of answered questions from the database
-        ArrayList<String> dummyData = new ArrayList<>();
-        dummyData.add("AnsweredQuestion 1");
-        dummyData.add("AnsweredQuestion 2");
-        dummyData.add("AnsweredQuestion 3");
+        // TODO if no answered questions, display something appropriate!
+        questionArray.clear();
 
-        questionArray = dummyData;
+        // If there are any incoming questions, attach a listener to the adapter to populate it with the questions in the DB
+        incomingQuestions = mDatabaseHelper.users.child(authHelper.thisUserID).child("incomingQuestions");
+        incomingQuestions.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    detachUnansweredQuestionsReadListener();
+                    attachAnsweredQuestionsReadListener();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "Problem with to database: " + databaseError.toString());
+            }
+        });
 
 
     }
@@ -142,21 +166,14 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
     private void loadUnansweredContent() {
         unansweredView = true;
         loadUnansweredQuestions();
-        adapter.clear();
-        adapter.addAll(questionArray);
         adapter.notifyDataSetChanged();
         switchToUnansweredHeader();
 
-        Log.d(TAG, "ABOUT TO ATTACH UNANSWERED LISTENER");
-        // Attach a listener to the adapter to populate it with the questions in the DB
-        attachUnansweredQuestionsReadListener();
     }
 
     private void loadAnsweredContent() {
         unansweredView = false;
         loadAnsweredQuestions();
-        adapter.clear();
-        adapter.addAll(questionArray);
         adapter.notifyDataSetChanged();
         switchToAnsweredHeader();
     }
@@ -209,9 +226,8 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
     }
 
 
-    // This listener listens for any content added to the "questions" child of the database and when anything
-    // is added, the question's text is added to the questionAdapter on the Discover page
-    // TODO properly implement child removed/changed methods, or choose a different listener if more appropriate
+    // This listener listens to any changes that happen on this user's incoming questions portion of the database
+    // TODO properly implement child changed methods, or choose a different listener if more appropriate
     private void attachUnansweredQuestionsReadListener(){
         if (unansweredQuestionsListener == null) {
             unansweredQuestionsListener = new ChildEventListener() {
@@ -233,13 +249,16 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
                             Question question = dataSnapshot.getValue(Question.class);
 
-                            // TODO add more than just question text
-                            adapter.add(question.questionText);
+                            if (question.answerText == null) {
+                                // TODO add more than just question text
+                                questionArray.add(question.questionText);
+                                adapter.notifyDataSetChanged();
+                            }
                         }
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-
+                            Log.e(TAG, "Error with database: " + databaseError.toString());
                         }
                     });
 
@@ -247,16 +266,93 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
 
-                public void onChildRemoved(DataSnapshot dataSnapshot) {}
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    Question question = dataSnapshot.getValue(Question.class);
+
+                    // TODO add more than just question text
+                    questionArray.remove(question.questionText);
+                    adapter.notifyDataSetChanged();
+                }
 
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
 
                 public void onCancelled(DatabaseError databaseError) {}
             };
 
-            DatabaseReference incomingQuestions = mDatabaseHelper.users.child(THIS_USER_ID).child("incomingQuestions");
             incomingQuestions.addChildEventListener(unansweredQuestionsListener);
         }
     }
 
+
+    private void detachUnansweredQuestionsReadListener(){
+        if (unansweredQuestionsListener != null) {
+            incomingQuestions.removeEventListener(unansweredQuestionsListener);
+            unansweredQuestionsListener = null;
+        }
+    }
+
+    // This listener listens to any changes that happen on this user's incoming questions portion of the database
+    // TODO properly implement child changed methods, or choose a different listener if more appropriate
+    private void attachAnsweredQuestionsReadListener(){
+        if (answeredQuestionsListener == null) {
+            answeredQuestionsListener = new ChildEventListener() {
+                @Override
+
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Log.d(TAG, "IN ON CHILD ADDED");
+
+                    String questionKey = dataSnapshot.getValue(String.class);
+
+                    DatabaseReference thisQuestion = mDatabaseHelper.questions.child(questionKey);
+
+                    // Get the question from that part of the database
+                    thisQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Log.d(TAG, "IN SINGLE VALUE EVENT LISTENER");
+
+                            Question question = dataSnapshot.getValue(Question.class);
+
+                            if (question.answerText != null) {
+                                // TODO add more than just question text
+                                questionArray.add(question.questionText);
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.e(TAG, "Error with database: " + databaseError.toString());
+                        }
+                    });
+
+                }
+
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    Question question = dataSnapshot.getValue(Question.class);
+
+                    // TODO add more than just question text
+                    questionArray.remove(question.questionText);
+                    adapter.notifyDataSetChanged();
+                }
+
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
+                public void onCancelled(DatabaseError databaseError) {}
+            };
+
+            incomingQuestions.addChildEventListener(answeredQuestionsListener);
+        }
+    }
+
+
+    private void detachAnsweredQuestionsReadListener(){
+        if (answeredQuestionsListener != null) {
+            incomingQuestions.removeEventListener(answeredQuestionsListener);
+            answeredQuestionsListener = null;
+        }
+    }
 }
