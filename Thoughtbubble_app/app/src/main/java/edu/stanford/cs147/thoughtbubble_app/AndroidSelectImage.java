@@ -66,6 +66,6 @@ public class AndroidSelectImage extends Activity {
 
     public void saveimage(View view) {
         //TODO : save the image into firebase and update the profile page
-
+        finish();
     }
 }

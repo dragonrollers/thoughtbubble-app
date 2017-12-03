@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.stanford.cs147.thoughtbubble_app">
 
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,9 +26,7 @@
         <activity android:name=".AnswerWriteActivity" />
         <activity android:name=".AndroidSelectImage" />
         <activity android:name=".PublicProfilePage" />
+        <activity android:name=".BoardFullView"></activity>
     </application>
-
-    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>

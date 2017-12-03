@@ -130,6 +130,11 @@ public class ProfilePage extends AppCompatActivity {
 
     }
 
+    public void ViewFullList(View view) {
+        Intent fullview = new Intent(this, BoardFullView.class);
+        startActivity(fullview);
+    }
+
     // for the board view
     public enum CustomPagerEnum {
 
