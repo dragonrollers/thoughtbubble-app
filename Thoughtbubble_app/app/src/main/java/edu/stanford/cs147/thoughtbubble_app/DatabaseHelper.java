@@ -6,7 +6,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,9 +18,6 @@ import java.util.Map;
 
 class DatabaseHelper {
 
-    // TODO Change this once we have authentication
-    private String THIS_USER_ID = "0";
-
     // For debugging
     private static final String TAG = "DatabaseHelper";
 
@@ -31,7 +27,6 @@ class DatabaseHelper {
     public DatabaseReference questions;
     public DatabaseReference users;
 
-    private ArrayList<Question> questionArray = new ArrayList<Question>();
 
     private DatabaseHelper() {
 
@@ -52,9 +47,7 @@ class DatabaseHelper {
         return singleton_instance;
     }
 
-    public void writeAskToDatabase(String questionText, String sendToID) {
-        // TODO change once we have auth
-        String thisUserID = THIS_USER_ID;
+    public void writeAskToDatabase(String questionText, String thisUserID, String sendToID) {
 
         // Create Question object from given data
         Question newQuestion = new Question();

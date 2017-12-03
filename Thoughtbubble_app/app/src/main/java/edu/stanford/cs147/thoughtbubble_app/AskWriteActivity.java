@@ -14,6 +14,7 @@ import android.widget.Toast;
 public class AskWriteActivity extends AppCompatActivity {
 
     private DatabaseHelper DBH;
+    private AuthenticationHelper authHelper;
 
 
     // sendTo[0] is ID, sendTo[1] is full name
@@ -44,6 +45,7 @@ public class AskWriteActivity extends AppCompatActivity {
 
         sendTo = null;
         DBH = DatabaseHelper.getInstance();
+        authHelper = AuthenticationHelper.getInstance();
 
         //create SELECT on click listener to launch select intent
         Button selectButton = (Button) findViewById(R.id.ask_select_button);
@@ -72,7 +74,7 @@ public class AskWriteActivity extends AppCompatActivity {
                     startActivityForResult(selectIntent, SELECT_END_CODE);
                 } else {
                     //TODO: error checking, don't allow sending of blank messages
-                    DBH.writeAskToDatabase(getInputText(), sendTo[0]);
+                    DBH.writeAskToDatabase(getInputText(), authHelper.thisUserID, sendTo[0]);
                     Toast.makeText(AskWriteActivity.this, "Ask Sent!", Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -115,7 +117,7 @@ public class AskWriteActivity extends AppCompatActivity {
         if (requestCode == SELECT_END_CODE) {
             //was reached by hitting send, then launching the select person activity so the current
             //activity should just write to database and return
-            DBH.writeAskToDatabase(getInputText(), sendTo[0]);
+            DBH.writeAskToDatabase(getInputText(), authHelper.thisUserID, sendTo[0]);
             Toast.makeText(this, "Ask Sent!", Toast.LENGTH_SHORT).show();
             finish();
         }
