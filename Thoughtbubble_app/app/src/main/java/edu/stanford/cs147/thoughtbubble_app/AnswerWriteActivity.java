@@ -2,10 +2,12 @@ package edu.stanford.cs147.thoughtbubble_app;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +41,29 @@ public class AnswerWriteActivity extends AppCompatActivity {
             finish();
         }
 
+        // switch that controls whether to see the revised question
+
+        Switch switchOne = (Switch) findViewById(R.id.switch_for_revising_question);
+        switchOne.setChecked(true);
+
+
+        switchOne.setOnCheckedChangeListener(
+                new CompoundButton.OnCheckedChangeListener() {
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            EditText space_for_revising_question = (EditText) findViewById(R.id.answer_revisedQuestion_text);
+                            space_for_revising_question.setVisibility(View.VISIBLE);
+                            EditText space_for_answering_question = (EditText) findViewById(R.id.answer_answer_text);
+                            space_for_answering_question.setHeight((int) (400)); // magic number to control the size
+                        } else {
+                            EditText space_for_revising_question = (EditText) findViewById(R.id.answer_revisedQuestion_text);
+                            space_for_revising_question.setVisibility(View.GONE);
+                            EditText space_for_answering_question = (EditText) findViewById(R.id.answer_answer_text);
+                            space_for_answering_question.setHeight(800); // magic number to control the size
+                        }
+                    }
+                });
+
         loadQuestionText(questionID);
     }
 
@@ -53,11 +78,11 @@ public class AnswerWriteActivity extends AppCompatActivity {
     private void loadQuestionText(int questionID) {
         TextView questionText = (TextView) findViewById(R.id.answerWrite_question_text);
         //TODO: load questions somehow using the passed in question ID
-        String question = "Question Dummy Text";
-        questionText.setText(question);
+        //String question = "Question Dummy Text";
+        //questionText.setText(question);
 
-        EditText revisedQuestionPrompt = (EditText) findViewById(R.id.answer_revisedQuestion_text);
-        revisedQuestionPrompt.setHint(question);
+        //EditText revisedQuestionPrompt = (EditText) findViewById(R.id.answer_revisedQuestion_text);
+        //revisedQuestionPrompt.setHint(question);
     }
 
     /**
@@ -110,4 +135,5 @@ public class AnswerWriteActivity extends AppCompatActivity {
     public void cancelAnswer(View view) {
         finish();
     }
+
 }
