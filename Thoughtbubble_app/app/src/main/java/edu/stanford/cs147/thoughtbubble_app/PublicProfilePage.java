@@ -1,10 +1,8 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,17 +49,4 @@ public class PublicProfilePage extends AppCompatActivity {
         mImageView.setImageResource(R.drawable.elsa);
     }
 
-    public void gotoPrivateProfile(View view) {
-        // placeholder
-        Intent intent = new Intent(this, ProfilePage.class);
-        startActivity(intent);
-    }
-
-
-    public void gotoPublicProfile(View view) {
-
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        // placeholder for now
-    }
 }

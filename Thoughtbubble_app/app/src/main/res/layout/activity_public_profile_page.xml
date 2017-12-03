@@ -52,33 +52,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="right"
-        android:paddingBottom="16dp">
-
-        <TextView
-            android:id="@+id/private_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="gotoPrivateProfile"
-            android:text="Private Profile" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" | " />
-
-        <TextView
-            android:id="@+id/public_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="gotoPublicProfile"
-            android:text="Public Profile" />
-    </LinearLayout>
-
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

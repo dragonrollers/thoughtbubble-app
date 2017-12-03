@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Load the image in your phone gallery. Click Save if you want to update the image."
+        />
+    <Button
+        android:id="@+id/loadimage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Load Image"
+        />
+    <TextView
+        android:id="@+id/targeturi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+    <ImageView
+        android:id="@+id/targetimage"
+        android:layout_weight="2"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="save image"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:onClick="saveimage"
+        />
+</LinearLayout>

@@ -1,5 +1,6 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -141,4 +142,12 @@ public class AskWriteActivity extends AppCompatActivity {
     }
 
 
+    public void needhelp(View view) {
+        FragmentManager fm = getFragmentManager();
+        AskingQuestionHelp dialogFragment = new AskingQuestionHelp ();
+        Bundle args = new Bundle();
+        dialogFragment.setArguments(args);
+        dialogFragment.show(fm, "Getting help to ask good questions");
+        System.out.println(dialogFragment.getActivity());
+    }
 }
