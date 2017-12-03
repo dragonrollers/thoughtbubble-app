@@ -22,26 +22,27 @@ import java.util.HashMap;
 
 public class AskSelectActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    // TODO Change this once we have authentication
-    private String THIS_USER_ID = "0";
-
-
     // For debugging
     private String TAG = "AskSelectActivity";
 
     private DatabaseHelper DBH;
     private ValueEventListener friendsListener;
 
+    private AuthenticationHelper authHelper;
+
     private ArrayAdapter<String> friendsAdapter;
     private ArrayList<String[]> friendsArray; // For holding the ID and name of the friends displayed
-
-    ArrayList<String> myArray;
+    private ArrayList<String> friendNamesArray;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DBH = DatabaseHelper.getInstance();
+        authHelper = AuthenticationHelper.getInstance();
+
         setContentView(R.layout.activity_ask_select);
 
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
@@ -60,16 +61,12 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
 
         //TODO: actually replace this with the real list
         //Tester list
-        myArray = new ArrayList<>();
-        myArray.add("Grace");
-        myArray.add("Po");
-        myArray.add("Bonnie");
-        myArray.add("Jenny");
+        friendsArray = new ArrayList<>();
+        friendNamesArray = new ArrayList<>();
 
         //TODO: will have to use a different layout in order to accomodate more than one string
-        // TODO this is cleared and repopulated w/info from the db with the listener - do we need myArray anymore?
         friendsAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_list_item_1, myArray
+                this, android.R.layout.simple_list_item_1, friendNamesArray
         );
 
         ListView list = (ListView) findViewById(R.id.ask_friends_list);
@@ -78,9 +75,10 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
 
 
         // Attach a listener to the friends list in the DB to populate the adapter
-        friendsArray = new ArrayList<String[]>();
-        DBH = DatabaseHelper.getInstance();
+
         attachFriendsReadListener();
+
+
 
     }
 
@@ -142,7 +140,7 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
 
 
             // Actually attach the listener
-            DatabaseReference friends = DBH.users.child(THIS_USER_ID).child("friends");
+            DatabaseReference friends = DBH.users.child(authHelper.thisUserID).child("friends");
             friends.addValueEventListener(friendsListener);
 
 

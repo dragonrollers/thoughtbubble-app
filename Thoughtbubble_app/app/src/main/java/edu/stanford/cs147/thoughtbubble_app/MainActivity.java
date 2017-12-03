@@ -24,7 +24,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -36,10 +35,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ChildEventListener allQuestionsListener;
 
     // Firebase auth
+    private AuthenticationHelper authHelper;
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
     // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
+
 
     ArrayList<String> questionArray;
     private ArrayAdapter<String> questionAdapter;
@@ -85,7 +86,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
         // Authentication
-        auth = FirebaseAuth.getInstance();
+        authHelper = AuthenticationHelper.getInstance();
+        auth = authHelper.auth;
         authListener = new FirebaseAuth.AuthStateListener(){
             @Override
             // This firebaseAuth contains whether or not user is signed in or not
@@ -101,23 +103,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Log.d(TAG, "USER NOT SIGNED IN");
                     onSignedOutCleanup();
 
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setIsSmartLockEnabled(false)
-                                    .setAvailableProviders(Arrays.asList(
-                                            new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                            // Uncomment line below for Facebook
-                                            new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()
-                                            )
-                                    )
-                                    .build(),
-                            RC_SIGN_IN);
-
+                    startActivityForResult(authHelper.getAuthUIInstance(), RC_SIGN_IN);
                 }
-
             }
         };
+
 
     }
 
@@ -205,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    // Sign-out menu
+    // Sign-out menu (hamburger)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -243,7 +233,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void onSignedInInitialize(){
-        // Can pass in something from authentication and et any variables that need to be set
+        // Handle the case where this is a new user
+        authHelper.handleNewUserCreation();
+
         attachAllQuestionsReadListener();
 
     }
