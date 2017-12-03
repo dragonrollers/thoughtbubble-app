@@ -59,6 +59,7 @@
 
         <ImageView
             android:id="@+id/profile_image"
+            android:onClick="changeimage"
             android:layout_width="50dp"
             android:layout_height="50dp" />
 

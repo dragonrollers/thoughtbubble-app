@@ -21,8 +21,11 @@
         <activity android:name=".AskSelectActivity" />
         <activity android:name=".SeeDetailedQuestion" />
         <activity android:name=".AnswerWriteActivity" />
+        <activity android:name=".AndroidSelectImage" />
         <activity android:name=".PublicProfilePage" />
-        <activity android:name=".IndivBoard"></activity>
     </application>
+
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>

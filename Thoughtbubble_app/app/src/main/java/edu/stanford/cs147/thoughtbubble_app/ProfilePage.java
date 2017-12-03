@@ -3,7 +3,9 @@ package edu.stanford.cs147.thoughtbubble_app;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -19,6 +21,7 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class ProfilePage extends AppCompatActivity {
@@ -51,13 +54,12 @@ public class ProfilePage extends AppCompatActivity {
         viewPager.setAdapter(new CustomPagerAdapter(this));
         viewPager.setPageMargin(64);
 
+
         loadProfileText();
         loadProfileImage();
     }
 
     public void EnableSave(View view) {
-
-        System.out.println("HERE");
 
         TextSwitcher switcher = (TextSwitcher) findViewById(R.id.save_edit_switcher);
         SwitchEditSave(view);
@@ -65,15 +67,9 @@ public class ProfilePage extends AppCompatActivity {
 
         // This is a new name.
         EditText et=(EditText)findViewById(R.id.hidden_edit_view);
-        System.out.println("HERE11");
         String newName = et.getText().toString();
-        System.out.println("HERE22");
         TextView myTV = (TextView) findViewById(R.id.profile_name);
-        System.out.println("HERE33");
         myTV.setText(newName);
-        System.out.println("HERE44");
-
-        System.out.println("HERE2");
 
 
         // Save button disabled, change to edit button
@@ -81,7 +77,6 @@ public class ProfilePage extends AppCompatActivity {
         switcher.showNext();
         ViewSwitcher switcher2 = (ViewSwitcher) findViewById(R.id.my_switcher);
         switcher2.showNext();
-        System.out.println("HERE3");
     }
 
     private void SwitchEditSave(View view){
@@ -109,6 +104,30 @@ public class ProfilePage extends AppCompatActivity {
         String newName = et.getText().toString();
         myTV.setText(newName);
         SwitchEditSave(view);
+    }
+
+    public void changeimage(View view) {
+
+        System.out.println("HERE");
+
+
+        ImageView profile = (ImageView) findViewById(R.id.profile_image);
+        Bitmap bitmap =((BitmapDrawable)profile.getDrawable()).getBitmap();
+        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bs);
+
+        Intent intent=new Intent(view.getContext(),AndroidSelectImage.class);
+        intent.putExtra("byteArray", bs.toByteArray());
+        startActivity(intent);
+
+
+
+        //Intent intent = new Intent(view.getContext(), AndroidSelectImage.class);
+
+        System.out.println("2222222");
+
+        //startActivity(intent);
+
     }
 
     // for the board view
