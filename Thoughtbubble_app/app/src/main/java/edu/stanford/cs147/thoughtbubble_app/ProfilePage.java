@@ -22,6 +22,8 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +42,7 @@ public class ProfilePage extends AppCompatActivity {
 
     private DatabaseHelper DBH;
     private AuthenticationHelper authHelper;
+    private StorageHelper storageHelper;
 
     private ValueEventListener currUserListener;
     private User currUser;
@@ -51,6 +54,7 @@ public class ProfilePage extends AppCompatActivity {
 
         DBH = DatabaseHelper.getInstance();
         authHelper = AuthenticationHelper.getInstance();
+        storageHelper = StorageHelper.getInstance();
         topics = new ArrayList<String>();
         loadUserFromDatabase();
 
@@ -122,10 +126,9 @@ public class ProfilePage extends AppCompatActivity {
 
     public void changeimage(View view) {
 
-        System.out.println("HERE");
-
-
+        // ImageView in your Activity
         ImageView profile = (ImageView) findViewById(R.id.profile_image);
+
         Bitmap bitmap =((BitmapDrawable)profile.getDrawable()).getBitmap();
         ByteArrayOutputStream bs = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bs);
@@ -137,8 +140,6 @@ public class ProfilePage extends AppCompatActivity {
 
 
         //Intent intent = new Intent(view.getContext(), AndroidSelectImage.class);
-
-        System.out.println("2222222");
 
         //startActivity(intent);
 
@@ -246,7 +247,12 @@ public class ProfilePage extends AppCompatActivity {
     private void loadProfileImage(){
         // TODO: load images from database
         mImageView = (ImageView) findViewById(R.id.profile_image);
-        mImageView.setImageResource(R.drawable.elsa);
+        Log.d(TAG, "userID " + authHelper.thisUserID);
+        // Load the image using Glide
+        Glide.with(this /* context */)
+                .using(new FirebaseImageLoader())
+                .load(storageHelper.getProfileImageRef(authHelper.thisUserID))
+                .into(mImageView);
     }
 
     public void ProfilePage(View view) {
