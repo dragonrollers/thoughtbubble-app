@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> list, View row, int index, long rowID) {
         System.out.println(index);
-        Question question = questionArray.get(index-1);
+        Question question = questionArray.get(index);
         Intent seeDetailedQuestion = new Intent(this, SeeDetailedQuestion.class);
         //TODO: add the question id as an int to the intent
         seeDetailedQuestion.putExtra("questionID", question.questionID);
