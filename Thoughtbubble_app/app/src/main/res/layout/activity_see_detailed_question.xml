@@ -54,28 +54,31 @@
         android:id="@+id/detailedQ_question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/detailedQ_answer"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="18dp" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/detailedQ_answer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/detailedQ_critique"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="18dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -101,5 +104,7 @@
         android:id="@+id/discoverQ_saveThought_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="saveToBoard"
         android:text="Save to Board" />
+
 </LinearLayout>

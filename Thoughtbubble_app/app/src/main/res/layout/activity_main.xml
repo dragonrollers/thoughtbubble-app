@@ -52,47 +52,37 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        android:paddingBottom="16dp">
 
         <TextView
-            android:id="@+id/notification"
+            android:id="@+id/friend_feed_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Someone Answered Your Question" />
+            android:onClick="gotoFriendFeed"
+            android:text="Your Friends " />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:text="" />
+            android:text=" | " />
+
+        <TextView
+            android:id="@+id/your_feed_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="gotoYourFeed"
+            android:text="You " />
+
     </LinearLayout>
 
-    <LinearLayout
+    <ListView
+        android:id="@+id/feed_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:onClick="DiscoverPage"
-            android:text="Recent Activity" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-        <ListView
-            android:id="@+id/feed_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </ListView>
-
-    </LinearLayout>
+        android:layout_height="wrap_content">
+    </ListView>
 
 </LinearLayout>

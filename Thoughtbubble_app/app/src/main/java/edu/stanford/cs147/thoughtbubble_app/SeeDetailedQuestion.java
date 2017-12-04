@@ -14,6 +14,10 @@ public class SeeDetailedQuestion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_see_detailed_question);
 
+        Intent extraInfo = getIntent();
+
+        fillWithQuestionDetails(extraInfo);
+
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
         int unselected = Color.parseColor("#00cca3");
         int selected = Color.parseColor("#016d57");
@@ -26,6 +30,24 @@ public class SeeDetailedQuestion extends AppCompatActivity {
         answer.setBackgroundColor(unselected);
         discover.setBackgroundColor(selected);
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
+
+    }
+
+    private void fillWithQuestionDetails(Intent extraInfo){
+        // TODO: Backend side need to retrieve the user image
+        String critiqueText = extraInfo.getStringExtra("critiqueText");
+        String answerText = extraInfo.getStringExtra("answerText");
+        String questionText = extraInfo.getStringExtra("questionText");
+
+        TextView questionView = (TextView) findViewById(R.id.detailedQ_question);
+        questionView.setText(questionText);
+
+        TextView answerView = (TextView) findViewById(R.id.detailedQ_answer);
+        answerView.setText(answerText);
+
+        TextView critiqueView = (TextView) findViewById(R.id.detailedQ_critique);
+        critiqueView.setText(critiqueText);
+
 
     }
 
@@ -47,5 +69,9 @@ public class SeeDetailedQuestion extends AppCompatActivity {
     public void DiscoverPage(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public void saveToBoard(View view) {
+        finish();
     }
 }
