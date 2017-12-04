@@ -1,4 +1,0 @@
-#Wed Nov 29 15:42:04 PST 2017
-base.0=/Users/Jenny/Desktop/thoughtbubble-app/S06.02-Solution-SettingsFragment/app/build/intermediates/transforms/dexMerger/debug/8
-path.0=classes.dex
-renamed.0=classes.dex
