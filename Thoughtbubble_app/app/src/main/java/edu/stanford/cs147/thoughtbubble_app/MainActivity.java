@@ -11,7 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,8 +19,6 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 
@@ -42,8 +39,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private static final int RC_SIGN_IN = 123;
 
 
-    ArrayList<String> questionArray;
-    private ArrayAdapter<String> questionAdapter;
+    ArrayList<Question> questionArray;
+    private QuestionAdapter questionAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,24 +62,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         discover.setBackgroundColor(selected);
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
 
-        questionArray = new ArrayList<String>();
-        questionArray.add("Question 1");
-        questionArray.add("Question 2");
-        questionArray.add("Question 3");
-
-        questionAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_list_item_1, questionArray
-        );
-
-        ListView list = (ListView) findViewById(R.id.feed_list);
-        list.setOnItemClickListener(this);
-        list.setAdapter(questionAdapter);
-
-
+        fillInQuestionsForFeed();
 
         // Attach a listener to the adapter to populate it with the questions in the DB
         mDatabaseHelper = DatabaseHelper.getInstance();
-        attachAllQuestionsReadListener();
+        //attachAllQuestionsReadListener();
 
 
         // Authentication
@@ -112,12 +96,35 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+    private void fillInQuestionsForFeed(){
+        questionArray = new ArrayList<Question>();
+        questionArray.add(new Question("Q1", "A1", "Critique1", "10:43", "Jenny", "Bonnie"));
+        questionArray.add(new Question("Q2", "A2", "Critique2", "10:13", "Po", "Grace"));
+
+        questionAdapter = new QuestionAdapter(this,
+                R.layout.listview_item_row, questionArray);
+
+
+        ListView listView1 = (ListView)findViewById(R.id.feed_list);
+
+        View header = (View)getLayoutInflater().inflate(R.layout.listview_header_row, null);
+        listView1.setOnItemClickListener(this);
+        listView1.addHeaderView(header);
+        listView1.setAdapter(questionAdapter);
+    }
+
     @Override
     public void onItemClick(AdapterView<?> list, View row, int index, long rowID) {
-        String clickedName = questionArray.get(index);
+        System.out.println(index);
+        Question question = questionArray.get(index-1);
         Intent seeDetailedQuestion = new Intent(this, SeeDetailedQuestion.class);
         //TODO: add the question id as an int to the intent
-        seeDetailedQuestion.putExtra("questionID", 123);
+        seeDetailedQuestion.putExtra("questionID", question.questionID);
+        seeDetailedQuestion.putExtra("questionText", question.questionText);
+        seeDetailedQuestion.putExtra("answerText", question.answerText);
+        seeDetailedQuestion.putExtra("critiqueText", question.critiqueText);
+        seeDetailedQuestion.putExtra("answererID", question.answererID);
+        seeDetailedQuestion.putExtra("questionerID", question.questionerID);
         startActivity(seeDetailedQuestion);
 
     }
@@ -145,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // This listener listens for any content added to the "questions" child of the database and when anything
     // is added, the question's text is added to the questionAdapter on the Discover page
     // TODO properly implement child removed/changed methods, or choose a different listener if more appropriate
-    private void attachAllQuestionsReadListener(){
+    /* private void attachAllQuestionsReadListener(){
         if (allQuestionsListener == null) { // It start out null eventually when we add authentication
             allQuestionsListener = new ChildEventListener() {
                 @Override
@@ -156,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Question question = dataSnapshot.getValue(Question.class);
 
                     // TODO store more than just question text in question array
-                    questionAdapter.add(question.questionText);
+                    questionAdapter.add(question);
                 }
 
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
@@ -179,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             mDatabaseHelper.questions.removeEventListener(allQuestionsListener);
             allQuestionsListener = null;
         }
-    }
+    } */
 
 
     // Auth
@@ -228,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if (authListener != null) {
             auth.removeAuthStateListener(authListener);
         }
-        detachAllQuestionsReadListener();
+        //detachAllQuestionsReadListener();
         questionAdapter.clear();
 
     }
@@ -238,13 +245,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         authHelper.handleNewUserCreation();
         authHelper.setThisUserID();
 
-        attachAllQuestionsReadListener();
+        //attachAllQuestionsReadListener();
 
     }
 
     private void onSignedOutCleanup(){
         questionAdapter.clear();
-        detachAllQuestionsReadListener();
+        //detachAllQuestionsReadListener();
 
     }
 
