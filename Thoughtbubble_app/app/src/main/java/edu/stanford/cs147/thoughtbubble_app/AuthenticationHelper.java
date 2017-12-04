@@ -42,7 +42,7 @@ public class AuthenticationHelper {
         auth = FirebaseAuth.getInstance();
         DBH = DatabaseHelper.getInstance();
 
-        thisUserID = auth.getCurrentUser().getUid();
+
 
 
 
@@ -114,6 +114,10 @@ public class AuthenticationHelper {
 
         });
 
+    }
+
+    public void setThisUserID(){
+        thisUserID = auth.getCurrentUser().getUid();
     }
 
 

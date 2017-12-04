@@ -236,6 +236,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private void onSignedInInitialize(){
         // Handle the case where this is a new user
         authHelper.handleNewUserCreation();
+        authHelper.setThisUserID();
 
         attachAllQuestionsReadListener();
 
