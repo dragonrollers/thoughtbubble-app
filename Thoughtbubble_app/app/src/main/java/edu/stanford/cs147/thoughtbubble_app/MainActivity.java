@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
             }
         };
+        auth.addAuthStateListener(authListener);
 
 
     }
