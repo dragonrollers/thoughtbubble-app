@@ -252,6 +252,7 @@ public class ProfilePage extends AppCompatActivity {
         Glide.with(this /* context */)
                 .using(new FirebaseImageLoader())
                 .load(storageHelper.getProfileImageRef(authHelper.thisUserID))
+                .asBitmap()
                 .into(mImageView);
     }
 
