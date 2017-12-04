@@ -36,7 +36,7 @@ public class ProfilePage extends AppCompatActivity {
 
     // profile image
     private ImageView mImageView;
-    private ArrayList<String> interests;
+    private ArrayList<String> topics;
 
     private DatabaseHelper DBH;
     private AuthenticationHelper authHelper;
@@ -51,6 +51,7 @@ public class ProfilePage extends AppCompatActivity {
 
         DBH = DatabaseHelper.getInstance();
         authHelper = AuthenticationHelper.getInstance();
+        topics = new ArrayList<String>();
         loadUserFromDatabase();
 
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
@@ -176,13 +177,14 @@ public class ProfilePage extends AppCompatActivity {
 
     private void loadUserFromDatabase() {
         Log.d(TAG, "loadUserFromDatabase");
-        DatabaseReference currUserRef = DBH.users.child(authHelper.thisUserID);
+        final DatabaseReference currUserRef = DBH.users.child(authHelper.thisUserID);
         if (currUserListener == null) {
             currUserListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     currUser = dataSnapshot.getValue(User.class);
                     Log.d(TAG, "getting currUser");
+                    topics = currUser.getTopics();
                     loadProfileText();
                     loadProfileImage();
                 }
@@ -197,27 +199,19 @@ public class ProfilePage extends AppCompatActivity {
     }
 
     private void loadProfileText() {
-        //TODO: load the name from the database using the id of the user
         String name = currUser.getFirstName() + " " + currUser.getLastName();
 
         TextView nameField = (TextView) findViewById(R.id.profile_name);
         nameField.setText(name);
 
-        interests = new ArrayList<String>();
-
-        interests.add("Sleeping");
-        interests.add("Napping");
-
-        // TODO: load the interests using the id of the user
-
         LinearLayout profilelayout = (LinearLayout) findViewById(R.id.profilelayout);
 
-        for (int i = 0; i < interests.size(); i++) {
+        for (int i = 0; i < topics.size(); i++) {
 
             Button btn = new Button(this);
             //btn.setWidth();
             //btn.setHeight(20);
-            btn.setText(interests.get(i));
+            btn.setText(topics.get(i));
 
             btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -226,7 +220,7 @@ public class ProfilePage extends AppCompatActivity {
                     DialogFragmentProfile dialogFragment = new DialogFragmentProfile ();
                     Bundle args = new Bundle();
                     dialogFragment.setArguments(args);
-                    dialogFragment.show(fm, "Do you want to delete this interest?");
+                    dialogFragment.show(fm, "Do you want to delete this topic?");
                     System.out.println(dialogFragment.getActivity());
                 }
             });
@@ -315,7 +309,7 @@ public class ProfilePage extends AppCompatActivity {
 
         public void addResult(String inputText) {
             String result = inputText;
-            interests.add(result);
+            topics.add(result);
         }
 
         public void removeResult() {

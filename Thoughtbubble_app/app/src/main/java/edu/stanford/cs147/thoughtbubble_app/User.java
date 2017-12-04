@@ -1,5 +1,7 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
+import java.util.ArrayList;
+
 /**
  * Created by bonnienortz on 11/27/17.
  */
@@ -9,6 +11,7 @@ public class User {
     // TODO more than just names
     private String firstName;
     private String lastName;
+    private ArrayList<String> topics;
 
     public User () {}
 
@@ -24,5 +27,9 @@ public class User {
     public String getLastName() { return lastName; }
 
     public void setLastName(String lastName){ this.lastName = lastName; }
+
+    public ArrayList<String> getTopics() { return topics; }
+
+    public void setTopics(ArrayList<String> topics){ this.topics = topics; }
 
 }
