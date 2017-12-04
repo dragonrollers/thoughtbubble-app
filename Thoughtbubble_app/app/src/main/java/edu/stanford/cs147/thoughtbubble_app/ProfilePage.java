@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,20 +22,36 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class ProfilePage extends AppCompatActivity {
 
+    private String TAG = "ProfilePage";
 
     // profile image
     private ImageView mImageView;
     private ArrayList<String> interests;
 
+    private DatabaseHelper DBH;
+    private AuthenticationHelper authHelper;
+
+    private ValueEventListener currUserListener;
+    private User currUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_page);
+
+        DBH = DatabaseHelper.getInstance();
+        authHelper = AuthenticationHelper.getInstance();
+        loadUserFromDatabase();
 
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
         int unselected = Color.parseColor("#00cca3");
@@ -53,10 +70,6 @@ public class ProfilePage extends AppCompatActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new CustomPagerAdapter(this));
         viewPager.setPageMargin(64);
-
-
-        loadProfileText();
-        loadProfileImage();
     }
 
     public void EnableSave(View view) {
@@ -161,10 +174,31 @@ public class ProfilePage extends AppCompatActivity {
 
     }
 
+    private void loadUserFromDatabase() {
+        Log.d(TAG, "loadUserFromDatabase");
+        DatabaseReference currUserRef = DBH.users.child(authHelper.thisUserID);
+        if (currUserListener == null) {
+            currUserListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    currUser = dataSnapshot.getValue(User.class);
+                    Log.d(TAG, "getting currUser");
+                    loadProfileText();
+                    loadProfileImage();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+        }
+        currUserRef.addListenerForSingleValueEvent(currUserListener);
+    }
 
     private void loadProfileText() {
         //TODO: load the name from the database using the id of the user
-        String name = "Sample Name";
+        String name = currUser.getFirstName() + " " + currUser.getLastName();
 
         TextView nameField = (TextView) findViewById(R.id.profile_name);
         nameField.setText(name);
