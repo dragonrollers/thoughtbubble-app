@@ -69,30 +69,10 @@
             android:text="" />
     </LinearLayout>
 
-    <LinearLayout
+    <ListView
+        android:id="@+id/feed_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:onClick="DiscoverPage"
-            android:text="Recent Activity" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-        <ListView
-            android:id="@+id/feed_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </ListView>
-
-    </LinearLayout>
+        android:layout_height="wrap_content">
+    </ListView>
 
 </LinearLayout>
