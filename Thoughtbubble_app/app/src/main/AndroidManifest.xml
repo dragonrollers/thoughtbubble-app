@@ -26,9 +26,7 @@
         <activity android:name=".AnswerWriteActivity" />
         <activity android:name=".AndroidSelectImage" />
         <activity android:name=".PublicProfilePage" />
-<<<<<<< HEAD
         <activity android:name=".BoardFullView"></activity>
-=======
 
 
         <!-- For facebook -->
@@ -48,7 +46,6 @@
             </intent-filter>
         </activity>
 
->>>>>>> 8ee4ce358a208e08cc823ccd14627baa25616a2a
     </application>
 
 
