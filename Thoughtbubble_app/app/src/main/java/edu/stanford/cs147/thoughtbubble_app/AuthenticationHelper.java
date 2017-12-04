@@ -38,14 +38,8 @@ public class AuthenticationHelper {
 
 
     private AuthenticationHelper(){
-
         auth = FirebaseAuth.getInstance();
         DBH = DatabaseHelper.getInstance();
-
-
-
-
-
     }
 
     public static AuthenticationHelper getInstance(){
