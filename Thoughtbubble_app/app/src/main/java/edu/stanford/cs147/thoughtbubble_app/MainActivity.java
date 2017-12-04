@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // For debugging
     private static final String TAG = "MainActivity";
 
+    boolean yourfeed = false;
+
     // Firebase database
     private DatabaseHelper mDatabaseHelper;
     private ChildEventListener allQuestionsListener;
@@ -62,7 +64,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         discover.setBackgroundColor(selected);
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
 
-        fillInQuestionsForFeed();
+        // Show your friend's feed first
+        loadFriendsContent();
 
         // Attach a listener to the adapter to populate it with the questions in the DB
         mDatabaseHelper = DatabaseHelper.getInstance();
@@ -94,23 +97,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         auth.addAuthStateListener(authListener);
 
 
-    }
-
-    private void fillInQuestionsForFeed(){
-        questionArray = new ArrayList<Question>();
-        questionArray.add(new Question("Q1", "A1", "Critique1", "10:43", "Jenny", "Bonnie"));
-        questionArray.add(new Question("Q2", "A2", "Critique2", "10:13", "Po", "Grace"));
-
-        questionAdapter = new QuestionAdapter(this,
-                R.layout.listview_item_row, questionArray);
-
-
-        ListView listView1 = (ListView)findViewById(R.id.feed_list);
-
-        View header = (View)getLayoutInflater().inflate(R.layout.listview_header_row, null);
-        listView1.setOnItemClickListener(this);
-        listView1.addHeaderView(header);
-        listView1.setAdapter(questionAdapter);
     }
 
     @Override
@@ -255,6 +241,73 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+    private void loadYourContent(){
+
+        yourfeed = false;
+
+        // TODO : PLEASE FILL IN THE QUESTIONARRAY WITH A REAL DATA
+        questionArray = new ArrayList<Question>();
+        questionArray.add(new Question("YQ1", "YA1", "Critique1", "10:43", "Grace", "Bonnie"));
+        questionArray.add(new Question("YQ2", "YA2", "Critique2", "10:13", "Jenny", "Bonnie"));
+
+        questionAdapter = new QuestionAdapter(this,
+                R.layout.listview_item_row, questionArray);
 
 
+        ListView listView1 = (ListView)findViewById(R.id.feed_list);
+        listView1.setOnItemClickListener(this);
+        listView1.setAdapter(questionAdapter);
+        switchToYourHeader();
+    }
+
+    private void loadFriendsContent(){
+
+        yourfeed = true;
+        // TODO : PLEASE FILL IN THE QUESTIONARRAY WITH A REAL DATA
+        questionArray = new ArrayList<Question>();
+        questionArray.add(new Question("Q1", "A1", "Critique1", "10:43", "Jenny", "Bonnie"));
+        questionArray.add(new Question("Q2", "A2", "Critique2", "10:13", "Po", "Grace"));
+
+        questionAdapter = new QuestionAdapter(this,
+                R.layout.listview_item_row, questionArray);
+
+
+        ListView listView1 = (ListView)findViewById(R.id.feed_list);
+        listView1.setOnItemClickListener(this);
+        listView1.setAdapter(questionAdapter);
+        switchToFriendHeader();
+    }
+
+    private void switchToYourHeader() {
+        TextView friendHeader = (TextView) findViewById(R.id.friend_feed_text);
+        TextView yourHeader = (TextView) findViewById(R.id.your_feed_text);
+
+        yourHeader.setTextColor(getResources().getColor(R.color.colorBlack));
+        friendHeader.setTextColor(getResources().getColor(R.color.colorGrey));
+    }
+
+    private void switchToFriendHeader() {
+        TextView friendHeader = (TextView) findViewById(R.id.friend_feed_text);
+        TextView yourHeader = (TextView) findViewById(R.id.your_feed_text);
+
+        yourHeader.setTextColor(getResources().getColor(R.color.colorGrey));
+        friendHeader.setTextColor(getResources().getColor(R.color.colorBlack));
+    }
+
+    public void gotoYourFeed(View view) {
+        if (yourfeed) {
+            loadYourContent();
+        } else {
+            Toast.makeText(this, "Already viewing your feed!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public void gotoFriendFeed(View view) {
+        if (!yourfeed) {
+            loadFriendsContent();
+        } else {
+            Toast.makeText(this, "Already viewing your friends' feed!", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

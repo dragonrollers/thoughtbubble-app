@@ -216,9 +216,7 @@ public class ProfilePage extends AppCompatActivity {
     }
 
     private void loadProfileImage(){
-        // TODO: load images from database
-        mImageView = (ImageView) findViewById(R.id.profile_image);
-        mImageView.setImageResource(R.drawable.elsa);
+
     }
 
     public void ProfilePage(View view) {
