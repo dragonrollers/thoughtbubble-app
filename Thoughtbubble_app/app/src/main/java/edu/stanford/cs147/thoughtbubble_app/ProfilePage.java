@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,20 +22,41 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class ProfilePage extends AppCompatActivity {
 
+    private String TAG = "ProfilePage";
 
     // profile image
     private ImageView mImageView;
-    private ArrayList<String> interests;
+    private ArrayList<String> topics;
+
+    private DatabaseHelper DBH;
+    private AuthenticationHelper authHelper;
+    private StorageHelper storageHelper;
+
+    private ValueEventListener currUserListener;
+    private User currUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_page);
+
+        DBH = DatabaseHelper.getInstance();
+        authHelper = AuthenticationHelper.getInstance();
+        storageHelper = StorageHelper.getInstance();
+        topics = new ArrayList<String>();
+        loadUserFromDatabase();
 
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
         int unselected = Color.parseColor("#00cca3");
@@ -53,10 +75,6 @@ public class ProfilePage extends AppCompatActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new CustomPagerAdapter(this));
         viewPager.setPageMargin(64);
-
-
-        loadProfileText();
-        loadProfileImage();
     }
 
     public void EnableSave(View view) {
@@ -108,10 +126,9 @@ public class ProfilePage extends AppCompatActivity {
 
     public void changeimage(View view) {
 
-        System.out.println("HERE");
-
-
+        // ImageView in your Activity
         ImageView profile = (ImageView) findViewById(R.id.profile_image);
+
         Bitmap bitmap =((BitmapDrawable)profile.getDrawable()).getBitmap();
         ByteArrayOutputStream bs = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bs);
@@ -123,8 +140,6 @@ public class ProfilePage extends AppCompatActivity {
 
 
         //Intent intent = new Intent(view.getContext(), AndroidSelectImage.class);
-
-        System.out.println("2222222");
 
         //startActivity(intent);
 
@@ -161,29 +176,43 @@ public class ProfilePage extends AppCompatActivity {
 
     }
 
+    private void loadUserFromDatabase() {
+        Log.d(TAG, "loadUserFromDatabase");
+        final DatabaseReference currUserRef = DBH.users.child(authHelper.thisUserID);
+        if (currUserListener == null) {
+            currUserListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    currUser = dataSnapshot.getValue(User.class);
+                    Log.d(TAG, "getting currUser");
+                    topics = currUser.getTopics();
+                    loadProfileText();
+                    loadProfileImage();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+        }
+        currUserRef.addListenerForSingleValueEvent(currUserListener);
+    }
 
     private void loadProfileText() {
-        //TODO: load the name from the database using the id of the user
-        String name = "Sample Name";
+        String name = currUser.getFirstName() + " " + currUser.getLastName();
 
         TextView nameField = (TextView) findViewById(R.id.profile_name);
         nameField.setText(name);
 
-        interests = new ArrayList<String>();
-
-        interests.add("Sleeping");
-        interests.add("Napping");
-
-        // TODO: load the interests using the id of the user
-
         LinearLayout profilelayout = (LinearLayout) findViewById(R.id.profilelayout);
 
-        for (int i = 0; i < interests.size(); i++) {
+        for (int i = 0; i < topics.size(); i++) {
 
             Button btn = new Button(this);
             //btn.setWidth();
             //btn.setHeight(20);
-            btn.setText(interests.get(i));
+            btn.setText(topics.get(i));
 
             btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -192,7 +221,7 @@ public class ProfilePage extends AppCompatActivity {
                     DialogFragmentProfile dialogFragment = new DialogFragmentProfile ();
                     Bundle args = new Bundle();
                     dialogFragment.setArguments(args);
-                    dialogFragment.show(fm, "Do you want to delete this interest?");
+                    dialogFragment.show(fm, "Do you want to delete this topic?");
                     System.out.println(dialogFragment.getActivity());
                 }
             });
@@ -216,7 +245,15 @@ public class ProfilePage extends AppCompatActivity {
     }
 
     private void loadProfileImage(){
-
+        // TODO: load images from database
+        mImageView = (ImageView) findViewById(R.id.profile_image);
+        Log.d(TAG, "userID " + authHelper.thisUserID);
+        // Load the image using Glide
+        Glide.with(this /* context */)
+                .using(new FirebaseImageLoader())
+                .load(storageHelper.getProfileImageRef(authHelper.thisUserID))
+                .asBitmap()
+                .into(mImageView);
     }
 
     public void ProfilePage(View view) {
@@ -279,7 +316,7 @@ public class ProfilePage extends AppCompatActivity {
 
         public void addResult(String inputText) {
             String result = inputText;
-            interests.add(result);
+            topics.add(result);
         }
 
         public void removeResult() {
