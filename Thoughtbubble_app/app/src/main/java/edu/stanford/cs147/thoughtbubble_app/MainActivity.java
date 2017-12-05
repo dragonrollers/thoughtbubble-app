@@ -35,8 +35,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     // Firebase auth
     private AuthenticationHelper authHelper;
-    private FirebaseAuth auth;
-    private FirebaseAuth.AuthStateListener authListener;
     // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
 
@@ -74,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // Authentication
         authHelper = AuthenticationHelper.getInstance();
-        auth = authHelper.auth;
-        authListener = new FirebaseAuth.AuthStateListener(){
+
+        authHelper.authListener = new FirebaseAuth.AuthStateListener(){
             @Override
             // This firebaseAuth contains whether or not user is signed in or not
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
@@ -85,7 +83,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Log.d(TAG, "USER ALREADY SIGNED IN: " + user.getDisplayName());
                     onSignedInInitialize();
 
-                } else {
+                } else if (!authHelper.signInAlreadyStarted){
+                    authHelper.signInAlreadyStarted = true;
                     // user is signed out
                     Log.d(TAG, "USER NOT SIGNED IN");
                     onSignedOutCleanup();
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
             }
         };
-        auth.addAuthStateListener(authListener);
+        authHelper.auth.addAuthStateListener(authHelper.authListener);
 
 
     }
@@ -181,9 +180,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
+                // Handle the case where this is a new user
+                authHelper.handleNewUserCreation();
                 Toast.makeText(MainActivity.this, "Signed in!", Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
+                authHelper.signInAlreadyStarted = false;
                 Toast.makeText(MainActivity.this, "Sign-in canceled", Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                // Set sign-in boolean to false for good measure
+                authHelper.signInAlreadyStarted = false;
                 finish();
             }
         }
@@ -202,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         switch (item.getItemId()) {
             case R.id.sign_out_menu:
                 // sign out
+                authHelper.signInAlreadyStarted = false;
                 AuthUI.getInstance().signOut(this);
                 return true;
             default:
@@ -212,14 +219,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onResume(){
         super.onResume();
-        auth.addAuthStateListener(authListener);
+        authHelper.auth.addAuthStateListener(authHelper.authListener);
     }
 
     @Override
     protected void onPause(){
         super.onPause();
-        if (authListener != null) {
-            auth.removeAuthStateListener(authListener);
+        if (authHelper.authListener != null) {
+            authHelper.auth.removeAuthStateListener(authHelper.authListener);
         }
         //detachAllQuestionsReadListener();
         questionAdapter.clear();
@@ -227,8 +234,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void onSignedInInitialize(){
-        // Handle the case where this is a new user
-        authHelper.handleNewUserCreation();
+
         authHelper.setThisUserID();
 
         //attachAllQuestionsReadListener();

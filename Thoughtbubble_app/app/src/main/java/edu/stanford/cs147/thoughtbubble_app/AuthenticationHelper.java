@@ -29,6 +29,7 @@ public class AuthenticationHelper {
     private static AuthenticationHelper singleton_instance = null;
     public FirebaseAuth auth;
     public FirebaseAuth.AuthStateListener authListener;
+    public boolean signInAlreadyStarted;
 
 
     private DatabaseHelper DBH;
@@ -40,6 +41,7 @@ public class AuthenticationHelper {
     private AuthenticationHelper(){
         auth = FirebaseAuth.getInstance();
         DBH = DatabaseHelper.getInstance();
+        signInAlreadyStarted = false;
     }
 
     public static AuthenticationHelper getInstance(){
@@ -66,7 +68,7 @@ public class AuthenticationHelper {
         FirebaseUser user = auth.getCurrentUser();
         String uid = user.getUid();
 
-        DBH.users.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        DBH.users.child(uid).child("firstName").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 // If the user doesn't exist in the database yet
