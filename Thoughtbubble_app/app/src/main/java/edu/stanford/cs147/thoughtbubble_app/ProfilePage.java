@@ -40,6 +40,9 @@ public class ProfilePage extends AppCompatActivity {
     private ImageView mImageView;
     private ArrayList<String> topics;
 
+    // user board
+    CustomPagerEnum customBoard;
+
     private DatabaseHelper DBH;
     private AuthenticationHelper authHelper;
     private StorageHelper storageHelper;
@@ -58,6 +61,8 @@ public class ProfilePage extends AppCompatActivity {
         topics = new ArrayList<String>();
         loadUserFromDatabase();
 
+        loadBoardData();
+
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
         int unselected = Color.parseColor("#00cca3");
         int selected = Color.parseColor("#016d57");
@@ -75,6 +80,15 @@ public class ProfilePage extends AppCompatActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new CustomPagerAdapter(this));
         viewPager.setPageMargin(64);
+    }
+
+    private void loadBoardData(){
+        customBoard = new CustomPagerEnum();
+        // TODO: Fill this in with the backend data
+        customBoard.addBoard("HUNGRY");
+        customBoard.addBoard("I am hungry");
+        customBoard.addBoard("I am more hungry");
+        customBoard.addBoard("sleepy");
     }
 
     public void EnableSave(View view) {
@@ -151,27 +165,33 @@ public class ProfilePage extends AppCompatActivity {
     }
 
     // for the board view
-    public enum CustomPagerEnum {
+    public class CustomPagerEnum {
 
         // TODO: change this to reflect the backend
-
-        RED(0, R.layout.view_red),
-        BLUE(1, R.layout.view_blue);
 
         private int mTitleResId;
         private int mLayoutResId;
 
-        CustomPagerEnum(int titleResId, int layoutResId) {
-            mTitleResId = titleResId;
-            mLayoutResId = layoutResId;
+        private ArrayList<String> boardString;
+
+        public CustomPagerEnum(){
+            boardString = new ArrayList<String>();
         }
 
-        public int getTitleResId() {
-            return mTitleResId;
+        public void addBoard(String boardName){
+            boardString.add(boardName);
         }
+
+        public ArrayList<String> getArray(){
+            return boardString;
+        }
+
+        //public int getTitleResId() {
+        //    return mTitleResId;
+        //}
 
         public int getLayoutResId() {
-            return mLayoutResId;
+            return R.layout.view_blue;
         }
 
     }
@@ -245,7 +265,8 @@ public class ProfilePage extends AppCompatActivity {
     }
 
     private void loadProfileImage(){
-        // TODO: load images from database
+        // TODO: load images from databenum
+        // ase
         mImageView = (ImageView) findViewById(R.id.profile_image);
         Log.d(TAG, "userID " + authHelper.thisUserID);
         // Load the image using Glide
@@ -286,10 +307,28 @@ public class ProfilePage extends AppCompatActivity {
 
         @Override
         public Object instantiateItem(ViewGroup collection, int position) {
-            CustomPagerEnum customPagerEnum = CustomPagerEnum.values()[position];
+            System.out.println("here");
+            final String boardString = customBoard.getArray().get(position);
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            ViewGroup layout = (ViewGroup) inflater.inflate(customPagerEnum.getLayoutResId(), collection, false);
+            View layout = (View) inflater.inflate(customBoard.getLayoutResId(), collection, false);
+            TextView tv = (TextView) layout.findViewById(R.id.textView);
+            tv.setText(boardString);
             collection.addView(layout);
+
+            layout.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    //this will log the page number that was click
+
+                    Intent intent = new Intent(getBaseContext(), IndivBoardView.class);
+
+                    intent.putExtra("CURRENT_BOARD", boardString);
+                    startActivity(intent);
+
+                    //Log.i("TAG", "This page was clicked: " + boardString);
+                }
+            });
+
+
             return layout;
         }
 
@@ -300,7 +339,7 @@ public class ProfilePage extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return CustomPagerEnum.values().length;
+            return customBoard.getArray().size();
         }
 
         @Override
@@ -310,8 +349,9 @@ public class ProfilePage extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            CustomPagerEnum customPagerEnum = CustomPagerEnum.values()[position];
-            return mContext.getString(customPagerEnum.getTitleResId());
+            //CustomPagerEnum customPagerEnum = CustomPagerEnum.values()[position];
+            //return mContext.getString(customPagerEnum.getTitleResId());
+            return customBoard.getArray().get(position);
         }
 
         public void addResult(String inputText) {
@@ -319,9 +359,9 @@ public class ProfilePage extends AppCompatActivity {
             topics.add(result);
         }
 
-        public void removeResult() {
+        //public void removeResult() {
 
-        }
+        //}
 
     }
 
