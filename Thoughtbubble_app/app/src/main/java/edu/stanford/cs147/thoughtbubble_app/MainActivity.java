@@ -16,6 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.ErrorCodes;
+import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -84,7 +88,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     onSignedInInitialize();
 
                 } else if (!authHelper.signInAlreadyStarted){
+
+                    // Set to true to prevent weird nested sign-in bug
                     authHelper.signInAlreadyStarted = true;
+
                     // user is signed out
                     Log.d(TAG, "USER NOT SIGNED IN");
                     onSignedOutCleanup();
@@ -176,24 +183,42 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     // Auth
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
                 // Handle the case where this is a new user
                 authHelper.handleNewUserCreation();
                 Toast.makeText(MainActivity.this, "Signed in!", Toast.LENGTH_SHORT).show();
-            } else if (resultCode == RESULT_CANCELED) {
-                authHelper.signInAlreadyStarted = false;
-                Toast.makeText(MainActivity.this, "Sign-in canceled", Toast.LENGTH_SHORT).show();
-                finish();
+                return;
             } else {
-                // Set sign-in boolean to false for good measure
+                // MUST BE SET TO FALSE TO ALLOW FUTURE SIGN-IN
                 authHelper.signInAlreadyStarted = false;
-                finish();
+                    // Sign in failed
+                    if (response == null) {
+                        // User pressed back button
+                        Toast.makeText(MainActivity.this, "Sign-in cancelled", Toast.LENGTH_SHORT).show();
+                        finish();
+                        return;
+                    }
+
+                    if (response.getErrorCode() == ErrorCodes.NO_NETWORK) {
+                        // Not the most graceful way to handle the errors - should probably have a 404 page-type-thing
+                        Toast.makeText(MainActivity.this, "No internet connection", Toast.LENGTH_SHORT).show();
+                        finish();
+                        return;
+                    }
+
+                    if (response.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
+                        Toast.makeText(MainActivity.this, "Unknown error", Toast.LENGTH_SHORT).show();
+                        finish();
+                        return;
+                    }
+                }
             }
         }
-    }
+
 
     // Sign-out menu (hamburger)
     @Override
@@ -208,8 +233,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         switch (item.getItemId()) {
             case R.id.sign_out_menu:
                 // sign out
-                authHelper.signInAlreadyStarted = false;
-                AuthUI.getInstance().signOut(this);
+                AuthUI.getInstance()
+                        .signOut(this)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            public void onComplete(@NonNull Task<Void> task) {
+                                // user is now signed out
+
+                                // MUST BE SET TO FALSE TO ALLOW FUTURE SIGN-IN
+                                authHelper.signInAlreadyStarted = false;
+                                onSignedOutCleanup();
+                            }
+                        });
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
