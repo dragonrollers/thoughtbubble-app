@@ -2,19 +2,22 @@ package edu.stanford.cs147.thoughtbubble_app;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class SeeDetailedQuestion extends AppCompatActivity {
+
+    private Intent extraInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_see_detailed_question);
 
-        Intent extraInfo = getIntent();
+        extraInfo = getIntent();
 
         fillWithQuestionDetails(extraInfo);
 
@@ -72,6 +75,18 @@ public class SeeDetailedQuestion extends AppCompatActivity {
     }
 
     public void saveToBoard(View view) {
-        finish();
+        Intent boardFullView = new Intent(this, BoardFullView.class);
+        EditText reflection = (EditText) findViewById(R.id.detailedQ_thought_input);
+        String critiqueText = extraInfo.getStringExtra("critiqueText");
+        String answerText = extraInfo.getStringExtra("answerText");
+        String questionText = extraInfo.getStringExtra("questionText");
+        String answererID = extraInfo.getStringExtra("answererID");
+        boardFullView.putExtra("context", "save");
+        boardFullView.putExtra("questionText", questionText);
+        boardFullView.putExtra("answerText", answerText);
+        boardFullView.putExtra("critiqueText", critiqueText);
+        boardFullView.putExtra("reflection", reflection.getText());
+        boardFullView.putExtra("answererID", answererID);
+        startActivity(boardFullView);
     }
 }

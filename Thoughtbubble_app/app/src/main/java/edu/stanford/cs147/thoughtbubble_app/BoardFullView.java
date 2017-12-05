@@ -1,11 +1,14 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -21,16 +24,42 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
     private DatabaseHelper mDatabaseHelper;
     private ChildEventListener allQuestionsListener;
 
+    // boolean to denote where the activity came from
+    private boolean save = false;
+
+    // extra data save space (from previous activity)
+    private String critique = null;
+    private String question = null;
+    private String answer = null;
+    private String answererID = null;
+
+    // strings to remember the newly passed intent
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_full_view);
+
+        String context = getIntent().getStringExtra("context");
 
         // TODO: fill the array with backend data
         BoardArray = new ArrayList<String>();
         BoardArray.add("Board1");
         BoardArray.add("Board2");
         BoardArray.add("Board3");
+
+
+        if(context.equals("save")){
+            // we do not want to finish -- we want to cancel
+            Button saveButton = (Button) findViewById(R.id.finishButton);
+            saveButton.setText("Cancel");
+            save = true;
+            // save extra data to the global variable
+            saveDataToGlobal();
+
+        } else {
+
+        }
 
         BoardAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_list_item_1, BoardArray
@@ -43,6 +72,13 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
         // Attach a listener to the adapter to populate it with the questions in the DB
         mDatabaseHelper = DatabaseHelper.getInstance();
         attachAllQuestionsReadListener();
+    }
+
+    private void saveDataToGlobal(){
+        critique = getIntent().getStringExtra("critiqueText");
+        question = getIntent().getStringExtra("questionText");
+        answer = getIntent().getStringExtra("answerText");
+        answererID = getIntent().getStringExtra("answererID");
     }
 
     // This listener listens for any content added to the "questions" child of the database and when anything
@@ -77,7 +113,24 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        // TODO: START NEW ACTIVITY
+        if(save){
+
+            // TODO: Save the question, answer, critique, and reflection (already saved into the global variables)
+            // into the database and the board that is selected
+            // WE NEED TO SAVE IT HERE, NOT IN THE NEXT ACTIVITY
+
+            Toast alert_saved = Toast.makeText(this, "Your Reflection is saved to the board", Toast.LENGTH_LONG);
+            alert_saved.show();
+
+            // ** I AM SETTING THIS TO 0 BECAUSE I AM USING FILLERS
+            // ONCE WE GET THE DATABASE WORKING, THE CODE SHOULD BE
+            // BoardArray.get(i)
+            // please text Jenny if this confuses you
+            String boardName = BoardArray.get(0);
+            Intent indivBoard = new Intent(this, IndivBoardView.class);
+            indivBoard.putExtra("CURRENT_BOARD", boardName);
+            startActivity(indivBoard);
+        }
     }
 
     public void cancelView(View view) {
