@@ -16,9 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.ErrorCodes;
+import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 
@@ -62,17 +68,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         discover.setBackgroundColor(selected);
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
 
-        // Show your friend's feed first
-        loadFriendsContent();
-
-        // Attach a listener to the adapter to populate it with the questions in the DB
+        // Initialize database helper
         mDatabaseHelper = DatabaseHelper.getInstance();
-        //attachAllQuestionsReadListener();
+
+
+        // Setting up places to display content
+        questionArray = new ArrayList<Question>();
+        questionAdapter = new QuestionAdapter(this,
+                R.layout.listview_item_row, questionArray);
+
+        ListView listView1 = (ListView)findViewById(R.id.feed_list);
+        listView1.setOnItemClickListener(this);
+        listView1.setAdapter(questionAdapter);
 
 
         // Authentication
         authHelper = AuthenticationHelper.getInstance();
-
         authHelper.authListener = new FirebaseAuth.AuthStateListener(){
             @Override
             // This firebaseAuth contains whether or not user is signed in or not
@@ -84,7 +95,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     onSignedInInitialize();
 
                 } else if (!authHelper.signInAlreadyStarted){
+
+                    // Set to true to prevent weird nested sign-in bug
                     authHelper.signInAlreadyStarted = true;
+
                     // user is signed out
                     Log.d(TAG, "USER NOT SIGNED IN");
                     onSignedOutCleanup();
@@ -96,6 +110,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         authHelper.auth.addAuthStateListener(authHelper.authListener);
 
 
+
+        // Show your friend's feed first
+        loadFriendsContent();
+
+
+
+
     }
 
     @Override
@@ -103,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         System.out.println(index);
         Question question = questionArray.get(index);
         Intent seeDetailedQuestion = new Intent(this, SeeDetailedQuestion.class);
-        //TODO: add the question id as an int to the intent
+
         seeDetailedQuestion.putExtra("questionID", question.questionID);
         seeDetailedQuestion.putExtra("questionText", question.questionText);
         seeDetailedQuestion.putExtra("answerText", question.answerText);
@@ -137,23 +158,33 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // This listener listens for any content added to the "questions" child of the database and when anything
     // is added, the question's text is added to the questionAdapter on the Discover page
     // TODO properly implement child removed/changed methods, or choose a different listener if more appropriate
-    /* private void attachAllQuestionsReadListener(){
+    private void attachAllQuestionsReadListener(){
         if (allQuestionsListener == null) { // It start out null eventually when we add authentication
             allQuestionsListener = new ChildEventListener() {
                 @Override
 
                 // Whenever a child is added to the "questions" part of the database, add the new question to the adapter
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    //Log.d(TAG, "IN ON CHILD ADDED");
 
                     Question question = dataSnapshot.getValue(Question.class);
 
-                    // TODO store more than just question text in question array
-                    questionAdapter.add(question);
+                    //Log.d(TAG, question.toString());
+
+                    questionArray.add(question);
+                    questionAdapter.notifyDataSetChanged();
                 }
 
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                public void onChildRemoved(DataSnapshot dataSnapshot) {}
+                }
+
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    Question question = dataSnapshot.getValue(Question.class);
+
+                    questionArray.remove(question);
+                    questionAdapter.notifyDataSetChanged();
+                }
 
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
 
@@ -171,29 +202,47 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             mDatabaseHelper.questions.removeEventListener(allQuestionsListener);
             allQuestionsListener = null;
         }
-    } */
+    }
 
 
     // Auth
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
                 // Handle the case where this is a new user
                 authHelper.handleNewUserCreation();
                 Toast.makeText(MainActivity.this, "Signed in!", Toast.LENGTH_SHORT).show();
-            } else if (resultCode == RESULT_CANCELED) {
-                authHelper.signInAlreadyStarted = false;
-                Toast.makeText(MainActivity.this, "Sign-in canceled", Toast.LENGTH_SHORT).show();
-                finish();
+                return;
             } else {
-                // Set sign-in boolean to false for good measure
+                // MUST BE SET TO FALSE TO ALLOW FUTURE SIGN-IN
                 authHelper.signInAlreadyStarted = false;
-                finish();
+                    // Sign in failed
+                    if (response == null) {
+                        // User pressed back button
+                        Toast.makeText(MainActivity.this, "Sign-in cancelled", Toast.LENGTH_SHORT).show();
+                        finish();
+                        return;
+                    }
+
+                    if (response.getErrorCode() == ErrorCodes.NO_NETWORK) {
+                        // Not the most graceful way to handle the errors - should probably have a 404 page-type-thing
+                        Toast.makeText(MainActivity.this, "No internet connection", Toast.LENGTH_SHORT).show();
+                        finish();
+                        return;
+                    }
+
+                    if (response.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
+                        Toast.makeText(MainActivity.this, "Unknown error", Toast.LENGTH_SHORT).show();
+                        finish();
+                        return;
+                    }
+                }
             }
         }
-    }
+
 
     // Sign-out menu (hamburger)
     @Override
@@ -208,8 +257,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         switch (item.getItemId()) {
             case R.id.sign_out_menu:
                 // sign out
-                authHelper.signInAlreadyStarted = false;
-                AuthUI.getInstance().signOut(this);
+                AuthUI.getInstance()
+                        .signOut(this)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            public void onComplete(@NonNull Task<Void> task) {
+                                // user is now signed out
+
+                                // MUST BE SET TO FALSE TO ALLOW FUTURE SIGN-IN
+                                authHelper.signInAlreadyStarted = false;
+                                onSignedOutCleanup();
+                            }
+                        });
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -228,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if (authHelper.authListener != null) {
             authHelper.auth.removeAuthStateListener(authHelper.authListener);
         }
-        //detachAllQuestionsReadListener();
+        detachAllQuestionsReadListener();
         questionAdapter.clear();
 
     }
@@ -236,52 +294,61 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private void onSignedInInitialize(){
 
         authHelper.setThisUserID();
+        loadYourContent();
+        attachAllQuestionsReadListener();
 
-        //attachAllQuestionsReadListener();
 
     }
 
     private void onSignedOutCleanup(){
         questionAdapter.clear();
-        //detachAllQuestionsReadListener();
+        detachAllQuestionsReadListener();
 
     }
 
     private void loadYourContent(){
 
+        Log.d(TAG, "IN LOAD YOUR CONTENT");
+
         yourfeed = false;
 
-        // TODO : PLEASE FILL IN THE QUESTIONARRAY WITH A REAL DATA
-        questionArray = new ArrayList<Question>();
+        questionArray.clear();
+        questionAdapter.notifyDataSetChanged();
+
+        // TODO : REMOVE DUMMY DATA WHEN FULLY IMPLEMENTED
         questionArray.add(new Question("YQ1", "YA1", "Critique1", "10:43", "Grace", "Bonnie"));
         questionArray.add(new Question("YQ2", "YA2", "Critique2", "10:13", "Jenny", "Bonnie"));
 
-        questionAdapter = new QuestionAdapter(this,
-                R.layout.listview_item_row, questionArray);
+        // TODO create the correct listeners and make the correct one detach and the other one attach (shouldn't be the same one)
+        detachAllQuestionsReadListener();
+        attachAllQuestionsReadListener();
 
 
-        ListView listView1 = (ListView)findViewById(R.id.feed_list);
-        listView1.setOnItemClickListener(this);
-        listView1.setAdapter(questionAdapter);
+
+
         switchToYourHeader();
+
     }
 
     private void loadFriendsContent(){
 
+        Log.d(TAG, "IN LOAD FRIENDS' CONTENT");
+
         yourfeed = true;
-        // TODO : PLEASE FILL IN THE QUESTIONARRAY WITH A REAL DATA
-        questionArray = new ArrayList<Question>();
+
+        questionArray.clear();
+        questionAdapter.notifyDataSetChanged();
+
+        // TODO : REMOVE DUMMY DATA WHEN FULLY IMPLEMENTED
         questionArray.add(new Question("Q1", "A1", "Critique1", "10:43", "Jenny", "Bonnie"));
         questionArray.add(new Question("Q2", "A2", "Critique2", "10:13", "Po", "Grace"));
 
-        questionAdapter = new QuestionAdapter(this,
-                R.layout.listview_item_row, questionArray);
+        // TODO create the correct listeners and make the correct one detach and the other one attach (shouldn't be the same one)
+        detachAllQuestionsReadListener();
+        attachAllQuestionsReadListener();
 
-
-        ListView listView1 = (ListView)findViewById(R.id.feed_list);
-        listView1.setOnItemClickListener(this);
-        listView1.setAdapter(questionAdapter);
         switchToFriendHeader();
+
     }
 
     private void switchToYourHeader() {
