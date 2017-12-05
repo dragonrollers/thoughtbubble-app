@@ -23,6 +23,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 
@@ -66,17 +68,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         discover.setBackgroundColor(selected);
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
 
-        // Show your friend's feed first
-        loadFriendsContent();
-
-        // Attach a listener to the adapter to populate it with the questions in the DB
+        // Initialize database helper
         mDatabaseHelper = DatabaseHelper.getInstance();
-        //attachAllQuestionsReadListener();
+
+
+        // Setting up places to display content
+        questionArray = new ArrayList<Question>();
+        questionAdapter = new QuestionAdapter(this,
+                R.layout.listview_item_row, questionArray);
+
+        ListView listView1 = (ListView)findViewById(R.id.feed_list);
+        listView1.setOnItemClickListener(this);
+        listView1.setAdapter(questionAdapter);
 
 
         // Authentication
         authHelper = AuthenticationHelper.getInstance();
-
         authHelper.authListener = new FirebaseAuth.AuthStateListener(){
             @Override
             // This firebaseAuth contains whether or not user is signed in or not
@@ -103,6 +110,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         authHelper.auth.addAuthStateListener(authHelper.authListener);
 
 
+
+        // Show your friend's feed first
+        loadFriendsContent();
+
+
+
+
     }
 
     @Override
@@ -110,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         System.out.println(index);
         Question question = questionArray.get(index);
         Intent seeDetailedQuestion = new Intent(this, SeeDetailedQuestion.class);
-        //TODO: add the question id as an int to the intent
+
         seeDetailedQuestion.putExtra("questionID", question.questionID);
         seeDetailedQuestion.putExtra("questionText", question.questionText);
         seeDetailedQuestion.putExtra("answerText", question.answerText);
@@ -144,23 +158,33 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // This listener listens for any content added to the "questions" child of the database and when anything
     // is added, the question's text is added to the questionAdapter on the Discover page
     // TODO properly implement child removed/changed methods, or choose a different listener if more appropriate
-    /* private void attachAllQuestionsReadListener(){
+    private void attachAllQuestionsReadListener(){
         if (allQuestionsListener == null) { // It start out null eventually when we add authentication
             allQuestionsListener = new ChildEventListener() {
                 @Override
 
                 // Whenever a child is added to the "questions" part of the database, add the new question to the adapter
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    //Log.d(TAG, "IN ON CHILD ADDED");
 
                     Question question = dataSnapshot.getValue(Question.class);
 
-                    // TODO store more than just question text in question array
-                    questionAdapter.add(question);
+                    //Log.d(TAG, question.toString());
+
+                    questionArray.add(question);
+                    questionAdapter.notifyDataSetChanged();
                 }
 
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                public void onChildRemoved(DataSnapshot dataSnapshot) {}
+                }
+
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    Question question = dataSnapshot.getValue(Question.class);
+
+                    questionArray.remove(question);
+                    questionAdapter.notifyDataSetChanged();
+                }
 
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
 
@@ -178,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             mDatabaseHelper.questions.removeEventListener(allQuestionsListener);
             allQuestionsListener = null;
         }
-    } */
+    }
 
 
     // Auth
@@ -262,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if (authHelper.authListener != null) {
             authHelper.auth.removeAuthStateListener(authHelper.authListener);
         }
-        //detachAllQuestionsReadListener();
+        detachAllQuestionsReadListener();
         questionAdapter.clear();
 
     }
@@ -270,52 +294,61 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private void onSignedInInitialize(){
 
         authHelper.setThisUserID();
+        loadYourContent();
+        attachAllQuestionsReadListener();
 
-        //attachAllQuestionsReadListener();
 
     }
 
     private void onSignedOutCleanup(){
         questionAdapter.clear();
-        //detachAllQuestionsReadListener();
+        detachAllQuestionsReadListener();
 
     }
 
     private void loadYourContent(){
 
+        Log.d(TAG, "IN LOAD YOUR CONTENT");
+
         yourfeed = false;
 
-        // TODO : PLEASE FILL IN THE QUESTIONARRAY WITH A REAL DATA
-        questionArray = new ArrayList<Question>();
+        questionArray.clear();
+        questionAdapter.notifyDataSetChanged();
+
+        // TODO : REMOVE DUMMY DATA WHEN FULLY IMPLEMENTED
         questionArray.add(new Question("YQ1", "YA1", "Critique1", "10:43", "Grace", "Bonnie"));
         questionArray.add(new Question("YQ2", "YA2", "Critique2", "10:13", "Jenny", "Bonnie"));
 
-        questionAdapter = new QuestionAdapter(this,
-                R.layout.listview_item_row, questionArray);
+        // TODO create the correct listeners and make the correct one detach and the other one attach (shouldn't be the same one)
+        detachAllQuestionsReadListener();
+        attachAllQuestionsReadListener();
 
 
-        ListView listView1 = (ListView)findViewById(R.id.feed_list);
-        listView1.setOnItemClickListener(this);
-        listView1.setAdapter(questionAdapter);
+
+
         switchToYourHeader();
+
     }
 
     private void loadFriendsContent(){
 
+        Log.d(TAG, "IN LOAD FRIENDS' CONTENT");
+
         yourfeed = true;
-        // TODO : PLEASE FILL IN THE QUESTIONARRAY WITH A REAL DATA
-        questionArray = new ArrayList<Question>();
+
+        questionArray.clear();
+        questionAdapter.notifyDataSetChanged();
+
+        // TODO : REMOVE DUMMY DATA WHEN FULLY IMPLEMENTED
         questionArray.add(new Question("Q1", "A1", "Critique1", "10:43", "Jenny", "Bonnie"));
         questionArray.add(new Question("Q2", "A2", "Critique2", "10:13", "Po", "Grace"));
 
-        questionAdapter = new QuestionAdapter(this,
-                R.layout.listview_item_row, questionArray);
+        // TODO create the correct listeners and make the correct one detach and the other one attach (shouldn't be the same one)
+        detachAllQuestionsReadListener();
+        attachAllQuestionsReadListener();
 
-
-        ListView listView1 = (ListView)findViewById(R.id.feed_list);
-        listView1.setOnItemClickListener(this);
-        listView1.setAdapter(questionAdapter);
         switchToFriendHeader();
+
     }
 
     private void switchToYourHeader() {
