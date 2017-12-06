@@ -34,6 +34,7 @@ public class StorageHelper {
     }
 
     public StorageReference getProfileImageRef(String thisUserID) {
+        //TODO check if user has profile picture
         return storageReference.child("images/profile/" + thisUserID + ".jpg");
     }
 }
