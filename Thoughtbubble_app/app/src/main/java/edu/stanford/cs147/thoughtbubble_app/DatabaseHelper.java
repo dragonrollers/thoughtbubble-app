@@ -12,12 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-/**
- * Created by Grace on 11/20/2017.
- */
-
-
-
 class DatabaseHelper {
 
     // For debugging
@@ -56,6 +50,23 @@ class DatabaseHelper {
     public void writeLastName(String thisUserID, String lastName) {
         DatabaseReference userRef = users.child(thisUserID);
         userRef.child("lastName").setValue(lastName);
+    }
+
+    public void writeNewInterest(final String thisUserID, final String interest) {
+        final DatabaseReference ref = users.child(thisUserID).child("topics");
+        ValueEventListener topicsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                long index = dataSnapshot.getChildrenCount();
+                ref.child(String.valueOf(index)).setValue(interest);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        ref.addListenerForSingleValueEvent(topicsListener);
     }
 
     public void writeAskToDatabase(String questionText, String thisUserID, String sendToID) {
