@@ -21,6 +21,8 @@
             android:id="@+id/Profile"
             android:layout_width="fill_parent"
             android:layout_weight="1"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
             android:layout_height="match_parent"
             android:onClick="ProfilePage"
             android:text="User" />
@@ -30,6 +32,8 @@
             android:layout_width="fill_parent"
             android:layout_weight="1"
             android:layout_height="match_parent"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
             android:onClick="DiscoverPage"
             android:text="Discover" />
 
@@ -38,6 +42,8 @@
             android:layout_width="fill_parent"
             android:layout_weight="1"
             android:layout_height="match_parent"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
             android:onClick="AskPage"
             android:text="Ask" />
 
@@ -46,6 +52,8 @@
             android:layout_width="fill_parent"
             android:layout_weight="1"
             android:layout_height="match_parent"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
             android:onClick="AnswerPage"
             android:text="Answer" />
 
