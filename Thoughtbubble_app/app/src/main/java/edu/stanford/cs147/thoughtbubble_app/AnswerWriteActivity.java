@@ -64,7 +64,7 @@ public class AnswerWriteActivity extends AppCompatActivity {
                     }
                 });
 
-        loadQuestionText(questionID);
+        loadQuestionText(intent);
     }
 
     /**
@@ -75,14 +75,10 @@ public class AnswerWriteActivity extends AppCompatActivity {
      *
      * @param questionID
      */
-    private void loadQuestionText(String questionID) {
-        TextView questionText = (TextView) findViewById(R.id.answerWrite_question_text);
-        //TODO: load questions somehow using the passed in question ID
-        //String question = "Question Dummy Text";
-        //questionText.setText(question);
-
-        //EditText revisedQuestionPrompt = (EditText) findViewById(R.id.answer_revisedQuestion_text);
-        //revisedQuestionPrompt.setHint(question);
+    private void loadQuestionText(Intent intent) {
+        String questionText = intent.getStringExtra("questionText");
+        TextView question = (TextView) findViewById(R.id.answerWrite_question_text);
+        question.setText(questionText);
     }
 
     /**
