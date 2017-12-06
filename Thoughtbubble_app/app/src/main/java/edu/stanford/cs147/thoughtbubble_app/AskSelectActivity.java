@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,7 +34,6 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
     private ArrayAdapter<String> friendsAdapter;
     private ArrayList<String[]> friendsArray; // For holding the ID and name of the friends displayed
     private ArrayList<String> friendNamesArray;
-
 
 
     @Override
@@ -79,7 +79,6 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
         attachFriendsReadListener();
 
 
-
     }
 
     /**
@@ -107,7 +106,7 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
     // This listener listens for any change in the "friends" portion of the database for this user
     // TODO this assumes that if a user changes their name, that change is propogated to the "friends" parts of the DB
     //      ^ That might not be the best practice, so we can change if necessary!
-    private void attachFriendsReadListener(){
+    private void attachFriendsReadListener() {
         if (friendsListener == null) { // It start out null eventually when we add authentication
 
             // Define the listener
@@ -119,15 +118,20 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     // Get the updated friends list
-                    GenericTypeIndicator<ArrayList<HashMap<String, String>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, String>>>() {};
+                    GenericTypeIndicator<ArrayList<HashMap<String, String>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, String>>>() {
+                    };
                     ArrayList<HashMap<String, String>> friendList = dataSnapshot.getValue(t);
 
                     // Populate the adapter with the updated data
                     friendsAdapter.clear();
-                    for (HashMap<String, String> h : friendList){
-                        friendsAdapter.add(h.get("friendName"));
-                        String[] friend = {h.get("friendID"), h.get("friendName")};
-                        friendsArray.add(friend);
+                    if (friendList != null) {
+                        for (HashMap<String, String> h : friendList) {
+                            friendsAdapter.add(h.get("friendName"));
+                            String[] friend = {h.get("friendID"), h.get("friendName")};
+                            friendsArray.add(friend);
+                        }
+                    } else {
+                        Toast.makeText(AskSelectActivity.this, "You currently don't have friends--", Toast.LENGTH_SHORT).show();
                     }
 
                 }
