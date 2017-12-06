@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,8 +24,12 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
     private String TAG = "AnswerList Activity";
 
 
-    ArrayList<String> questionArray;
-    ArrayAdapter<String> adapter;
+    //ArrayList<String> questionArray;
+    //ArrayAdapter adapter;
+
+    ArrayList<Question> questionArray;
+    private AnonQuestionAdapter questionAdapter;
+
     boolean unansweredView;
 
     // Firebase database
@@ -61,17 +64,20 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
 
         unansweredView = true;
-        questionArray = new ArrayList<>();
-        loadUnansweredQuestions();
-        adapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_list_item_1, questionArray
-        );
 
 
-        ListView list = (ListView) findViewById(R.id.ask_unanswered_list);
-        list.setOnItemClickListener(this);
-        list.setAdapter(adapter);
+        // Setting up places to display content
+        questionArray = new ArrayList<Question>();
+        // TODO : REMOVE DUMMY DATA WHEN FULLY IMPLEMENTED
+        questionArray.add(new Question("YQ1", "YA1", "Critique1", "10:43", "Grace", "Bonnie"));
+        questionArray.add(new Question("YQ2", "YA2", "Critique2", "10:13", "Jenny", "Bonnie"));
 
+        questionAdapter = new AnonQuestionAdapter(this,
+                R.layout.unanswered_question_items, questionArray);
+
+        ListView listView1 = (ListView)findViewById(R.id.ask_unanswered_list);
+        listView1.setOnItemClickListener(this);
+        listView1.setAdapter(questionAdapter);
 
         switchToUnansweredHeader();
 
@@ -81,16 +87,18 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void onItemClick(AdapterView<?> list, View row, int index, long rowID) {
-        String clickedName = questionArray.get(index); //todo: use this to retrieve the question, and question id
+        Question clickedQuestion = questionArray.get(index); //todo: use this to retrieve the question, and question id
         if (unansweredView) {
             Intent writeAnswerActivity = new Intent(this, AnswerWriteActivity.class);
             //TODO: add the question id as an int to the intent
-            writeAnswerActivity.putExtra("questionID", 123);
+            writeAnswerActivity.putExtra("questionID", clickedQuestion.questionID);
+            writeAnswerActivity.putExtra("questionText", clickedQuestion.questionText);
             startActivity(writeAnswerActivity);
         } else {
             Intent seeDetailedQuestion = new Intent(this, SeeDetailedQuestion.class);
             //TODO: add the question id as an int to the intent
-            seeDetailedQuestion.putExtra("questionID", 123);
+            seeDetailedQuestion.putExtra("questionID", clickedQuestion.questionID);
+            seeDetailedQuestion.putExtra("questionText", clickedQuestion.questionText);
             startActivity(seeDetailedQuestion);
         }
 
@@ -166,7 +174,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
     private void loadUnansweredContent() {
         unansweredView = true;
         loadUnansweredQuestions();
-        adapter.notifyDataSetChanged();
+        questionAdapter.notifyDataSetChanged();
         switchToUnansweredHeader();
 
     }
@@ -174,7 +182,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
     private void loadAnsweredContent() {
         unansweredView = false;
         loadAnsweredQuestions();
-        adapter.notifyDataSetChanged();
+        questionAdapter.notifyDataSetChanged();
         switchToAnsweredHeader();
     }
 
@@ -251,8 +259,8 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
                             if (question.answerText == null) {
                                 // TODO add more than just question text
-                                questionArray.add(question.questionText);
-                                adapter.notifyDataSetChanged();
+                                questionArray.add(question);
+                                questionAdapter.notifyDataSetChanged();
                             }
                         }
 
@@ -271,7 +279,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
                     // TODO add more than just question text
                     questionArray.remove(question.questionText);
-                    adapter.notifyDataSetChanged();
+                    questionAdapter.notifyDataSetChanged();
                 }
 
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
@@ -316,8 +324,8 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
                             if (question.answerText != null) {
                                 // TODO add more than just question text
-                                questionArray.add(question.questionText);
-                                adapter.notifyDataSetChanged();
+                                questionArray.add(question);
+                                questionAdapter.notifyDataSetChanged();
                             }
                         }
 
@@ -335,8 +343,8 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
                     Question question = dataSnapshot.getValue(Question.class);
 
                     // TODO add more than just question text
-                    questionArray.remove(question.questionText);
-                    adapter.notifyDataSetChanged();
+                    questionArray.remove(question);
+                    questionAdapter.notifyDataSetChanged();
                 }
 
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
