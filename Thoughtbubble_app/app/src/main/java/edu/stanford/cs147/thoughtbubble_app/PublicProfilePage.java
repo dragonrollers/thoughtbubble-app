@@ -95,17 +95,22 @@ public class PublicProfilePage extends AppCompatActivity {
 
     private void loadProfileImage(){
         //TODO Note this is untested because we haven't linked to this view
-        //Also all users except for us (teammember@thoughtbubbleapp.com)
-        //don't have images in storage right now, which causes an
-        //exception when trying to access their nonexistent image
         mImageView = (ImageView) findViewById(R.id.profile_image);
         Log.d(TAG, "userID " + thisUserID);
         // Load the image using Glide
-        Glide.with(this /* context */)
-                .using(new FirebaseImageLoader())
-                .load(storageHelper.getProfileImageRef(thisUserID))
-                .asBitmap()
-                .into(mImageView);
+        if (currUser.getHasProfileImage()) {
+            Glide.with(this /* context */)
+                    .using(new FirebaseImageLoader())
+                    .load(storageHelper.getProfileImageRef(thisUserID))
+                    .asBitmap()
+                    .into(mImageView);
+        } else {
+            Glide.with(this /* context */)
+                    .using(new FirebaseImageLoader())
+                    .load(storageHelper.getProfileImageRef("blank-user"))
+                    .asBitmap()
+                    .into(mImageView);
+        }
     }
 
 }

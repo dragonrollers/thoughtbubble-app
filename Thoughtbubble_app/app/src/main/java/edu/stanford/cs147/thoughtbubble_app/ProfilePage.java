@@ -301,12 +301,22 @@ public class ProfilePage extends AppCompatActivity {
     private void loadProfileImage(){
         mImageView = (ImageView) findViewById(R.id.profile_image);
         Log.d(TAG, "userID " + authHelper.thisUserID);
+
         // Load the image using Glide
-        Glide.with(this /* context */)
-                .using(new FirebaseImageLoader())
-                .load(storageHelper.getProfileImageRef(authHelper.thisUserID))
-                .asBitmap()
-                .into(mImageView);
+        if (currUser.getHasProfileImage()) {
+            Glide.with(this /* context */)
+                    .using(new FirebaseImageLoader())
+                    .load(storageHelper.getProfileImageRef(authHelper.thisUserID))
+                    .asBitmap()
+                    .into(mImageView);
+        } else {
+            Glide.with(this /* context */)
+                    .using(new FirebaseImageLoader())
+                    .load(storageHelper.getProfileImageRef("blank-user"))
+                    .asBitmap()
+                    .into(mImageView);
+        }
+
     }
 
     public void ProfilePage(View view) {
