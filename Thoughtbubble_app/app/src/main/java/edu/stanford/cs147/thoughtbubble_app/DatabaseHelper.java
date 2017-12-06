@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,6 +60,26 @@ class DatabaseHelper {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 long index = dataSnapshot.getChildrenCount();
                 ref.child(String.valueOf(index)).setValue(interest);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        ref.addListenerForSingleValueEvent(topicsListener);
+    }
+
+    public void removeInterest(String thisUserID, final int index) {
+        Log.d(TAG, "index=" + index);
+        final DatabaseReference ref = users.child(thisUserID);
+        ValueEventListener topicsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User currUser = dataSnapshot.getValue(User.class);
+                ArrayList<String> topics = currUser.getTopics();
+                topics.remove(index);
+                ref.child("topics").setValue(topics);
             }
 
             @Override

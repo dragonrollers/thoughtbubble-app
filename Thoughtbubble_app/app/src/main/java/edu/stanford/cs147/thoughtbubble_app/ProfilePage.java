@@ -268,12 +268,14 @@ public class ProfilePage extends AppCompatActivity {
             Button btn = new Button(this);
             btn.setText(topics.get(i));
 
+            final int finalI = i;
             btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
                     FragmentManager fm = getFragmentManager();
                     DialogFragmentProfile dialogFragment = new DialogFragmentProfile ();
                     Bundle args = new Bundle();
+                    args.putInt("num", finalI);
                     dialogFragment.setArguments(args);
                     dialogFragment.show(fm, "Do you want to delete this topic?");
                     System.out.println(dialogFragment.getActivity());
