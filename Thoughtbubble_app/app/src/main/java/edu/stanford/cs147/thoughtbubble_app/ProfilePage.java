@@ -254,11 +254,11 @@ public class ProfilePage extends AppCompatActivity {
 
         LinearLayout profilelayout = (LinearLayout) findViewById(R.id.profilelayout);
 
+        if (topics == null) {
+            topics = new ArrayList<String>();
+        }
         for (int i = 0; i < topics.size(); i++) {
-
             Button btn = new Button(this);
-            //btn.setWidth();
-            //btn.setHeight(20);
             btn.setText(topics.get(i));
 
             btn.setOnClickListener(new View.OnClickListener() {
@@ -292,8 +292,6 @@ public class ProfilePage extends AppCompatActivity {
     }
 
     private void loadProfileImage(){
-        // TODO: load images from databenum
-        // ase
         mImageView = (ImageView) findViewById(R.id.profile_image);
         Log.d(TAG, "userID " + authHelper.thisUserID);
         // Load the image using Glide
@@ -334,7 +332,6 @@ public class ProfilePage extends AppCompatActivity {
 
         @Override
         public Object instantiateItem(ViewGroup collection, int position) {
-            System.out.println("here");
             final String boardString = customBoard.getArray().get(position);
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View layout = (View) inflater.inflate(customBoard.getLayoutResId(), collection, false);
