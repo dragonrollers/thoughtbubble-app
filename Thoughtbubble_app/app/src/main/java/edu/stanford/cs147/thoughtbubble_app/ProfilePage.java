@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -80,6 +79,11 @@ public class ProfilePage extends AppCompatActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new CustomPagerAdapter(this));
         viewPager.setPageMargin(64);
+
+        // name edit box
+        LinearLayout editName = (LinearLayout) findViewById(R.id.editNameBox);
+        editName.setVisibility(View.GONE);
+
     }
 
     private void loadBoardData(){
@@ -93,31 +97,40 @@ public class ProfilePage extends AppCompatActivity {
 
     public void EnableSave(View view) {
 
-        TextSwitcher switcher = (TextSwitcher) findViewById(R.id.save_edit_switcher);
+        // edit -> save
+
+        ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
         SwitchEditSave(view);
         // TODO: Save these things to the database
 
         // This is a new name.
-        EditText et=(EditText)findViewById(R.id.hidden_edit_view);
-        String newName = et.getText().toString();
+        EditText firstName=(EditText)findViewById(R.id.first_name_view);
+        String newFirstName = firstName.getText().toString();
+        EditText lastName=(EditText)findViewById(R.id.last_name_view);
+        String newLastName = lastName.getText().toString();
+        String newName = newFirstName + " " + newLastName;
         TextView myTV = (TextView) findViewById(R.id.profile_name);
         myTV.setText(newName);
+
+        LinearLayout editName = (LinearLayout) findViewById(R.id.editNameBox);
+        editName.setVisibility(View.GONE);
+        TextView name = (TextView) findViewById(R.id.profile_name);
+        name.setVisibility(View.VISIBLE);
+
 
 
         // Save button disabled, change to edit button
         TextView switcher_cur_view = (TextView) switcher.getCurrentView();
         switcher.showNext();
-        ViewSwitcher switcher2 = (ViewSwitcher) findViewById(R.id.my_switcher);
-        switcher2.showNext();
+        //ViewSwitcher switcher2 = (ViewSwitcher) findViewById(R.id.my_switcher);
+        //switcher2.showNext();
     }
 
     private void SwitchEditSave(View view){
-        TextSwitcher switcher = (TextSwitcher) findViewById(R.id.save_edit_switcher);
+        ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
         TextView switcher_cur_view = (TextView) switcher.getCurrentView();
         String switch_string = switcher_cur_view.getText().toString().replaceAll("\\s+","");
-        System.out.println(switch_string);
         if (switch_string.equals("EditProfile")){
-            System.out.println("I AM HERE");
             switcher.showNext();
         }
     }
@@ -125,17 +138,30 @@ public class ProfilePage extends AppCompatActivity {
     public void EditProfile(View view) {
         SwitchEditSave(view);
         EditName(view);
+        LinearLayout editName = (LinearLayout) findViewById(R.id.editNameBox);
+        editName.setVisibility(View.VISIBLE);
+        TextView name = (TextView) findViewById(R.id.profile_name);
+        name.setVisibility(View.GONE);
     }
 
 
     public void EditName(View view) {
         ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
         switcher.showNext(); //or switcher.showPrevious();
-        TextView myTV = (TextView) switcher.findViewById(R.id.profile_name);
-        EditText et=(EditText)findViewById(R.id.hidden_edit_view);
-        String newName = et.getText().toString();
+        // This is a new name.
+        EditText firstName=(EditText)findViewById(R.id.first_name_view);
+        String newFirstName = firstName.getText().toString();
+        EditText lastName=(EditText)findViewById(R.id.last_name_view);
+        String newLastName = lastName.getText().toString();
+        String newName = newFirstName + " " + newLastName;
+        TextView myTV = (TextView) findViewById(R.id.profile_name);
+        LinearLayout editName = (LinearLayout) findViewById(R.id.editNameBox);
+        editName.setVisibility(View.VISIBLE);
+        TextView name = (TextView) findViewById(R.id.profile_name);
+        name.setVisibility(View.GONE);
         myTV.setText(newName);
         SwitchEditSave(view);
+
     }
 
     public void changeimage(View view) {
