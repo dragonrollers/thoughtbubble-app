@@ -60,8 +60,6 @@ public class ProfilePage extends AppCompatActivity {
         topics = new ArrayList<String>();
         loadUserFromDatabase();
 
-        loadBoardData();
-
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
         int unselected = Color.parseColor("#00cca3");
         int selected = Color.parseColor("#016d57");
@@ -75,24 +73,22 @@ public class ProfilePage extends AppCompatActivity {
         discover.setBackgroundColor(unselected);
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
 
-        // board page
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new CustomPagerAdapter(this));
-        viewPager.setPageMargin(64);
-
         // name edit box
         LinearLayout editName = (LinearLayout) findViewById(R.id.editNameBox);
         editName.setVisibility(View.GONE);
 
     }
 
-    private void loadBoardData(){
+    public void createBoardPage(ArrayList<String> boards) {
         customBoard = new CustomPagerEnum();
-        // TODO: Fill this in with the backend data
-        customBoard.addBoard("HUNGRY");
-        customBoard.addBoard("I am hungry");
-        customBoard.addBoard("I am more hungry");
-        customBoard.addBoard("sleepy");
+        Log.d(TAG, "boards is not null");
+        for (int i = 0; i < boards.size(); i++) {
+            customBoard.addBoard(boards.get(i));
+        }
+        Log.d(TAG, "createBoardPage");
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(new CustomPagerAdapter(this));
+        viewPager.setPageMargin(64);
     }
 
     public void EnableSave(View view) {
@@ -233,6 +229,12 @@ public class ProfilePage extends AppCompatActivity {
                     currUser = dataSnapshot.getValue(User.class);
                     Log.d(TAG, "getting currUser");
                     topics = currUser.getTopics();
+                    ArrayList<String> boards = currUser.getBoards();
+                    Log.d(TAG, "boards=" + boards);
+                    if (boards != null) {
+                        createBoardPage(boards);
+                    }
+
                     loadProfileText();
                     loadProfileImage();
                 }
@@ -254,11 +256,11 @@ public class ProfilePage extends AppCompatActivity {
 
         LinearLayout profilelayout = (LinearLayout) findViewById(R.id.profilelayout);
 
+        if (topics == null) {
+            topics = new ArrayList<String>();
+        }
         for (int i = 0; i < topics.size(); i++) {
-
             Button btn = new Button(this);
-            //btn.setWidth();
-            //btn.setHeight(20);
             btn.setText(topics.get(i));
 
             btn.setOnClickListener(new View.OnClickListener() {
@@ -292,8 +294,6 @@ public class ProfilePage extends AppCompatActivity {
     }
 
     private void loadProfileImage(){
-        // TODO: load images from databenum
-        // ase
         mImageView = (ImageView) findViewById(R.id.profile_image);
         Log.d(TAG, "userID " + authHelper.thisUserID);
         // Load the image using Glide
@@ -334,7 +334,6 @@ public class ProfilePage extends AppCompatActivity {
 
         @Override
         public Object instantiateItem(ViewGroup collection, int position) {
-            System.out.println("here");
             final String boardString = customBoard.getArray().get(position);
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View layout = (View) inflater.inflate(customBoard.getLayoutResId(), collection, false);

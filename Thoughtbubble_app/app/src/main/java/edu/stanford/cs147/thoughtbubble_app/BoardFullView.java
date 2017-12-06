@@ -3,6 +3,7 @@ package edu.stanford.cs147.thoughtbubble_app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,16 +14,24 @@ import android.widget.Toast;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class BoardFullView extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
+    private String TAG = "BoardFullView";
+
     ArrayList<String> BoardArray;
     private ArrayAdapter<String> BoardAdapter;
     // Firebase
     private DatabaseHelper mDatabaseHelper;
+    private AuthenticationHelper authHelper;
     private ChildEventListener allQuestionsListener;
+    private ValueEventListener currUserListener;
+
+    private User currUser;
 
     // boolean to denote where the activity came from
     private boolean save = false;
@@ -42,12 +51,10 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
 
         String context = getIntent().getStringExtra("context");
 
-        // TODO: fill the array with backend data
-        BoardArray = new ArrayList<String>();
-        BoardArray.add("Board1");
-        BoardArray.add("Board2");
-        BoardArray.add("Board3");
+        mDatabaseHelper = DatabaseHelper.getInstance();
+        authHelper = AuthenticationHelper.getInstance();
 
+        loadUserFromDatabase();
 
         if(context.equals("save")){
             // we do not want to finish -- we want to cancel
@@ -61,6 +68,11 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
 
         }
 
+        // Attach a listener to the adapter to populate it with the questions in the DB
+        attachAllQuestionsReadListener();
+    }
+
+    private void loadBoards() {
         BoardAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_list_item_1, BoardArray
         );
@@ -68,10 +80,30 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
         ListView list = (ListView) findViewById(R.id.feed_list);
         list.setOnItemClickListener(this);
         list.setAdapter(BoardAdapter);
+    }
 
-        // Attach a listener to the adapter to populate it with the questions in the DB
-        mDatabaseHelper = DatabaseHelper.getInstance();
-        attachAllQuestionsReadListener();
+    private void loadUserFromDatabase() {
+        Log.d(TAG, "loadUserFromDatabase");
+        final DatabaseReference currUserRef = mDatabaseHelper.users.child(authHelper.thisUserID);
+        if (currUserListener == null) {
+            currUserListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    currUser = dataSnapshot.getValue(User.class);
+                    Log.d(TAG, "getting currUser");
+                    BoardArray = currUser.getBoards();
+                    if (BoardArray != null) {
+                        loadBoards();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+        }
+        currUserRef.addListenerForSingleValueEvent(currUserListener);
     }
 
     private void saveDataToGlobal(){
