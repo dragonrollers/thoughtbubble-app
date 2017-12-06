@@ -48,6 +48,16 @@ class DatabaseHelper {
         return singleton_instance;
     }
 
+    public void writeFirstName(String thisUserID, String firstName) {
+        DatabaseReference userRef = users.child(thisUserID);
+        userRef.child("firstName").setValue(firstName);
+    }
+
+    public void writeLastName(String thisUserID, String lastName) {
+        DatabaseReference userRef = users.child(thisUserID);
+        userRef.child("lastName").setValue(lastName);
+    }
+
     public void writeAskToDatabase(String questionText, String thisUserID, String sendToID) {
 
         // Create Question object from given data

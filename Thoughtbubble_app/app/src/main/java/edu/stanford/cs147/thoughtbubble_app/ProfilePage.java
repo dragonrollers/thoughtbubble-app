@@ -97,7 +97,6 @@ public class ProfilePage extends AppCompatActivity {
 
         ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
         SwitchEditSave(view);
-        // TODO: Save these things to the database
 
         // This is a new name.
         EditText firstName=(EditText)findViewById(R.id.first_name_view);
@@ -107,6 +106,12 @@ public class ProfilePage extends AppCompatActivity {
         String newName = newFirstName + " " + newLastName;
         TextView myTV = (TextView) findViewById(R.id.profile_name);
         myTV.setText(newName);
+
+        //Update currUser and db
+        currUser.setFirstName(newFirstName);
+        currUser.setLastName(newLastName);
+        DBH.writeFirstName(authHelper.thisUserID, newFirstName);
+        DBH.writeLastName(authHelper.thisUserID, newLastName);
 
         LinearLayout editName = (LinearLayout) findViewById(R.id.editNameBox);
         editName.setVisibility(View.GONE);
