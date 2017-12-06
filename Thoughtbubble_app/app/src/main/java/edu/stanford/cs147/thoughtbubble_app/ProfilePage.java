@@ -254,7 +254,7 @@ public class ProfilePage extends AppCompatActivity {
         TextView nameField = (TextView) findViewById(R.id.profile_name);
         nameField.setText(name);
 
-        LinearLayout profilelayout = (LinearLayout) findViewById(R.id.profilelayout);
+        android.support.v7.widget.GridLayout profilelayout = (android.support.v7.widget.GridLayout) findViewById(R.id.profilelayout);
 
         if (topics == null) {
             topics = new ArrayList<String>();

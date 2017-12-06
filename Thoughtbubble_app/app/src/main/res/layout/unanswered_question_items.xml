@@ -31,6 +31,12 @@
                 android:textSize="12dp"
                 android:textColor="#000000"/>
 
+            <TextView android:id="@+id/answerContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:textColor="#000000"/>
+
         </LinearLayout>
 
 
