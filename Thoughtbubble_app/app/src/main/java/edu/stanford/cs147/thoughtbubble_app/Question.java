@@ -26,13 +26,14 @@ public class Question {
      * database. Thus, all fields should be able to be filled. If there is no
      * critique text, then a null string can be passed in instead.
      */
-    public Question(String questionText, String answerText, String critiqueText, String timestamp, String answererID, String askerID) {
+    public Question(String questionText, String answerText, String critiqueText, String timestamp, String answererID, String askerID, String questionID) {
         this.questionText = questionText;
         this.answerText = answerText;
         this.critiqueText = critiqueText;
         this.timestamp = timestamp;
         this.answererID = answererID;
-        this.questionerID = questionerID;
+        this.questionerID = askerID;
+        this.questionID = questionID;
 
         // Not sure if we'll actually need this in this class, might be enough to store only in DB
         //this.questionID = questionID;

@@ -69,8 +69,8 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
         // Setting up places to display content
         questionArray = new ArrayList<Question>();
         // TODO : REMOVE DUMMY DATA WHEN FULLY IMPLEMENTED
-        questionArray.add(new Question("YQ1", "YA1", "Critique1", "10:43", "Grace", "Bonnie"));
-        questionArray.add(new Question("YQ2", "YA2", "Critique2", "10:13", "Jenny", "Bonnie"));
+        questionArray.add(new Question("YQ1", "YA1", "Critique1", "10:43", "Grace", "Bonnie", "7"));
+        questionArray.add(new Question("YQ2", "YA2", "Critique2", "10:13", "Jenny", "Bonnie", "11"));
 
         questionAdapter = new AnonQuestionAdapter(this,
                 R.layout.unanswered_question_items, questionArray);
@@ -87,14 +87,20 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void onItemClick(AdapterView<?> list, View row, int index, long rowID) {
+        System.out.println("ITEM CLICKED");
         Question clickedQuestion = questionArray.get(index); //todo: use this to retrieve the question, and question id
         if (unansweredView) {
+            System.out.println("NOT ANSWERED");
             Intent writeAnswerActivity = new Intent(this, AnswerWriteActivity.class);
+            System.out.println("111");
             //TODO: add the question id as an int to the intent
             writeAnswerActivity.putExtra("questionID", clickedQuestion.questionID);
+            System.out.println("222");
             writeAnswerActivity.putExtra("questionText", clickedQuestion.questionText);
+            System.out.println("333");
             startActivity(writeAnswerActivity);
         } else {
+            System.out.println("ANSWERED");
             Intent seeDetailedQuestion = new Intent(this, SeeDetailedQuestion.class);
             //TODO: add the question id as an int to the intent
             seeDetailedQuestion.putExtra("questionID", clickedQuestion.questionID);

@@ -34,9 +34,9 @@ public class AnswerWriteActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        int questionID = intent.getIntExtra("questionID", -1);
+        String questionID = intent.getStringExtra("questionID");
 
-        if (questionID == -1) {
+        if (questionID == "") {
             //ERROR: the activity was not launched with an intent. Terminate
             finish();
         }
@@ -75,7 +75,7 @@ public class AnswerWriteActivity extends AppCompatActivity {
      *
      * @param questionID
      */
-    private void loadQuestionText(int questionID) {
+    private void loadQuestionText(String questionID) {
         TextView questionText = (TextView) findViewById(R.id.answerWrite_question_text);
         //TODO: load questions somehow using the passed in question ID
         //String question = "Question Dummy Text";
