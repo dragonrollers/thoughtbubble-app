@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class QuestionAdapter extends ArrayAdapter<Question> {
             holder = new QuestionHolder();
             holder.questionContent = (TextView)row.findViewById(R.id.questionContent);
             holder.answerContent = (TextView)row.findViewById(R.id.answerContent);
-            holder.userName = (TextView)row.findViewById(R.id.userName);
+            holder.profileImage = (ImageView)row.findViewById(R.id.profile_image);
             row.setTag(holder);
         }
         else
@@ -46,7 +47,9 @@ public class QuestionAdapter extends ArrayAdapter<Question> {
 
 
         Question question = data.get(position);
-        holder.userName.setText(question.answererID);
+        // TODO: SET THIS IMAGE FROM THE DATABASE. YOU CAN GET THE ANSWERER ID BY UNCOMMENTING THE LINE BELOW:
+        // String answererID = question.answererID
+        holder.profileImage.setImageResource(R.drawable.anonymous);
         holder.questionContent.setText(question.questionText);
         holder.answerContent.setText(question.answerText);
 
@@ -55,7 +58,7 @@ public class QuestionAdapter extends ArrayAdapter<Question> {
 
     static class QuestionHolder
     {
-        TextView userName;
+        ImageView profileImage;
         TextView questionContent;
         TextView answerContent;
     }

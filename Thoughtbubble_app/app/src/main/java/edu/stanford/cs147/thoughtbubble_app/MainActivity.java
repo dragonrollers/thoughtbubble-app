@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> list, View row, int index, long rowID) {
-        System.out.println(index);
         Question question = questionArray.get(index);
         Intent seeDetailedQuestion = new Intent(this, SeeDetailedQuestion.class);
 
