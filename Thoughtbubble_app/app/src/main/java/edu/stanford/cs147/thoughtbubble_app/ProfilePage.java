@@ -60,8 +60,6 @@ public class ProfilePage extends AppCompatActivity {
         topics = new ArrayList<String>();
         loadUserFromDatabase();
 
-        loadBoardData();
-
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
         int unselected = Color.parseColor("#00cca3");
         int selected = Color.parseColor("#016d57");
@@ -75,24 +73,22 @@ public class ProfilePage extends AppCompatActivity {
         discover.setBackgroundColor(unselected);
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
 
-        // board page
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new CustomPagerAdapter(this));
-        viewPager.setPageMargin(64);
-
         // name edit box
         LinearLayout editName = (LinearLayout) findViewById(R.id.editNameBox);
         editName.setVisibility(View.GONE);
 
     }
 
-    private void loadBoardData(){
+    public void createBoardPage(ArrayList<String> boards) {
         customBoard = new CustomPagerEnum();
-        // TODO: Fill this in with the backend data
-        customBoard.addBoard("HUNGRY");
-        customBoard.addBoard("I am hungry");
-        customBoard.addBoard("I am more hungry");
-        customBoard.addBoard("sleepy");
+        Log.d(TAG, "boards is not null");
+        for (int i = 0; i < boards.size(); i++) {
+            customBoard.addBoard(boards.get(i));
+        }
+        Log.d(TAG, "createBoardPage");
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(new CustomPagerAdapter(this));
+        viewPager.setPageMargin(64);
     }
 
     public void EnableSave(View view) {
@@ -233,6 +229,12 @@ public class ProfilePage extends AppCompatActivity {
                     currUser = dataSnapshot.getValue(User.class);
                     Log.d(TAG, "getting currUser");
                     topics = currUser.getTopics();
+                    ArrayList<String> boards = currUser.getBoards();
+                    Log.d(TAG, "boards=" + boards);
+                    if (boards != null) {
+                        createBoardPage(boards);
+                    }
+
                     loadProfileText();
                     loadProfileImage();
                 }

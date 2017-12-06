@@ -12,6 +12,8 @@ public class User {
     private String firstName;
     private String lastName;
     private ArrayList<String> topics;
+    private ArrayList<String> boards;
+    private boolean hasProfileImage;
 
     public User () {}
 
@@ -31,5 +33,13 @@ public class User {
     public ArrayList<String> getTopics() { return topics; }
 
     public void setTopics(ArrayList<String> topics){ this.topics = topics; }
+
+    public ArrayList<String> getBoards() { return boards; }
+
+    public void setBoards(ArrayList<String> boards){ this.boards = boards; }
+
+    public boolean getHasProfileImage() { return hasProfileImage; };
+
+    public void setHasProfileImage(boolean hasProfileImage) { this.hasProfileImage = hasProfileImage; };
 
 }

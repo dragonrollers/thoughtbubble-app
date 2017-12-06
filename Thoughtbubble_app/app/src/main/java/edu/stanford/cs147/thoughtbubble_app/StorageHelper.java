@@ -8,6 +8,8 @@ import android.util.Log;
 
 import com.google.firebase.storage.*;
 
+import java.util.ArrayList;
+
 public class StorageHelper {
     // For debugging
     private static final String TAG = "DatabaseHelper";
@@ -15,7 +17,6 @@ public class StorageHelper {
     private static StorageHelper singleton_instance = null;
     public FirebaseStorage storage;
     public StorageReference storageReference;
-
 
     private StorageHelper() {
 
