@@ -315,8 +315,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         questionAdapter.notifyDataSetChanged();
 
         // TODO : REMOVE DUMMY DATA WHEN FULLY IMPLEMENTED
-        questionArray.add(new Question("YQ1", "YA1", "Critique1", "10:43", "Grace", "Bonnie", "1"));
-        questionArray.add(new Question("YQ2", "YA2", "Critique2", "10:13", "Jenny", "Bonnie", "2"));
+        questionArray.add(new Question("YQ1", "YA1", "Critique1", "Grace", "Bonnie", "1"));
+        questionArray.add(new Question("YQ2", "YA2", "Critique2", "Jenny", "Bonnie", "2"));
 
         // TODO create the correct listeners and make the correct one detach and the other one attach (shouldn't be the same one)
         detachAllQuestionsReadListener();
@@ -339,8 +339,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         questionAdapter.notifyDataSetChanged();
 
         // TODO : REMOVE DUMMY DATA WHEN FULLY IMPLEMENTED
-        questionArray.add(new Question("Q1", "A1", "Critique1", "10:43", "Jenny", "Bonnie", "1"));
-        questionArray.add(new Question("Q2", "A2", "Critique2", "10:13", "Po", "Grace", "2"));
+        questionArray.add(new Question("Q1", "A1", "Critique1", "Jenny", "Bonnie", "1"));
+        questionArray.add(new Question("Q2", "A2", "Critique2", "Po", "Grace", "2"));
 
         // TODO create the correct listeners and make the correct one detach and the other one attach (shouldn't be the same one)
         detachAllQuestionsReadListener();
