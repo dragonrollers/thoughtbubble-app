@@ -17,6 +17,12 @@ public class AnswerWriteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Makes status bar black and hides action bar
+        getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
+        getSupportActionBar().hide();
+        setContentView(R.layout.activity_ask_write);
+
         setContentView(R.layout.activity_answer_write);
 
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
