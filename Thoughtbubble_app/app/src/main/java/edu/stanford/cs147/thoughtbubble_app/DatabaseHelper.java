@@ -2,11 +2,9 @@ package edu.stanford.cs147.thoughtbubble_app;
 
 import android.util.Log;
 
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -97,6 +95,35 @@ class DatabaseHelper {
 
     }
 
+
+    public void writeAnswerToDatabase(String questionID, String revisedQuestionText, String answerText){
+        // Create data to update
+        Map updatedData = new HashMap();
+
+        // TODO if we were being robust about this we'd do error checking making sure this questionID actually exists in the DB
+        // For the question
+        String questionDataPath = "questions/" + questionID;
+        String questionRevisionPath = questionDataPath + "/" + "critiqueText";
+        updatedData.put(questionRevisionPath, revisedQuestionText);
+        String questionAnswerPath = questionDataPath + "/" + "answerText";
+        updatedData.put(questionAnswerPath, answerText);
+
+
+        // TODO potentially implement part where we change asker and answerer parts of database to say question is changed
+        // (above requires refactoring the database slightly)
+
+        Log.d(TAG, "About to update database");
+        // Do the update
+        databaseReference.updateChildren(updatedData, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    Log.e(TAG, "Problem writing to database: " + databaseError.toString());
+                }
+            }
+        });
+
+    }
 
 
 }

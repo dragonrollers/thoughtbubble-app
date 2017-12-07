@@ -262,10 +262,12 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
                             Log.d(TAG, "IN SINGLE VALUE EVENT LISTENER");
 
                             Question question = dataSnapshot.getValue(Question.class);
+                            question.questionID = dataSnapshot.getKey();
 
                             if (question.answerText == null) {
                                 // TODO add more than just question text
                                 questionArray.add(question);
+                                Log.d(TAG, question.toString());
                                 questionAdapter.notifyDataSetChanged();
                             }
                         }
