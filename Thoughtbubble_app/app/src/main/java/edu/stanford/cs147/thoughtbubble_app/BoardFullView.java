@@ -54,6 +54,11 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
         mDatabaseHelper = DatabaseHelper.getInstance();
         authHelper = AuthenticationHelper.getInstance();
 
+        BoardArray = new ArrayList<String>();
+        BoardAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_list_item_1, BoardArray
+        );
+
         loadUserFromDatabase();
 
         if(context.equals("save")){
@@ -64,8 +69,6 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
             // save extra data to the global variable
             saveDataToGlobal();
 
-        } else {
-
         }
 
         // Attach a listener to the adapter to populate it with the questions in the DB
@@ -73,10 +76,6 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void loadBoards() {
-        BoardAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_list_item_1, BoardArray
-        );
-
         ListView list = (ListView) findViewById(R.id.feed_list);
         list.setOnItemClickListener(this);
         list.setAdapter(BoardAdapter);
