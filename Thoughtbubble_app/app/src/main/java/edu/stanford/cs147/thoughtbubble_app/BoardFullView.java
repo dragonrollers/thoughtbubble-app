@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -87,6 +88,11 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
 
         // Attach a listener to the adapter to populate it with the questions in the DB
         attachAllQuestionsReadListener();
+
+        if(BoardArray.size()==0){
+            TextView tv = (TextView) findViewById(R.id.help);
+            tv.setText("THERE SEEMS TO BE NO BOARD! PLEASE MAKE ONE.");
+        }
     }
 
     private void loadBoards(HashMap<String, String> boards) {

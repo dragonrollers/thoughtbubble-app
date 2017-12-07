@@ -37,8 +37,6 @@ public class IndivBoardView extends AppCompatActivity {
 
         // TODO : PLEASE FILL IN THE QUESTIONARRAY WITH A REAL DATA
         ArrayList<Question> questionArray = new ArrayList<Question>();
-        questionArray.add(new Question("YQ1", "YA1", "Critique1", "Grace", "Bonnie", "1"));
-        questionArray.add(new Question("YQ2", "YA2", "Critique2", "Jenny", "Bonnie", "2"));
 
         QuestionAdapter questionAdapter = new QuestionAdapter(this,
                 R.layout.listview_item_row, questionArray);

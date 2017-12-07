@@ -6,6 +6,14 @@
     tools:context="edu.stanford.cs147.thoughtbubble_app.BoardFullView"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:id="@+id/help"
+        />
+
     <ListView
         android:id="@+id/feed_list"
         android:layout_weight="2"
