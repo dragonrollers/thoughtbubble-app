@@ -8,9 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -78,7 +78,6 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
 
         attachFriendsReadListener();
 
-
     }
 
     /**
@@ -124,14 +123,20 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
 
                     // Populate the adapter with the updated data
                     friendsAdapter.clear();
-                    if (friendList != null) {
+                    if (friendList != null) { //Make sure that user has friends
                         for (HashMap<String, String> h : friendList) {
                             friendsAdapter.add(h.get("friendName"));
                             String[] friend = {h.get("friendID"), h.get("friendName")};
                             friendsArray.add(friend);
                         }
-                    } else {
-                        Toast.makeText(AskSelectActivity.this, "You currently don't have friends--", Toast.LENGTH_SHORT).show();
+                    } else { //In event that user does not have friends
+                        TextView feedbackTextMain = new TextView(AskSelectActivity.this);
+                        feedbackTextMain.setText("You currently don't have any friends...");
+                        TextView feedbackTextSub = new TextView(AskSelectActivity.this);
+                        feedbackTextSub.setText("Why not find some new ones?");
+                        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.ask_select_main_layout);
+                        mainLayout.addView(feedbackTextMain, 1);
+                        mainLayout.addView(feedbackTextSub, 2);
                     }
 
                 }
