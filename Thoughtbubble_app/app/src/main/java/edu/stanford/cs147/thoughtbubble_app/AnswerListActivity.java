@@ -251,7 +251,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
                 @Override
 
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Log.d(TAG, "IN ON CHILD ADDED");
+                    //Log.d(TAG, "IN ON CHILD ADDED");
 
                     String questionKey = dataSnapshot.getValue(String.class);
 
@@ -262,7 +262,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            Log.d(TAG, "IN SINGLE VALUE EVENT LISTENER");
+                            //Log.d(TAG, "IN SINGLE VALUE EVENT LISTENER");
 
                             Question question = dataSnapshot.getValue(Question.class);
                             question.questionID = dataSnapshot.getKey();
@@ -270,7 +270,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
                             if (question.answerText == null) {
                                 // TODO add more than just question text
                                 questionArray.add(question);
-                                Log.d(TAG, question.toString());
+                                //Log.d(TAG, question.toString());
                                 questionAdapter.notifyDataSetChanged();
                             }
                         }
@@ -318,7 +318,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
                 @Override
 
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Log.d(TAG, "IN ON CHILD ADDED");
+                    //Log.d(TAG, "IN ON CHILD ADDED");
 
                     String questionKey = dataSnapshot.getValue(String.class);
 
@@ -329,7 +329,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            Log.d(TAG, "IN SINGLE VALUE EVENT LISTENER");
+                            //Log.d(TAG, "IN SINGLE VALUE EVENT LISTENER");
 
                             Question question = dataSnapshot.getValue(Question.class);
 

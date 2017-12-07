@@ -12,6 +12,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 public class AnswerWriteActivity extends AppCompatActivity {
 
@@ -19,6 +28,7 @@ public class AnswerWriteActivity extends AppCompatActivity {
 
     private DatabaseHelper DBH;
     private String questionID;
+    private AuthenticationHelper authHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +40,8 @@ public class AnswerWriteActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_ask_write);
 
-      DBH = DatabaseHelper.getInstance();
+        DBH = DatabaseHelper.getInstance();
+        authHelper = AuthenticationHelper.getInstance();
 
         setContentView(R.layout.activity_answer_write);
 
@@ -117,19 +128,56 @@ public class AnswerWriteActivity extends AppCompatActivity {
         EditText revisedQuestion = (EditText) findViewById(R.id.answer_revisedQuestion_text);
         EditText answer = (EditText) findViewById(R.id.answer_answer_text);
 
-        String revisedQuestionText = revisedQuestion.getText().toString();
-        String answerText = answer.getText().toString();
+        final String revisedQuestionText = revisedQuestion.getText().toString();
+        final String answerText = answer.getText().toString();
 
         Log.d(TAG, "About to send answer to question " + questionID);
-        DBH.writeAnswerToDatabase(questionID, revisedQuestionText, answerText);
 
-        Toast.makeText(this, "Answer Sent!", Toast.LENGTH_SHORT).show();
-        //TODO: load these fields into the database
-        finish();
 
-        // Restart the answer activity to refresh the unanswered questions list
-        Intent intent = new Intent(this, AnswerListActivity.class);
-        startActivity(intent);
+        // Get the friends list and once that's done write the answer to DB
+        // TODO putting the write to DB inside the listener feels so hacky, is there a way to do it with an onComplete listener?
+        DatabaseReference friendsRef = DBH.users.child(authHelper.thisUserID).child("friends");
+
+        // Define the listener
+        friendsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+
+            // Populate the ArrayList with the updated data
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> friendsIDList = new ArrayList<>();
+
+                // Get the updated friends list
+                GenericTypeIndicator<ArrayList<HashMap<String, String>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, String>>>() {
+                };
+                ArrayList<HashMap<String, String>> friendList = dataSnapshot.getValue(t);
+
+                // Populate the ArrayList with the updated data
+                //friendsIDList.clear();
+                if (friendList != null) { //Make sure that user has friends
+                    for (HashMap<String, String> h : friendList) {
+
+                        friendsIDList.add(h.get("friendID"));
+                        Log.d(TAG, "FRIEND: " + h.get("friendName") + " " + h.get("friendID"));
+                    }
+                }
+
+                Log.d(TAG, "FRIENDS LIST: " + friendsIDList.toString());
+                DBH.writeAnswerToDatabase(questionID, revisedQuestionText, answerText, friendsIDList);
+
+                Toast.makeText(AnswerWriteActivity.this, "Answer Sent!", Toast.LENGTH_SHORT).show();
+                finish();
+
+                // Restart the answer activity to refresh the unanswered questions list
+                Intent intent = new Intent(AnswerWriteActivity.this, AnswerListActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "Failed to read value.");
+            }
+        });
+
     }
 
     public void ProfilePage(View view) {

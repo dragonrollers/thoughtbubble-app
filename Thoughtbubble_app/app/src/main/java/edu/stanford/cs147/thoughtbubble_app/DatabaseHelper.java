@@ -122,9 +122,9 @@ class DatabaseHelper {
         newQuestion.setAnswererID(sendToID);
         newQuestion.setQuestionerID(thisUserID);
 
-        // TODO eventually
-        //Date timestamp = Calendar.getInstance().getTime();
-
+        Long tsLong = System.currentTimeMillis()/1000;
+        String currentDateTimeString = tsLong.toString();
+        newQuestion.setAskTimestamp(currentDateTimeString);
 
 
 
@@ -138,6 +138,7 @@ class DatabaseHelper {
         // Create data to update
         Map updatedData = new HashMap();
 
+        // For the question itself
         String questionDataPath = "questions/" + newQuestionKey;
         updatedData.put(questionDataPath, newQuestion);
 
@@ -164,17 +165,35 @@ class DatabaseHelper {
     }
 
 
-    public void writeAnswerToDatabase(String questionID, String revisedQuestionText, String answerText){
+    public void writeAnswerToDatabase(String questionID, String revisedQuestionText, String answerText, ArrayList<String> friendsIDList){
         // Create data to update
         Map updatedData = new HashMap();
 
         // TODO if we were being robust about this we'd do error checking making sure this questionID actually exists in the DB
         // For the question
         String questionDataPath = "questions/" + questionID;
+
         String questionRevisionPath = questionDataPath + "/" + "critiqueText";
         updatedData.put(questionRevisionPath, revisedQuestionText);
+
         String questionAnswerPath = questionDataPath + "/" + "answerText";
         updatedData.put(questionAnswerPath, answerText);
+
+        String questionTimestampPath = questionDataPath + "/" + "answerTimestamp";
+        Long tsLong = System.currentTimeMillis()/1000;
+        String currentDateTimeString = tsLong.toString();
+        updatedData.put(questionTimestampPath, currentDateTimeString);
+
+//        try {
+//            Thread.sleep(10000);
+//        } catch(Exception e){}
+
+        Log.d(TAG, friendsIDList.toString());
+        for (String friendID : friendsIDList){
+            String updatePath = "users/" + friendID + "/discoverQuestions/" + questionID;
+            updatedData.put(updatePath, true);
+        }
+
 
 
         // TODO potentially implement part where we change asker and answerer parts of database to say question is changed
