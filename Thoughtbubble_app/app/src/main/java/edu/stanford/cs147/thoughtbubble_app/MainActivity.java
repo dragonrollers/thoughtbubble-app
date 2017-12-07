@@ -547,5 +547,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
 
-
+    public void Setting(View view) {
+        Intent intent = new Intent(this, SettingActivity.class);
+        startActivity(intent);
+    }
 }

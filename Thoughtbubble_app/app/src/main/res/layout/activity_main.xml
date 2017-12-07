@@ -22,6 +22,7 @@
             android:layout_width="30dp"
             android:layout_height="match_parent"
             android:background="#00cca3"
+            android:onClick="Setting"
             android:src="@drawable/settings"/>
 
         <Button
