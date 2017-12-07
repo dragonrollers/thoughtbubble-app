@@ -189,6 +189,7 @@ public class ProfilePage extends AppCompatActivity {
     public void ViewFullList(View view) {
         Intent fullview = new Intent(this, BoardFullView.class);
         fullview.putExtra("context", "view");
+        fullview.putExtra("origin", "ProfilePage");
         startActivity(fullview);
     }
 
@@ -363,7 +364,6 @@ public class ProfilePage extends AppCompatActivity {
                     Intent intent = new Intent(getBaseContext(), IndivBoardView.class);
 
                     intent.putExtra("CURRENT_BOARD", boardString);
-                    intent.putExtra("origin", "ProfilePage");
                     startActivity(intent);
 
                     //Log.i("TAG", "This page was clicked: " + boardString);
