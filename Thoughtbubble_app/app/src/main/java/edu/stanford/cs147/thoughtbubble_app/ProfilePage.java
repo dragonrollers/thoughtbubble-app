@@ -327,9 +327,8 @@ public class ProfilePage extends AppCompatActivity {
     private void loadProfileImage(){
         mImageView = (ImageView) findViewById(R.id.profile_image);
         Log.d(TAG, "userID " + authHelper.thisUserID);
-
         // Load the image using Glide
-        if (currUser.getHasProfileImage()) {
+        if (currUser.getHasProfile()) {
             Glide.with(this /* context */)
                     .using(new FirebaseImageLoader())
                     .load(storageHelper.getProfileImageRef(authHelper.thisUserID))

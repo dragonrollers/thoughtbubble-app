@@ -17,9 +17,9 @@ public class User {
 
     private String firstName;
     private String lastName;
+    private boolean hasProfile;
     private ArrayList<String> topics;
     private HashMap<String, String> boards;
-    private boolean hasProfileImage;
 
     public User () {}
 
@@ -44,8 +44,8 @@ public class User {
 
     public void setBoards(HashMap<String, String> boards){ this.boards = boards; }
 
-    public boolean getHasProfileImage() { return hasProfileImage; };
+    public boolean getHasProfile() { return hasProfile; };
 
-    public void setHasProfileImage(boolean hasProfileImage) { this.hasProfileImage = hasProfileImage; };
+    public void setHasProfile(boolean hasProfile) { this.hasProfile = hasProfile; };
 
 }
