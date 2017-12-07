@@ -35,6 +35,7 @@ public class AnonQuestionAdapter extends ArrayAdapter<Question> {
 
             holder = new QuestionHolder();
             holder.questionContent = (TextView)row.findViewById(R.id.questionContent);
+            holder.answerContent = (TextView) row.findViewById(R.id.answerContent);
             row.setTag(holder);
         }
         else
@@ -46,11 +47,17 @@ public class AnonQuestionAdapter extends ArrayAdapter<Question> {
         Question question = data.get(position);
         holder.questionContent.setText(question.questionText);
 
+        if(question.answerText != null){
+            holder.answerContent.setText(question.answerText);
+        }
+
+
         return row;
     }
 
     static class QuestionHolder
     {
+        TextView answerContent;
         TextView questionContent;
     }
 }

@@ -87,6 +87,7 @@ public class SeeDetailedQuestion extends AppCompatActivity {
         boardFullView.putExtra("critiqueText", critiqueText);
         boardFullView.putExtra("reflection", reflection.getText());
         boardFullView.putExtra("answererID", answererID);
+        boardFullView.putExtra("origin", "SeeDetailedQuestion");
         startActivity(boardFullView);
     }
 }

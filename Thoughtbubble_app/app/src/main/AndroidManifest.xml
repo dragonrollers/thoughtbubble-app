@@ -55,7 +55,8 @@
                 <data android:scheme="@string/facebook_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".IndivBoardView"></activity>
+        <activity android:name=".IndivBoardView" />
+        <activity android:name=".AddNewBoard"></activity>
     </application>
 
 </manifest>
