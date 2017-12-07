@@ -235,11 +235,9 @@ public class ProfilePage extends AppCompatActivity {
                     Log.d(TAG, "getting currUser");
                     topics = currUser.getTopics();
                     ArrayList<String> boards = currUser.getBoards();
-                    Log.d(TAG, "boards=" + boards);
                     if (boards != null) {
                         createBoardPage(boards);
                     }
-
                     loadProfileText();
                     loadProfileImage();
                 }
@@ -250,7 +248,7 @@ public class ProfilePage extends AppCompatActivity {
                 }
             };
         }
-        currUserRef.addListenerForSingleValueEvent(currUserListener);
+        currUserRef.addValueEventListener(currUserListener);
     }
 
     private void loadProfileText() {
@@ -260,6 +258,7 @@ public class ProfilePage extends AppCompatActivity {
         nameField.setText(name);
 
         LinearLayout profilelayout = (LinearLayout) findViewById(R.id.profilelayout);
+        profilelayout.removeAllViews();
 
         if (topics == null) {
             topics = new ArrayList<String>();
