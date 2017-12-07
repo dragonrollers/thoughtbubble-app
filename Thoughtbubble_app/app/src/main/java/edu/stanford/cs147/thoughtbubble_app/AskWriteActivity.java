@@ -1,11 +1,13 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
+import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,6 +29,10 @@ public class AskWriteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Makes status bar black and hides action bar
+        getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_ask_write);
 
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
@@ -146,7 +152,7 @@ public class AskWriteActivity extends AppCompatActivity {
 
     public void needhelp(View view) {
         FragmentManager fm = getFragmentManager();
-        AskingQuestionHelp dialogFragment = new AskingQuestionHelp ();
+        AskingQuestionHelp dialogFragment = new AskingQuestionHelp();
         Bundle args = new Bundle();
         dialogFragment.setArguments(args);
         dialogFragment.show(fm, "Getting help to ask good questions");

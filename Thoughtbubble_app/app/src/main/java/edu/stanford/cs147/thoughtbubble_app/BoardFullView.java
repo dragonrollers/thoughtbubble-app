@@ -50,6 +50,11 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Makes status bar black and hides action bar
+        getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
+        getSupportActionBar().hide();
+        setContentView(R.layout.activity_ask_write);
         setContentView(R.layout.activity_board_full_view);
 
         String context = getIntent().getStringExtra("context");

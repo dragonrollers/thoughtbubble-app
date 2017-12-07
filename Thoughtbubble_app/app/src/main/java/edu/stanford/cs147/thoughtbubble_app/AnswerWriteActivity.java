@@ -25,8 +25,12 @@ public class AnswerWriteActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
+        //Makes status bar black and hides action bar
+        getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
+        getSupportActionBar().hide();
+        setContentView(R.layout.activity_ask_write);
 
-        DBH = DatabaseHelper.getInstance();
+      DBH = DatabaseHelper.getInstance();
 
         setContentView(R.layout.activity_answer_write);
 
