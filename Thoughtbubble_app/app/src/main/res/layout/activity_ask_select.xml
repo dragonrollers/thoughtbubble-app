@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ask_select_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
@@ -13,6 +12,7 @@
     android:paddingTop="0dp"
     tools:context="edu.stanford.cs147.thoughtbubble_app.AskSelectActivity">
 
+    <!-- The toolbar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -60,10 +60,17 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/ask_friends_list"
+    <!-- The actual content of the page -->
+    <LinearLayout
+        android:id="@+id/ask_select_main_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    </ListView>
+        <ListView
+            android:id="@+id/ask_friends_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
 </LinearLayout>

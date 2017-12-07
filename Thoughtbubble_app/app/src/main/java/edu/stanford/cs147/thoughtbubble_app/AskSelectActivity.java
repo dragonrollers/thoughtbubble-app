@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -130,13 +131,7 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
                             friendsArray.add(friend);
                         }
                     } else { //In event that user does not have friends
-                        TextView feedbackTextMain = new TextView(AskSelectActivity.this);
-                        feedbackTextMain.setText("You currently don't have any friends...");
-                        TextView feedbackTextSub = new TextView(AskSelectActivity.this);
-                        feedbackTextSub.setText("Why not find some new ones?");
-                        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.ask_select_main_layout);
-                        mainLayout.addView(feedbackTextMain, 1);
-                        mainLayout.addView(feedbackTextSub, 2);
+                        addNoFriendsFeedback();
                     }
 
                 }
@@ -154,6 +149,22 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
 
 
         }
+    }
+
+    private void addNoFriendsFeedback() {
+        TextView feedbackTextMain = new TextView(AskSelectActivity.this);
+        feedbackTextMain.setText("You currently don't have any friends...");
+        feedbackTextMain.setTextSize(18);
+        feedbackTextMain.setGravity(Gravity.CENTER);
+        TextView feedbackTextSub = new TextView(AskSelectActivity.this);
+        feedbackTextSub.setText("Why not find some new ones?");
+        feedbackTextSub.setTextSize(14);
+        feedbackTextSub.setGravity(Gravity.CENTER);
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.ask_select_main_layout);
+        mainLayout.setGravity(Gravity.CENTER);
+        mainLayout.addView(feedbackTextMain, 0);
+        mainLayout.addView(feedbackTextSub, 1);
+        mainLayout.removeViewAt(2);
     }
 
     public void ProfilePage(View view) {
