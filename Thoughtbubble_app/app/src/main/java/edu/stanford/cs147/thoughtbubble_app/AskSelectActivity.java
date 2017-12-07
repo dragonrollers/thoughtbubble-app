@@ -5,9 +5,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,7 +35,6 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
     private ArrayAdapter<String> friendsAdapter;
     private ArrayList<String[]> friendsArray; // For holding the ID and name of the friends displayed
     private ArrayList<String> friendNamesArray;
-
 
 
     @Override
@@ -78,8 +79,6 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
 
         attachFriendsReadListener();
 
-
-
     }
 
     /**
@@ -107,7 +106,7 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
     // This listener listens for any change in the "friends" portion of the database for this user
     // TODO this assumes that if a user changes their name, that change is propogated to the "friends" parts of the DB
     //      ^ That might not be the best practice, so we can change if necessary!
-    private void attachFriendsReadListener(){
+    private void attachFriendsReadListener() {
         if (friendsListener == null) { // It start out null eventually when we add authentication
 
             // Define the listener
@@ -119,15 +118,20 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     // Get the updated friends list
-                    GenericTypeIndicator<ArrayList<HashMap<String, String>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, String>>>() {};
+                    GenericTypeIndicator<ArrayList<HashMap<String, String>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, String>>>() {
+                    };
                     ArrayList<HashMap<String, String>> friendList = dataSnapshot.getValue(t);
 
                     // Populate the adapter with the updated data
                     friendsAdapter.clear();
-                    for (HashMap<String, String> h : friendList){
-                        friendsAdapter.add(h.get("friendName"));
-                        String[] friend = {h.get("friendID"), h.get("friendName")};
-                        friendsArray.add(friend);
+                    if (friendList != null) { //Make sure that user has friends
+                        for (HashMap<String, String> h : friendList) {
+                            friendsAdapter.add(h.get("friendName"));
+                            String[] friend = {h.get("friendID"), h.get("friendName")};
+                            friendsArray.add(friend);
+                        }
+                    } else { //In event that user does not have friends
+                        addNoFriendsFeedback();
                     }
 
                 }
@@ -145,6 +149,22 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
 
 
         }
+    }
+
+    private void addNoFriendsFeedback() {
+        TextView feedbackTextMain = new TextView(AskSelectActivity.this);
+        feedbackTextMain.setText("You currently don't have any friends...");
+        feedbackTextMain.setTextSize(18);
+        feedbackTextMain.setGravity(Gravity.CENTER);
+        TextView feedbackTextSub = new TextView(AskSelectActivity.this);
+        feedbackTextSub.setText("Why not find some new ones?");
+        feedbackTextSub.setTextSize(14);
+        feedbackTextSub.setGravity(Gravity.CENTER);
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.ask_select_main_layout);
+        mainLayout.setGravity(Gravity.CENTER);
+        mainLayout.addView(feedbackTextMain, 0);
+        mainLayout.addView(feedbackTextSub, 1);
+        mainLayout.removeViewAt(2);
     }
 
     public void ProfilePage(View view) {
