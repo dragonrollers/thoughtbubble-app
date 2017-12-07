@@ -96,13 +96,12 @@
                 android:paddingBottom="8dp"
                 android:text="Your Question"
                 android:textSize="18dp" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="HELP?"
-                android:onClick="needhelp"
-                android:textSize="18dp" />
+            
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/help"
+                android:onClick="needHelp"/>
 
         </LinearLayout>
 
