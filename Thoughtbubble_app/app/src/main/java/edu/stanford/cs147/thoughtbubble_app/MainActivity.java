@@ -374,12 +374,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     //Log.d(TAG, "IN ON CHILD ADDED");
 
-                    Question question = dataSnapshot.getValue(Question.class);
+                    String questionID = dataSnapshot.getKey();
+                    DatabaseReference questionRef = mDatabaseHelper.questions.child(questionID);
 
+                    questionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Question question = dataSnapshot.getValue(Question.class);
+                            questionArray.add(0, question);
+
+                            questionAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.w(TAG, "Failed to read value.");
+                        }
+                    });
                     //Log.d(TAG, question.toString());
 
-                    questionArray.add(question);
-                    questionAdapter.notifyDataSetChanged();
+
                 }
 
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -387,10 +401,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
 
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    Question question = dataSnapshot.getValue(Question.class);
+                    String questionID = dataSnapshot.getKey();
+                    DatabaseReference questionRef = mDatabaseHelper.questions.child(questionID);
 
-                    questionArray.remove(question);
-                    questionAdapter.notifyDataSetChanged();
+                    questionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Question question = dataSnapshot.getValue(Question.class);
+                            questionArray.remove(question);
+                            questionAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.w(TAG, "Failed to read value.");
+                        }
+                    });
                 }
 
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
@@ -398,7 +424,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 public void onCancelled(DatabaseError databaseError) {}
             };
 
-            mDatabaseHelper.questions.addChildEventListener(allQuestionsListener);
+            mDatabaseHelper.users.child(authHelper.thisUserID).child("discoverQuestions").addChildEventListener(allQuestionsListener);
         }
     }
 
