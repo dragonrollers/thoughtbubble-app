@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -14,9 +15,19 @@ import android.widget.Toast;
 
 public class AnswerWriteActivity extends AppCompatActivity {
 
+    private String TAG = "AnswerWriteActivity";
+
+    private DatabaseHelper DBH;
+    private String questionID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+
+        DBH = DatabaseHelper.getInstance();
+
         setContentView(R.layout.activity_answer_write);
 
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
@@ -34,7 +45,8 @@ public class AnswerWriteActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        String questionID = intent.getStringExtra("questionID");
+        questionID = intent.getStringExtra("questionID");
+        Log.d(TAG, "QuestionID: " + questionID);
 
         if (questionID == "") {
             //ERROR: the activity was not launched with an intent. Terminate
@@ -72,8 +84,6 @@ public class AnswerWriteActivity extends AppCompatActivity {
      * ------------------------
      * Helper method that initializes the view by loading question text in to the question field
      * and as a hint to the revised question field
-     *
-     * @param questionID
      */
     private void loadQuestionText(Intent intent) {
         String questionText = intent.getStringExtra("questionText");
@@ -91,14 +101,21 @@ public class AnswerWriteActivity extends AppCompatActivity {
      */
     public void sendAnswer(View view) {
         EditText revisedQuestion = (EditText) findViewById(R.id.answer_revisedQuestion_text);
-        TextView answer = (TextView) findViewById(R.id.answerWrite_question_text);
+        EditText answer = (EditText) findViewById(R.id.answer_answer_text);
 
         String revisedQuestionText = revisedQuestion.getText().toString();
         String answerText = answer.getText().toString();
 
+        Log.d(TAG, "About to send answer to question " + questionID);
+        DBH.writeAnswerToDatabase(questionID, revisedQuestionText, answerText);
+
         Toast.makeText(this, "Answer Sent!", Toast.LENGTH_SHORT).show();
         //TODO: load these fields into the database
         finish();
+
+        // Restart the answer activity to refresh the unanswered questions list
+        Intent intent = new Intent(this, AnswerListActivity.class);
+        startActivity(intent);
     }
 
     public void ProfilePage(View view) {

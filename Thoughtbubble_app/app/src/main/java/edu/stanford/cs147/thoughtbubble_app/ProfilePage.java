@@ -191,6 +191,7 @@ public class ProfilePage extends AppCompatActivity {
     public void ViewFullList(View view) {
         Intent fullview = new Intent(this, BoardFullView.class);
         fullview.putExtra("context", "view");
+        fullview.putExtra("origin", "ProfilePage");
         startActivity(fullview);
     }
 

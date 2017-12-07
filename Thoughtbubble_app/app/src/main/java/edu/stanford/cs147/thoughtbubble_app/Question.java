@@ -92,6 +92,7 @@ public class Question {
 
     public String toString(){
         String output = "";
+        if (this.questionID != null) { output += "QuestionID: " + this.questionID + "\n"; }
         output += "Question: " + this.questionText + "\n";
         output += "Answer: " + this.answerText + "\n";
         output += "Critique: " + this.critiqueText + "\n";
