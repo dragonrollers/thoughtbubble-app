@@ -97,7 +97,6 @@ public class ProfilePage extends AppCompatActivity {
 
         ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
         SwitchEditSave(view);
-        // TODO: Save these things to the database
 
         // This is a new name.
         EditText firstName=(EditText)findViewById(R.id.first_name_view);
@@ -107,6 +106,12 @@ public class ProfilePage extends AppCompatActivity {
         String newName = newFirstName + " " + newLastName;
         TextView myTV = (TextView) findViewById(R.id.profile_name);
         myTV.setText(newName);
+
+        //Update currUser and db
+        currUser.setFirstName(newFirstName);
+        currUser.setLastName(newLastName);
+        DBH.writeFirstName(authHelper.thisUserID, newFirstName);
+        DBH.writeLastName(authHelper.thisUserID, newLastName);
 
         LinearLayout editName = (LinearLayout) findViewById(R.id.editNameBox);
         editName.setVisibility(View.GONE);
@@ -230,11 +235,9 @@ public class ProfilePage extends AppCompatActivity {
                     Log.d(TAG, "getting currUser");
                     topics = currUser.getTopics();
                     ArrayList<String> boards = currUser.getBoards();
-                    Log.d(TAG, "boards=" + boards);
                     if (boards != null) {
                         createBoardPage(boards);
                     }
-
                     loadProfileText();
                     loadProfileImage();
                 }
@@ -245,7 +248,7 @@ public class ProfilePage extends AppCompatActivity {
                 }
             };
         }
-        currUserRef.addListenerForSingleValueEvent(currUserListener);
+        currUserRef.addValueEventListener(currUserListener);
     }
 
     private void loadProfileText() {
@@ -255,6 +258,7 @@ public class ProfilePage extends AppCompatActivity {
         nameField.setText(name);
 
         LinearLayout profilelayout = (LinearLayout) findViewById(R.id.profilelayout);
+        profilelayout.removeAllViews();
 
         if (topics == null) {
             topics = new ArrayList<String>();
@@ -263,12 +267,14 @@ public class ProfilePage extends AppCompatActivity {
             Button btn = new Button(this);
             btn.setText(topics.get(i));
 
+            final int finalI = i;
             btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
                     FragmentManager fm = getFragmentManager();
                     DialogFragmentProfile dialogFragment = new DialogFragmentProfile ();
                     Bundle args = new Bundle();
+                    args.putInt("num", finalI);
                     dialogFragment.setArguments(args);
                     dialogFragment.show(fm, "Do you want to delete this topic?");
                 }
@@ -295,12 +301,22 @@ public class ProfilePage extends AppCompatActivity {
     private void loadProfileImage(){
         mImageView = (ImageView) findViewById(R.id.profile_image);
         Log.d(TAG, "userID " + authHelper.thisUserID);
+
         // Load the image using Glide
-        Glide.with(this /* context */)
-                .using(new FirebaseImageLoader())
-                .load(storageHelper.getProfileImageRef(authHelper.thisUserID))
-                .asBitmap()
-                .into(mImageView);
+        if (currUser.getHasProfileImage()) {
+            Glide.with(this /* context */)
+                    .using(new FirebaseImageLoader())
+                    .load(storageHelper.getProfileImageRef(authHelper.thisUserID))
+                    .asBitmap()
+                    .into(mImageView);
+        } else {
+            Glide.with(this /* context */)
+                    .using(new FirebaseImageLoader())
+                    .load(storageHelper.getProfileImageRef("blank-user"))
+                    .asBitmap()
+                    .into(mImageView);
+        }
+
     }
 
     public void ProfilePage(View view) {

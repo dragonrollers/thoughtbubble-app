@@ -8,14 +8,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-
-/**
- * Created by Grace on 11/20/2017.
- */
-
 
 
 class DatabaseHelper {
@@ -46,6 +41,53 @@ class DatabaseHelper {
         if (singleton_instance == null)
             singleton_instance = new DatabaseHelper();
         return singleton_instance;
+    }
+
+    public void writeFirstName(String thisUserID, String firstName) {
+        DatabaseReference userRef = users.child(thisUserID);
+        userRef.child("firstName").setValue(firstName);
+    }
+
+    public void writeLastName(String thisUserID, String lastName) {
+        DatabaseReference userRef = users.child(thisUserID);
+        userRef.child("lastName").setValue(lastName);
+    }
+
+    public void writeNewInterest(final String thisUserID, final String interest) {
+        final DatabaseReference ref = users.child(thisUserID).child("topics");
+        ValueEventListener topicsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                long index = dataSnapshot.getChildrenCount();
+                ref.child(String.valueOf(index)).setValue(interest);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        ref.addListenerForSingleValueEvent(topicsListener);
+    }
+
+    public void removeInterest(String thisUserID, final int index) {
+        Log.d(TAG, "index=" + index);
+        final DatabaseReference ref = users.child(thisUserID);
+        ValueEventListener topicsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User currUser = dataSnapshot.getValue(User.class);
+                ArrayList<String> topics = currUser.getTopics();
+                topics.remove(index);
+                ref.child("topics").setValue(topics);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        ref.addListenerForSingleValueEvent(topicsListener);
     }
 
     public void writeAskToDatabase(String questionText, String thisUserID, String sendToID) {
