@@ -1,6 +1,7 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by bonnienortz on 11/27/17.
@@ -12,7 +13,7 @@ public class User {
     private String firstName;
     private String lastName;
     private ArrayList<String> topics;
-    private ArrayList<String> boards;
+    private HashMap<String, String> boards;
     private boolean hasProfileImage;
 
     public User () {}
@@ -34,9 +35,9 @@ public class User {
 
     public void setTopics(ArrayList<String> topics){ this.topics = topics; }
 
-    public ArrayList<String> getBoards() { return boards; }
+    public HashMap<String, String> getBoards() { return boards; }
 
-    public void setBoards(ArrayList<String> boards){ this.boards = boards; }
+    public void setBoards(HashMap<String, String> boards){ this.boards = boards; }
 
     public boolean getHasProfileImage() { return hasProfileImage; };
 

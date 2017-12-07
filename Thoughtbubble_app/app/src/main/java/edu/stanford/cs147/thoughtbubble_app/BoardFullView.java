@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BoardFullView extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -97,8 +99,11 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     currUser = dataSnapshot.getValue(User.class);
                     Log.d(TAG, "getting currUser");
-                    BoardArray = currUser.getBoards();
-                    if (BoardArray != null) {
+                    HashMap<String, String> boards = currUser.getBoards();
+                    if (boards != null) {
+                        for (Map.Entry<String, String> entry : boards.entrySet()) {
+                            BoardArray.add(entry.getValue());
+                        }
                         loadBoards();
                     }
                 }

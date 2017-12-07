@@ -30,6 +30,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfilePage extends AppCompatActivity {
 
@@ -79,11 +81,11 @@ public class ProfilePage extends AppCompatActivity {
 
     }
 
-    public void createBoardPage(ArrayList<String> boards) {
+    public void createBoardPage(HashMap<String, String> boards) {
         customBoard = new CustomPagerEnum();
         Log.d(TAG, "boards is not null");
-        for (int i = 0; i < boards.size(); i++) {
-            customBoard.addBoard(boards.get(i));
+        for (Map.Entry<String, String> entry : boards.entrySet()) {
+            customBoard.addBoard(entry.getValue());
         }
         Log.d(TAG, "createBoardPage");
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -234,7 +236,7 @@ public class ProfilePage extends AppCompatActivity {
                     currUser = dataSnapshot.getValue(User.class);
                     Log.d(TAG, "getting currUser");
                     topics = currUser.getTopics();
-                    ArrayList<String> boards = currUser.getBoards();
+                    HashMap<String, String> boards = currUser.getBoards();
                     if (boards != null) {
                         createBoardPage(boards);
                     }
