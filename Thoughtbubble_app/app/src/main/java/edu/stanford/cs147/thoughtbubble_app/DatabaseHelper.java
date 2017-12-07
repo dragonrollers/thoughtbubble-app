@@ -101,10 +101,7 @@ class DatabaseHelper {
         // Create data to update
         Map updatedData = new HashMap();
         updatedData.put("boards/" + newBoardKey, newBoard);
-
-        // For the user
-        String newBoardKeyInUser = users.child(thisUserID).push().getKey();
-        updatedData.put("users/" + thisUserID + "/boards/" + newBoardKeyInUser, newBoardKeyInUser);
+        updatedData.put("users/" + thisUserID + "/boards/" + newBoardKey, newBoardKey);
 
         // Do the update
         databaseReference.updateChildren(updatedData, new DatabaseReference.CompletionListener() {

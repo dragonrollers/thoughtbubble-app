@@ -82,15 +82,33 @@ public class ProfilePage extends AppCompatActivity {
     }
 
     public void createBoardPage(HashMap<String, String> boards) {
-        customBoard = new CustomPagerEnum();
-        Log.d(TAG, "boards is not null");
-        for (Map.Entry<String, String> entry : boards.entrySet()) {
-            customBoard.addBoard(entry.getValue());
-        }
         Log.d(TAG, "createBoardPage");
+        customBoard = new CustomPagerEnum();
+        final CustomPagerAdapter boardAdapter = new CustomPagerAdapter(this);
+
+        for (Map.Entry<String, String> entry : boards.entrySet()) {
+            DatabaseReference ref = DBH.boards.child(entry.getValue());
+            ValueEventListener boardListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Board currBoard = dataSnapshot.getValue(Board.class);
+                    customBoard.addBoard(currBoard.getName());
+                    boardAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+            ref.addListenerForSingleValueEvent(boardListener);
+
+        }
+
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new CustomPagerAdapter(this));
+        viewPager.setAdapter(boardAdapter);
         viewPager.setPageMargin(64);
+
     }
 
     public void EnableSave(View view) {

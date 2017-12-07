@@ -84,7 +84,26 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
         attachAllQuestionsReadListener();
     }
 
-    private void loadBoards() {
+    private void loadBoards(HashMap<String, String> boards) {
+        for (Map.Entry<String, String> entry : boards.entrySet()) {
+            DatabaseReference ref = mDatabaseHelper.boards.child(entry.getValue());
+            ValueEventListener boardListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Board currBoard = dataSnapshot.getValue(Board.class);
+                    BoardArray.add(currBoard.getName());
+                    BoardAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+            ref.addListenerForSingleValueEvent(boardListener);
+
+        }
+
         ListView list = (ListView) findViewById(R.id.feed_list);
         list.setOnItemClickListener(this);
         list.setAdapter(BoardAdapter);
@@ -101,10 +120,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
                     Log.d(TAG, "getting currUser");
                     HashMap<String, String> boards = currUser.getBoards();
                     if (boards != null) {
-                        for (Map.Entry<String, String> entry : boards.entrySet()) {
-                            BoardArray.add(entry.getValue());
-                        }
-                        loadBoards();
+                        loadBoards(boards);
                     }
                 }
 
