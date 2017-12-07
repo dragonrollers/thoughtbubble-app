@@ -271,7 +271,6 @@ public class ProfilePage extends AppCompatActivity {
                     Bundle args = new Bundle();
                     dialogFragment.setArguments(args);
                     dialogFragment.show(fm, "Do you want to delete this topic?");
-                    System.out.println(dialogFragment.getActivity());
                 }
             });
 

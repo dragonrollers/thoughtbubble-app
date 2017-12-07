@@ -14,14 +14,32 @@
 
     </ListView>
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/finishButton"
-        android:gravity="center"
-        android:onClick="cancelView"
+        android:orientation="horizontal"
         android:layout_gravity="center"
-        android:text="cancel"
-        />
+        >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/finishButton"
+            android:gravity="center"
+            android:onClick="cancelView"
+            android:layout_gravity="center"
+            android:text="cancel" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/newBoardButton"
+            android:gravity="center"
+            android:onClick="NewBoard"
+            android:layout_gravity="center"
+            android:text="new board" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

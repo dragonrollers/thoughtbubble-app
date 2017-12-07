@@ -1,5 +1,6 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +51,12 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
         setContentView(R.layout.activity_board_full_view);
 
         String context = getIntent().getStringExtra("context");
+        String originalActivity = getIntent().getStringExtra("origin");
+
+        if(!originalActivity.equals("SeeDetailedQuestion")){
+            Button newBoard = (Button) findViewById(R.id.newBoardButton);
+            newBoard.setVisibility(View.GONE);
+        }
 
         mDatabaseHelper = DatabaseHelper.getInstance();
         authHelper = AuthenticationHelper.getInstance();
@@ -167,6 +174,15 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
 
     public void cancelView(View view) {
         finish();
+    }
+
+    public void NewBoard(View view) {
+        // TODO: SAVE THE NEW BOARD INTO THE DATABASE
+
+        FragmentManager fm = getFragmentManager();
+        AddNewBoard addNewBoardFragment = new AddNewBoard();
+        addNewBoardFragment.show(fm, null);
+
     }
 }
 
