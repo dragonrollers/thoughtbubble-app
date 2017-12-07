@@ -110,4 +110,12 @@ public class Question {
         output += "Questioner: " + this.questionerID + "\n";
         return output;
     }
+
+
+
+
+    public static int compareByAnswerTimestamp(Question q1, Question q2){
+        return q1.askTimestamp.compareTo(q2.askTimestamp);
+    }
+
 }

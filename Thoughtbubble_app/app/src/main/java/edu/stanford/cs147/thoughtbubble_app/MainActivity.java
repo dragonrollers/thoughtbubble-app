@@ -25,8 +25,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // Firebase database
     private DatabaseHelper mDatabaseHelper;
     private ChildEventListener allQuestionsListener;
+    private ChildEventListener yourQuestionsListener;
 
     // Firebase auth
     private AuthenticationHelper authHelper;
@@ -45,8 +50,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private static final int RC_SIGN_IN = 123;
 
 
-    ArrayList<Question> questionArray;
+    private ArrayList<Question> questionArray;
     private QuestionAdapter questionAdapter;
+
+    // For your questions feed
+    private ArrayList<Question> answeredQuestionArray;
+    private ArrayList<Question> unansweredQuestionArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // Setting up places to display content
         questionArray = new ArrayList<Question>();
+        answeredQuestionArray = new ArrayList<>();
+        unansweredQuestionArray = new ArrayList<>();
+
         questionAdapter = new QuestionAdapter(this,
                 R.layout.listview_item_row, questionArray);
 
@@ -112,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
         // Show your friend's feed first
-        loadFriendsContent();
+        //loadFriendsContent();
 
 
 
@@ -154,54 +166,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
 
-    // This listener listens for any content added to the "questions" child of the database and when anything
-    // is added, the question's text is added to the questionAdapter on the Discover page
-    // TODO properly implement child removed/changed methods, or choose a different listener if more appropriate
-    private void attachAllQuestionsReadListener(){
-        if (allQuestionsListener == null) { // It start out null eventually when we add authentication
-            allQuestionsListener = new ChildEventListener() {
-                @Override
 
-                // Whenever a child is added to the "questions" part of the database, add the new question to the adapter
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    //Log.d(TAG, "IN ON CHILD ADDED");
-
-                    Question question = dataSnapshot.getValue(Question.class);
-
-                    //Log.d(TAG, question.toString());
-
-                    questionArray.add(question);
-                    questionAdapter.notifyDataSetChanged();
-                }
-
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    Question question = dataSnapshot.getValue(Question.class);
-
-                    questionArray.remove(question);
-                    questionAdapter.notifyDataSetChanged();
-                }
-
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-
-                public void onCancelled(DatabaseError databaseError) {}
-            };
-
-            mDatabaseHelper.questions.addChildEventListener(allQuestionsListener);
-        }
-    }
-
-    // Method to detatch the AllQuestionsReadListener (really just an example of how we would detatch such a listener)
-    // Methods like this will be used once we do authentication
-    private void detachAllQuestionsReadListener(){
-        if (allQuestionsListener != null) {
-            mDatabaseHelper.questions.removeEventListener(allQuestionsListener);
-            allQuestionsListener = null;
-        }
-    }
 
 
     // Auth
@@ -276,7 +241,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onResume(){
         super.onResume();
+        Log.d(TAG, "IN ON RESUME");
+        authHelper.setThisUserID();
         authHelper.auth.addAuthStateListener(authHelper.authListener);
+
+        // TODO if we were being robust we would keep track of which part the user was actually on
+        loadYourContent();
     }
 
     @Override
@@ -286,22 +256,28 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             authHelper.auth.removeAuthStateListener(authHelper.authListener);
         }
         detachAllQuestionsReadListener();
+        detachYourQuestionsReadListener();
         questionAdapter.clear();
 
     }
 
     private void onSignedInInitialize(){
-
+        Log.d(TAG, "IN ON SIGNED IN INITIALIZE");
         authHelper.setThisUserID();
+
+        Log.d(TAG, "USER IS: " + authHelper.thisUserID);
         loadYourContent();
-        attachAllQuestionsReadListener();
 
 
     }
 
     private void onSignedOutCleanup(){
         questionAdapter.clear();
+
+        // Don't know which was attached upon sign-out
+        // Both check to make sure listener isn't null before removing, so it's okay to call both
         detachAllQuestionsReadListener();
+        detachYourQuestionsReadListener();
 
     }
 
@@ -320,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // TODO create the correct listeners and make the correct one detach and the other one attach (shouldn't be the same one)
         detachAllQuestionsReadListener();
-        attachAllQuestionsReadListener();
+        attachYourQuestionsReadListener();
 
 
 
@@ -343,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         questionArray.add(new Question("Q2", "A2", "Critique2", "Po", "Grace", "2"));
 
         // TODO create the correct listeners and make the correct one detach and the other one attach (shouldn't be the same one)
-        detachAllQuestionsReadListener();
+        detachYourQuestionsReadListener();
         attachAllQuestionsReadListener();
 
         switchToFriendHeader();
@@ -382,4 +358,168 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Toast.makeText(this, "Already viewing your friends' feed!", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+
+    // This listener listens for any content added to the "questions" child of the database and when anything
+    // is added, the question's text is added to the questionAdapter on the Discover page
+    // TODO properly implement child removed/changed methods, or choose a different listener if more appropriate
+    private void attachAllQuestionsReadListener(){
+        if (allQuestionsListener == null) { // It start out null eventually when we add authentication
+            allQuestionsListener = new ChildEventListener() {
+                @Override
+
+                // Whenever a child is added to the "questions" part of the database, add the new question to the adapter
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    //Log.d(TAG, "IN ON CHILD ADDED");
+
+                    Question question = dataSnapshot.getValue(Question.class);
+
+                    //Log.d(TAG, question.toString());
+
+                    questionArray.add(question);
+                    questionAdapter.notifyDataSetChanged();
+                }
+
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    Question question = dataSnapshot.getValue(Question.class);
+
+                    questionArray.remove(question);
+                    questionAdapter.notifyDataSetChanged();
+                }
+
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
+                public void onCancelled(DatabaseError databaseError) {}
+            };
+
+            mDatabaseHelper.questions.addChildEventListener(allQuestionsListener);
+        }
+    }
+
+    // Method to detatch the AllQuestionsReadListener (really just an example of how we would detatch such a listener)
+    // Methods like this will be used once we do authentication
+    private void detachAllQuestionsReadListener(){
+        if (allQuestionsListener != null) {
+            mDatabaseHelper.questions.removeEventListener(allQuestionsListener);
+            allQuestionsListener = null;
+        }
+    }
+
+
+
+
+    // This listener listens for any content added to the "questions" child of the database and when anything
+    // is added, the question's text is added to the questionAdapter on the Discover page
+    // TODO properly implement child removed/changed methods, or choose a different listener if more appropriate
+    private void attachYourQuestionsReadListener(){
+        if (yourQuestionsListener == null) { // It start out null eventually when we add authentication
+            yourQuestionsListener = new ChildEventListener() {
+                @Override
+
+                // Whenever a child is added to the "questions" part of the database, add the new question to the adapter
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    //Log.d(TAG, "IN ON CHILD ADDED");
+                    String questionID = dataSnapshot.getValue(String.class);
+                    DatabaseReference thisQuestion = mDatabaseHelper.questions.child(questionID);
+                    thisQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Question question = dataSnapshot.getValue(Question.class);
+
+                            Log.d(TAG, question.toString());
+
+                            if (question.answerText != null) {
+                                answeredQuestionArray.add(question);
+                                Collections.sort(answeredQuestionArray, new Comparator<Question>() {
+                                    public int compare(Question q1, Question q2) {
+
+                                        // Necessary because initially we had entries in database without timestamps
+                                        if (q1.answerTimestamp==null || q2.answerTimestamp==null) return 1;
+
+                                        return q2.answerTimestamp.compareTo(q1.answerTimestamp);
+                                    }
+                                });
+                            } else {
+                                unansweredQuestionArray.add(question);
+                                Collections.sort(unansweredQuestionArray, new Comparator<Question>() {
+                                    public int compare(Question q1, Question q2) {
+                                        // Necessary because initially we had entries in database without timestamps
+                                        if (q1.askTimestamp==null || q2.askTimestamp==null) return 1;
+
+                                        return q2.askTimestamp.compareTo(q1.askTimestamp);
+                                    }
+                                });
+                            }
+
+                            questionArray.clear();
+                            questionArray.addAll(answeredQuestionArray);
+                            questionArray.addAll(unansweredQuestionArray);
+                            questionAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.w(TAG, "Failed to read value.");
+                        }
+                    });
+                }
+
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    String questionID = dataSnapshot.getValue(String.class);
+                    DatabaseReference thisQuestion = mDatabaseHelper.questions.child(questionID);
+
+                    thisQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Question question = dataSnapshot.getValue(Question.class);
+                            if (answeredQuestionArray.contains(question)) {
+                                answeredQuestionArray.remove(question);
+                            } else {
+                                unansweredQuestionArray.remove(question);
+                            }
+                            questionArray.remove(question);
+                            questionAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.w(TAG, "Failed to read value.");
+                        }
+                    });
+                }
+
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
+                public void onCancelled(DatabaseError databaseError) {}
+            };
+            Log.d(TAG, "IN YOUR QUESTIONS LISTENER, USER IS: " + authHelper.thisUserID);
+            DatabaseReference outgoingQuestionsRef = mDatabaseHelper.users.child(authHelper.thisUserID).child("outgoingQuestions");
+            outgoingQuestionsRef.addChildEventListener(yourQuestionsListener);
+        }
+    }
+
+    // Method to detatch the AllQuestionsReadListener (really just an example of how we would detatch such a listener)
+    // Methods like this will be used once we do authentication
+    private void detachYourQuestionsReadListener(){
+        if (yourQuestionsListener != null) {
+            unansweredQuestionArray.clear();
+            answeredQuestionArray.clear();
+
+            DatabaseReference outgoingQuestionsRef = mDatabaseHelper.users.child(authHelper.thisUserID).child("outgoingQuestions");
+            outgoingQuestionsRef.removeEventListener(yourQuestionsListener);
+            yourQuestionsListener = null;
+        }
+    }
+
+
+
 }
