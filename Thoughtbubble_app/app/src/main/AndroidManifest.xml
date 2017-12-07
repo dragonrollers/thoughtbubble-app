@@ -56,7 +56,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".IndivBoardView" />
-        <activity android:name=".AddNewBoard"></activity>
+        <activity android:name=".AddNewBoard" />
+        <activity android:name=".AskReviseDialog"></activity>
     </application>
 
 </manifest>

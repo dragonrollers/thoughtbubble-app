@@ -46,6 +46,7 @@ public class AddNewBoard extends DialogFragment {
 
                 // TODO: SAVE THIS INFO TO DATABASE
                 String new_board_name = newBoard.getText().toString();
+                DBH.addBoard(authHelper.thisUserID, new_board_name);
                 Intent indivBoardView = new Intent(v.getContext(), IndivBoardView.class);
                 indivBoardView.putExtra("CURRENT_BOARD", new_board_name);
                 startActivity(indivBoardView);

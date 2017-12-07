@@ -1,5 +1,6 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,7 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class AnswerListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class AnswerListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AskReviseDialog.Communicator {
 
     private String TAG = "AnswerList Activity";
 
@@ -29,6 +30,8 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
     ArrayList<Question> questionArray;
     private AnonQuestionAdapter questionAdapter;
+
+    Question clickedQuestion;
 
     boolean unansweredView;
 
@@ -94,13 +97,11 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onItemClick(AdapterView<?> list, View row, int index, long rowID) {
         System.out.println("ITEM CLICKED");
-        Question clickedQuestion = questionArray.get(index); //todo: use this to retrieve the question, and question id
+        clickedQuestion = questionArray.get(index); //todo: use this to retrieve the question, and question id
         if (unansweredView) {
-            Intent writeAnswerActivity = new Intent(this, AnswerWriteActivity.class);
-            //TODO: add the question id as an int to the intent
-            writeAnswerActivity.putExtra("questionID", clickedQuestion.questionID);
-            writeAnswerActivity.putExtra("questionText", clickedQuestion.questionText);
-            startActivity(writeAnswerActivity);
+            FragmentManager manager = getFragmentManager();
+            AskReviseDialog dialog = new AskReviseDialog();
+            dialog.show(manager, null);
         } else {
             Intent seeDetailedQuestion = new Intent(this, SeeDetailedQuestion.class);
             //TODO: add the question id as an int to the intent
@@ -264,10 +265,12 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
                             Log.d(TAG, "IN SINGLE VALUE EVENT LISTENER");
 
                             Question question = dataSnapshot.getValue(Question.class);
+                            question.questionID = dataSnapshot.getKey();
 
                             if (question.answerText == null) {
                                 // TODO add more than just question text
                                 questionArray.add(question);
+                                Log.d(TAG, question.toString());
                                 questionAdapter.notifyDataSetChanged();
                             }
                         }
@@ -370,5 +373,19 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
             incomingQuestions.removeEventListener(answeredQuestionsListener);
             answeredQuestionsListener = null;
         }
+    }
+
+    @Override
+    public void onDialogMessage(String message) {
+        Intent writeAnswerActivity = new Intent(this, AnswerWriteActivity.class);
+        //TODO: add the question id as an int to the intent
+        writeAnswerActivity.putExtra("questionID", clickedQuestion.questionID);
+        writeAnswerActivity.putExtra("questionText", clickedQuestion.questionText);
+        if(message.equals("YES")){
+            writeAnswerActivity.putExtra("HIDE", "NO");
+        } else {
+            writeAnswerActivity.putExtra("HIDE", "YES");
+        }
+        startActivity(writeAnswerActivity);
     }
 }
