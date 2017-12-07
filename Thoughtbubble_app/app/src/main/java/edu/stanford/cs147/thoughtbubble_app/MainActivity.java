@@ -242,11 +242,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onResume(){
         super.onResume();
         Log.d(TAG, "IN ON RESUME");
-        authHelper.setThisUserID();
         authHelper.auth.addAuthStateListener(authHelper.authListener);
-
-        // TODO if we were being robust we would keep track of which part the user was actually on
-        loadYourContent();
+        if (authHelper.auth.getCurrentUser() != null) {
+            authHelper.setThisUserID();
+            // TODO if we were being robust we would keep track of which part the user was actually on
+            loadYourContent();
+        }
     }
 
     @Override
@@ -410,12 +411,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+    /*
+        For friend in friends list
+
+     */
 
 
 
-    // This listener listens for any content added to the "questions" child of the database and when anything
-    // is added, the question's text is added to the questionAdapter on the Discover page
-    // TODO properly implement child removed/changed methods, or choose a different listener if more appropriate
+
+    // This listener listens to the outgoing questions portion of this user's database portion
+    // TODO if developing further, this is a very inefficient way to get and sort the feed
     private void attachYourQuestionsReadListener(){
         if (yourQuestionsListener == null) { // It start out null eventually when we add authentication
             yourQuestionsListener = new ChildEventListener() {

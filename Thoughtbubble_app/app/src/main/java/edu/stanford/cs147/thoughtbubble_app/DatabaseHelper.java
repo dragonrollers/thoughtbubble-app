@@ -102,10 +102,6 @@ class DatabaseHelper {
         String currentDateTimeString = tsLong.toString();
         newQuestion.setAskTimestamp(currentDateTimeString);
 
-        // TODO eventually
-        //Date timestamp = Calendar.getInstance().getTime();
-
-
 
 
         // Update all relevant parts of the database atomically
@@ -145,7 +141,7 @@ class DatabaseHelper {
     }
 
 
-    public void writeAnswerToDatabase(String questionID, String revisedQuestionText, String answerText){
+    public void writeAnswerToDatabase(String questionID, String revisedQuestionText, String answerText, ArrayList<String> friendsIDList){
         // Create data to update
         Map updatedData = new HashMap();
 
@@ -163,6 +159,18 @@ class DatabaseHelper {
         Long tsLong = System.currentTimeMillis()/1000;
         String currentDateTimeString = tsLong.toString();
         updatedData.put(questionTimestampPath, currentDateTimeString);
+
+//        try {
+//            Thread.sleep(10000);
+//        } catch(Exception e){}
+
+        Log.d(TAG, friendsIDList.toString());
+        for (String friendID : friendsIDList){
+            String updatePath = "users/" + friendID + "/discoverQuestions/" + questionID;
+            updatedData.put(updatePath, true);
+        }
+
+
 
         // TODO potentially implement part where we change asker and answerer parts of database to say question is changed
         // (above requires refactoring the database slightly)
