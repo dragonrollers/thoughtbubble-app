@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class IndivBoardView extends AppCompatActivity {
+public class IndivBoardView extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private String TAG = "IndivBoardView";
 
@@ -25,6 +26,7 @@ public class IndivBoardView extends AppCompatActivity {
     private ValueEventListener currBoardListener;
     private Board currBoard;
     private ArrayList<Question> questions;
+    private ArrayList<String> questionIDs;
     private HashMap<String, String> questionReflections; // <questionID, reflection>
     private QuestionAdapter questionAdapter;
 
@@ -44,10 +46,12 @@ public class IndivBoardView extends AppCompatActivity {
         setContentView(R.layout.activity_indiv_board_view);
 
         questions = new ArrayList<>();
+        questionIDs = new ArrayList<>();
         questionAdapter = new QuestionAdapter(this,
                 R.layout.listview_item_row, questions);
 
         ListView listView1 = (ListView)findViewById(R.id.feed_list);
+        listView1.setOnItemClickListener(this);
         listView1.setAdapter(questionAdapter);
 
         boardName = getIntent().getStringExtra("CURR_BOARD");
@@ -60,7 +64,7 @@ public class IndivBoardView extends AppCompatActivity {
     }
 
     private void readBoardContent() {
-        
+
         DatabaseReference ref = DBH.boards.child(boardID);
         if (currBoardListener == null) {
             currBoardListener = new ValueEventListener() {
@@ -85,6 +89,7 @@ public class IndivBoardView extends AppCompatActivity {
     private void loadQuestions() {
         for (Map.Entry<String, String> entry : questionReflections.entrySet()) {
             String questionID = entry.getKey();
+            questionIDs.add(questionID);
             DatabaseReference ref = DBH.questions.child(questionID);
             ValueEventListener listener = new ValueEventListener() {
                 @Override
@@ -101,6 +106,25 @@ public class IndivBoardView extends AppCompatActivity {
             };
             ref.addListenerForSingleValueEvent(listener);
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> list, View row, int index, long rowID) {
+        Question question = questions.get(index);
+        String questionID = questionIDs.get(index);
+        String reflection = questionReflections.get(questionID);
+
+        Intent seeDetailedQuestion = new Intent(this, SeeDetailedQuestion.class);
+
+        seeDetailedQuestion.putExtra("questionID", questionID);
+        seeDetailedQuestion.putExtra("questionText", question.questionText);
+        seeDetailedQuestion.putExtra("answerText", question.answerText);
+        seeDetailedQuestion.putExtra("critiqueText", question.critiqueText);
+        seeDetailedQuestion.putExtra("answererID", question.answererID);
+        seeDetailedQuestion.putExtra("questionerID", question.questionerID);
+        seeDetailedQuestion.putExtra("reflection", reflection);
+        seeDetailedQuestion.putExtra("origin", "IndivBoardView");
+        startActivity(seeDetailedQuestion);
     }
 
     public void finishActivity(View view) {
