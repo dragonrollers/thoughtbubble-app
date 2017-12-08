@@ -9,14 +9,25 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 public class SeeDetailedQuestion extends AppCompatActivity {
 
     private Intent extraInfo;
     private String TAG = "SeeDetailedQuestion";
 
+    private DatabaseHelper DBH;
+    private AuthenticationHelper authHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DBH = DatabaseHelper.getInstance();
+        authHelper = AuthenticationHelper.getInstance();
 
         //Makes status bar black and hides action bar
         getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
@@ -62,6 +73,7 @@ public class SeeDetailedQuestion extends AppCompatActivity {
 
     private void fillWithQuestionDetails(Intent extraInfo){
         // TODO: Backend side need to retrieve the user image
+        // with String answererID = extraInfo.getStringExtra("answererID");
         String critiqueText = extraInfo.getStringExtra("critiqueText");
         String answerText = extraInfo.getStringExtra("answerText");
         String questionText = extraInfo.getStringExtra("questionText");
@@ -74,6 +86,23 @@ public class SeeDetailedQuestion extends AppCompatActivity {
 
         TextView critiqueView = (TextView) findViewById(R.id.detailedQ_critique);
         critiqueView.setText(critiqueText);
+
+        String questionID = extraInfo.getStringExtra("questionID");
+        final EditText thoughtEditText = (EditText) findViewById(R.id.detailedQ_thought_input);
+        DatabaseReference thisSavedQuestion = DBH.users.child(authHelper.thisUserID).child("savedQuestions").child(questionID);
+        thisSavedQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String reflectionThoughtThing = dataSnapshot.getValue(String.class);
+                thoughtEditText.setText(reflectionThoughtThing);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
 
     }

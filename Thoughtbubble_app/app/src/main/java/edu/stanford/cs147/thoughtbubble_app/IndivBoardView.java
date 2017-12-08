@@ -23,6 +23,7 @@ public class IndivBoardView extends AppCompatActivity implements AdapterView.OnI
     private String TAG = "IndivBoardView";
 
     private DatabaseHelper DBH;
+    private AuthenticationHelper authHelper;
     private ValueEventListener currBoardListener;
     private Board currBoard;
     private ArrayList<Question> questions;
@@ -38,6 +39,7 @@ public class IndivBoardView extends AppCompatActivity implements AdapterView.OnI
         super.onCreate(savedInstanceState);
 
         DBH = DatabaseHelper.getInstance();
+        authHelper = AuthenticationHelper.getInstance();
 
         //Makes status bar black and hides action bar
         getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
