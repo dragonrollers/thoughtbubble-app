@@ -86,9 +86,6 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
 
         }
 
-        // Attach a listener to the adapter to populate it with the questions in the DB
-        attachAllQuestionsReadListener();
-
         if(BoardArray.size()==0){
             TextView tv = (TextView) findViewById(R.id.help);
             tv.setText("THERE SEEMS TO BE NO BOARD! PLEASE MAKE ONE.");
@@ -149,36 +146,6 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
         question = getIntent().getStringExtra("questionText");
         answer = getIntent().getStringExtra("answerText");
         answererID = getIntent().getStringExtra("answererID");
-    }
-
-    // This listener listens for any content added to the "questions" child of the database and when anything
-    // is added, the question's text is added to the questionAdapter on the Discover page
-    // TODO properly implement child removed/changed methods, or choose a different listener if more appropriate
-    private void attachAllQuestionsReadListener(){
-        if (allQuestionsListener == null) { // It start out null eventually when we add authentication
-            allQuestionsListener = new ChildEventListener() {
-                @Override
-
-                // Whenever a child is added to the "questions" part of the database, add the new question to the adapter
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                    Question question = dataSnapshot.getValue(Question.class);
-
-                    // TODO store more than just question text in question array
-                    BoardAdapter.add(question.questionText);
-                }
-
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
-
-                public void onChildRemoved(DataSnapshot dataSnapshot) {}
-
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-
-                public void onCancelled(DatabaseError databaseError) {}
-            };
-
-            mDatabaseHelper.questions.addChildEventListener(allQuestionsListener);
-        }
     }
 
     @Override
