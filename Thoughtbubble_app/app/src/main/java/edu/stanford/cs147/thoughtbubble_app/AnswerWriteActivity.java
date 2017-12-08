@@ -1,5 +1,6 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -208,4 +209,12 @@ public class AnswerWriteActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void needHelp(View view) {
+        FragmentManager fm = getFragmentManager();
+        ReviseQuestionHelp dialogFragment = new ReviseQuestionHelp();
+        Bundle args = new Bundle();
+        dialogFragment.setArguments(args);
+        dialogFragment.show(fm, "If you do not like how the question is phrased, you should definitely fix it! If you like it, please toggle the switch off.");
+        System.out.println(dialogFragment.getActivity());
+    }
 }

@@ -126,6 +126,13 @@
                     android:text="Your Revised Question"
                     android:textSize="16dp" />
 
+                <ImageView
+                android:layout_marginLeft="8dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:onClick="needHelp"
+                android:src="@drawable/help" />
+
                 <Switch
                     android:id="@+id/switch_for_revising_question"
                     android:layout_width="wrap_content"
