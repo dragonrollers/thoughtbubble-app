@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
@@ -138,6 +136,9 @@ public class ProfilePage extends AppCompatActivity {
         currUser.setLastName(newLastName);
         DBH.writeFirstName(authHelper.thisUserID, newFirstName);
         DBH.writeLastName(authHelper.thisUserID, newLastName);
+
+        String fullName = newFirstName + " " + newLastName;
+        DBH.writeFullName(authHelper.thisUserID, fullName);
 
         //Remove both edit text fields as well as the save name button
         nameContainer.removeViewAt(2);
