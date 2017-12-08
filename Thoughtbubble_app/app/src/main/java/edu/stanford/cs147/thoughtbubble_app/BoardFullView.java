@@ -89,11 +89,6 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
             saveDataToGlobal();
 
         }
-
-        if(BoardArray.size()==0){
-            TextView tv = (TextView) findViewById(R.id.help);
-            tv.setText("THERE SEEMS TO BE NO BOARD! PLEASE MAKE ONE.");
-        }
     }
 
     private void loadBoards(HashMap<String, String> boards) {
@@ -134,6 +129,9 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
                     HashMap<String, String> boards = currUser.getBoards();
                     if (boards != null) {
                         loadBoards(boards);
+                    } else {
+                        TextView tv = (TextView) findViewById(R.id.help);
+                        tv.setText("You don't have any boards currently. Want to make your first one?");
                     }
                 }
 
@@ -159,9 +157,6 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if(save){
-
-            // TODO: Save questionID under boardID into database
-
             Toast alert_saved = Toast.makeText(this, "Your Reflection is saved to the board", Toast.LENGTH_LONG);
             alert_saved.show();
             Log.d(TAG, "Saving reflection to board[" + i + "]");
