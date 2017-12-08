@@ -1,6 +1,5 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -54,6 +53,11 @@ class DatabaseHelper {
     public void writeLastName(String thisUserID, String lastName) {
         DatabaseReference userRef = users.child(thisUserID);
         userRef.child("lastName").setValue(lastName);
+    }
+
+    public void writeFullName(String thisUserID, String fullName){
+        DatabaseReference userRef = users.child(thisUserID);
+        userRef.child("fullName").setValue(fullName);
     }
 
     public void writeNewInterest(final String thisUserID, final String interest) {

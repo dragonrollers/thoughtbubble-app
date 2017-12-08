@@ -4,11 +4,8 @@
 
 package edu.stanford.cs147.thoughtbubble_app;
 
-import android.util.Log;
-
-import com.google.firebase.storage.*;
-
-import java.util.ArrayList;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class StorageHelper {
     // For debugging
@@ -35,6 +32,6 @@ public class StorageHelper {
 
     public StorageReference getProfileImageRef(String thisUserID) {
         //TODO check if user has profile picture
-        return storageReference.child("images/profile/" + thisUserID + ".jpg");
+        return storageReference.child("images/profile/" + thisUserID + ".png");
     }
 }

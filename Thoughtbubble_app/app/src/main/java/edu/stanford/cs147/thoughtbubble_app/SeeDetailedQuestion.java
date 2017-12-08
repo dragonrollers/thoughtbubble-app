@@ -123,4 +123,13 @@ public class SeeDetailedQuestion extends AppCompatActivity {
         Intent intent = new Intent(this, SettingActivity.class);
         startActivity(intent);
     }
+
+    public void viewProfile(View view) {
+        if(extraInfo.getStringExtra("origin").equals("Main")){
+            String answererID = extraInfo.getStringExtra("answererID");
+            Intent intent = new Intent(this, PublicProfilePage.class);
+            intent.putExtra("answererID", answererID);
+            startActivity(intent);
+        }
+    }
 }
