@@ -49,9 +49,11 @@ public class AddNewInterestDialogFragment extends DialogFragment {
                 // ((FragmentDialog)getActivity()).showDialog();
 
                 String newInterest = interestField.getText().toString();
-                Log.d(TAG, "Adding interest: " + newInterest);
-                DBH.writeNewInterest(authHelper.thisUserID, newInterest);
-                dismiss();
+                if (newInterest.trim().length() != 0) { //user input validation
+                    Log.d(TAG, "Adding interest: " + newInterest);
+                    DBH.writeNewInterest(authHelper.thisUserID, newInterest);
+                    dismiss();
+                }
             }
         });
 
