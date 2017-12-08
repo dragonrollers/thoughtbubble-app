@@ -7,10 +7,12 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
@@ -74,8 +77,8 @@ public class ProfilePage extends AppCompatActivity {
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
 
         // name edit box
-        LinearLayout editName = (LinearLayout) findViewById(R.id.editNameBox);
-        editName.setVisibility(View.GONE);
+//        LinearLayout editName = (LinearLayout) findViewById(R.id.editNameBox);
+//        editName.setVisibility(View.GONE);
 
     }
 
@@ -91,78 +94,57 @@ public class ProfilePage extends AppCompatActivity {
         viewPager.setPageMargin(64);
     }
 
-    public void EnableSave(View view) {
 
-        // edit -> save
+    public void saveName(View view) {
+        LinearLayout nameContainer = (LinearLayout) findViewById(R.id.personal_profile_name_container);
+        String newFirstName = ((EditText) nameContainer.getChildAt(0)).getText().toString();
+        String newLastName = ((EditText) nameContainer.getChildAt(1)).getText().toString();
 
-        ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
-        SwitchEditSave(view);
-
-        // This is a new name.
-        EditText firstName=(EditText)findViewById(R.id.first_name_view);
-        String newFirstName = firstName.getText().toString();
-        EditText lastName=(EditText)findViewById(R.id.last_name_view);
-        String newLastName = lastName.getText().toString();
-        String newName = newFirstName + " " + newLastName;
-        TextView myTV = (TextView) findViewById(R.id.profile_name);
-        myTV.setText(newName);
-
-        //Update currUser and db
         currUser.setFirstName(newFirstName);
         currUser.setLastName(newLastName);
         DBH.writeFirstName(authHelper.thisUserID, newFirstName);
         DBH.writeLastName(authHelper.thisUserID, newLastName);
 
-        LinearLayout editName = (LinearLayout) findViewById(R.id.editNameBox);
-        editName.setVisibility(View.GONE);
-        TextView name = (TextView) findViewById(R.id.profile_name);
-        name.setVisibility(View.VISIBLE);
-
-
-
-        // Save button disabled, change to edit button
-        TextView switcher_cur_view = (TextView) switcher.getCurrentView();
-        switcher.showNext();
-        //ViewSwitcher switcher2 = (ViewSwitcher) findViewById(R.id.my_switcher);
-        //switcher2.showNext();
-    }
-
-    private void SwitchEditSave(View view){
-        ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
-        TextView switcher_cur_view = (TextView) switcher.getCurrentView();
-        String switch_string = switcher_cur_view.getText().toString().replaceAll("\\s+","");
-        if (switch_string.equals("EditProfile")){
-            switcher.showNext();
-        }
-    }
-
-    public void EditProfile(View view) {
-        SwitchEditSave(view);
-        EditName(view);
-        LinearLayout editName = (LinearLayout) findViewById(R.id.editNameBox);
-        editName.setVisibility(View.VISIBLE);
-        TextView name = (TextView) findViewById(R.id.profile_name);
-        name.setVisibility(View.GONE);
+        //Remove both edit text fields as well as the save name button
+        nameContainer.removeViewAt(2);
+        nameContainer.removeViewAt(1);
+        nameContainer.removeViewAt(0);
+        loadName();
     }
 
 
     public void EditName(View view) {
-        ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
-        switcher.showNext(); //or switcher.showPrevious();
-        // This is a new name.
-        EditText firstName=(EditText)findViewById(R.id.first_name_view);
-        String newFirstName = firstName.getText().toString();
-        EditText lastName=(EditText)findViewById(R.id.last_name_view);
-        String newLastName = lastName.getText().toString();
-        String newName = newFirstName + " " + newLastName;
-        TextView myTV = (TextView) findViewById(R.id.profile_name);
-        LinearLayout editName = (LinearLayout) findViewById(R.id.editNameBox);
-        editName.setVisibility(View.VISIBLE);
-        TextView name = (TextView) findViewById(R.id.profile_name);
-        name.setVisibility(View.GONE);
-        myTV.setText(newName);
-        SwitchEditSave(view);
+        LinearLayout nameContainer = (LinearLayout) findViewById(R.id.personal_profile_name_container);
 
+        //Add edit text field for first name
+        EditText firstNameInput = new EditText(this);
+        firstNameInput.setHint(currUser.getFirstName());
+        firstNameInput.setTextSize(24);
+        nameContainer.addView(firstNameInput, 0);
+
+        //Add edit text field for second name
+        EditText lastNameInput = new EditText(this);
+        lastNameInput.setHint(currUser.getLastName());
+        lastNameInput.setTextSize(24);
+        nameContainer.addView(lastNameInput, 1);
+
+        //Add button to save name
+        TextView saveButton = new TextView(this);
+        saveButton.setText("    (save)");
+        saveButton.setTextSize(16);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfilePage.this.saveName(v);
+            }
+        });
+        nameContainer.addView(saveButton, 2);
+
+        //remove old text field
+        TextView nameField = (TextView) findViewById(R.id.personal_profile_name);
+        nameField.setVisibility(View.GONE);
+
+        nameContainer.setGravity(Gravity.CENTER);
     }
 
     public void changeimage(View view) {
@@ -170,20 +152,13 @@ public class ProfilePage extends AppCompatActivity {
         // ImageView in your Activity
         ImageView profile = (ImageView) findViewById(R.id.profile_image);
 
-        Bitmap bitmap =((BitmapDrawable)profile.getDrawable()).getBitmap();
+        Bitmap bitmap = ((BitmapDrawable) profile.getDrawable()).getBitmap();
         ByteArrayOutputStream bs = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bs);
 
-        Intent intent=new Intent(view.getContext(),AndroidSelectImage.class);
+        Intent intent = new Intent(view.getContext(), AndroidSelectImage.class);
         intent.putExtra("byteArray", bs.toByteArray());
         startActivity(intent);
-
-
-
-        //Intent intent = new Intent(view.getContext(), AndroidSelectImage.class);
-
-        //startActivity(intent);
-
     }
 
     public void ViewFullList(View view) {
@@ -203,21 +178,17 @@ public class ProfilePage extends AppCompatActivity {
 
         private ArrayList<String> boardString;
 
-        public CustomPagerEnum(){
+        public CustomPagerEnum() {
             boardString = new ArrayList<String>();
         }
 
-        public void addBoard(String boardName){
+        public void addBoard(String boardName) {
             boardString.add(boardName);
         }
 
-        public ArrayList<String> getArray(){
+        public ArrayList<String> getArray() {
             return boardString;
         }
-
-        //public int getTitleResId() {
-        //    return mTitleResId;
-        //}
 
         public int getLayoutResId() {
             return R.layout.view_blue;
@@ -239,8 +210,8 @@ public class ProfilePage extends AppCompatActivity {
                     if (boards != null) {
                         createBoardPage(boards);
                     }
-                    loadProfileText();
                     loadProfileImage();
+                    loadProfileText();
                 }
 
                 @Override
@@ -252,18 +223,25 @@ public class ProfilePage extends AppCompatActivity {
         currUserRef.addValueEventListener(currUserListener);
     }
 
-    private void loadProfileText() {
+
+    private void loadName() {
         String name = currUser.getFirstName() + " " + currUser.getLastName();
 
-        TextView nameField = (TextView) findViewById(R.id.profile_name);
+        //TextView nameField = (TextView) findViewById(R.id.profile_name);
+        TextView nameField = (TextView) findViewById(R.id.personal_profile_name);
         nameField.setText(name);
+        if (nameField.getVisibility() == View.GONE) {
+            nameField.setVisibility(View.VISIBLE);
+        }
+    }
 
-        LinearLayout profilelayout = (LinearLayout) findViewById(R.id.profilelayout);
-        profilelayout.removeAllViews();
+    private void loadInterests() {
+
 
         if (topics == null) {
             topics = new ArrayList<String>();
         }
+
         for (int i = 0; i < topics.size(); i++) {
             Button btn = new Button(this);
             btn.setText(topics.get(i));
@@ -273,7 +251,7 @@ public class ProfilePage extends AppCompatActivity {
                 public void onClick(View v) {
 
                     FragmentManager fm = getFragmentManager();
-                    DialogFragmentProfile dialogFragment = new DialogFragmentProfile ();
+                    DialogFragmentProfile dialogFragment = new DialogFragmentProfile();
                     Bundle args = new Bundle();
                     args.putInt("num", finalI);
                     dialogFragment.setArguments(args);
@@ -281,7 +259,7 @@ public class ProfilePage extends AppCompatActivity {
                 }
             });
 
-            profilelayout.addView(btn);
+            //profilelayout.addView(btn);
         }
         Button btn = new Button(this);
         btn.setText("+");
@@ -289,17 +267,21 @@ public class ProfilePage extends AppCompatActivity {
             public void onClick(View v) {
 
                 FragmentManager fm = getFragmentManager();
-                AddNewInterestDialogFragment dialogFragment = new AddNewInterestDialogFragment ();
+                AddNewInterestDialogFragment dialogFragment = new AddNewInterestDialogFragment();
                 //EditText editText = (EditText) getDialog().findViewById(R.id.project_name);
                 dialogFragment.show(fm, null);
                 System.out.println(dialogFragment.getActivity());
             }
         });
-        profilelayout.addView(btn);
-
+        //profilelayout.addView(btn);
     }
 
-    private void loadProfileImage(){
+    private void loadProfileText() {
+        loadName();
+        //loadInterests();
+    }
+
+    private void loadProfileImage() {
         mImageView = (ImageView) findViewById(R.id.profile_image);
         Log.d(TAG, "userID " + authHelper.thisUserID);
 
@@ -357,8 +339,8 @@ public class ProfilePage extends AppCompatActivity {
             tv.setText(boardString);
             collection.addView(layout);
 
-            layout.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View v){
+            layout.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
                     //this will log the page number that was click
 
                     Intent intent = new Intent(getBaseContext(), IndivBoardView.class);

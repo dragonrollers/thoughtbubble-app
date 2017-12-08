@@ -71,8 +71,9 @@
         <!-- User Profile -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <ImageView
@@ -83,117 +84,107 @@
                 android:onClick="changeimage" />
 
             <LinearLayout
+                android:id="@+id/personal_profile_name_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
                 android:orientation="horizontal">
 
-
                 <TextView
-                    android:id="@+id/profile_name"
-                    android:layout_width="fill_parent"
+                    android:id="@+id/personal_profile_name"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:gravity="center"
+                    android:gravity="center_horizontal"
                     android:onClick="EditName"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:textSize="24dp" />
+            </LinearLayout>
+
+            <org.apmem.tools.layouts.FlowLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/personal_profile_interests"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></org.apmem.tools.layouts.FlowLayout>
 
 
-                <LinearLayout
-                    android:id="@+id/editNameBox"
+            <!--  <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center"
+                  android:gravity="center"
+                  android:orientation="horizontal"> -->
+
+
+            <!--<TextView
+                android:id="@+id/profile_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="EditName"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:id="@+id/editNameBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/first_name_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:hint="First Name" />
 
-                    <EditText
-                        android:id="@+id/first_name_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="First Name" />
-
-                    <EditText
-                        android:id="@+id/last_name_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="Last Name" />
-
-                </LinearLayout>
-
-                <ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/my_switcher"
+                <EditText
+                    android:id="@+id/last_name_view"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_weight="5">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Last Name" />
 
-                   <!-- <Button
-                        android:id="@+id/edit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:clickable="true"
-                        android:onClick="EditProfile"
-                        android:text="Edit Name"
-                        android:textSize="10dp" /> -->
+            </LinearLayout> -->
 
-                    <Button
-                        android:id="@+id/save"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:onClick="EnableSave"
-                        android:text="Save Name"
-                        android:textSize="10dp" />
+            <!-- <ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:id="@+id/my_switcher"
+                 android:layout_width="match_parent"
+                 android:layout_height="50dp"
+                 android:layout_weight="5"> -->
 
-                </ViewSwitcher>
+            <!-- <Button
+                 android:id="@+id/edit"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="3dp"
+                 android:clickable="true"
+                 android:onClick="EditProfile"
+                 android:text="Edit Name"
+                 android:textSize="10dp" /> -->
 
-            </LinearLayout>
+            <!--<Button
+                android:id="@+id/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:onClick="EnableSave"
+                android:text="Save"
+                android:textSize="10dp" /> -->
+
+            <!--</ViewSwitcher> -->
+
+            <!--</LinearLayout> -->
 
 
             <!-- View where existing the user profile content is loaded -->
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/profilelayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" />
-
-            <org.apmem.tools.layouts.FlowLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                >
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="HELLOOO"/>
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="HELLOOO000000000"/>
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="HELLOOO"/>
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="HELLOOO"/>
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="HELLOOO"/>
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="HELLOOO0000000000000000000"/>
-            </org.apmem.tools.layouts.FlowLayout>
+                android:orientation="horizontal" /> -->
 
 
         </LinearLayout>
@@ -205,39 +196,39 @@
             android:background="@android:color/darker_gray" />
 
 
+        <!-- <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="8dp"
+             android:gravity="center_vertical"
+             android:orientation="vertical">
+
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="1"
+                 android:text="Your Recent Questions"
+                 android:textSize="18dp" />
+
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="0.05"
+                 android:text="View More"
+                 android:textSize="18dp" />
+
+         </LinearLayout> -->
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Your Recent Questions"
-                android:textSize="18dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.05"
-                android:text="View More"
-                android:textSize="18dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="3"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
