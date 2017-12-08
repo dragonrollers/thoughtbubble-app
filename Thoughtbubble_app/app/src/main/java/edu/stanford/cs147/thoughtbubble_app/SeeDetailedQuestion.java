@@ -116,6 +116,7 @@ public class SeeDetailedQuestion extends AppCompatActivity {
         boardFullView.putExtra("questionID", questionID);
         boardFullView.putExtra("origin", "SeeDetailedQuestion");
         startActivity(boardFullView);
+        finish();
     }
 
     public void Setting(View view) {

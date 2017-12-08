@@ -128,8 +128,10 @@ public class IndivBoardView extends AppCompatActivity implements AdapterView.OnI
     }
 
     public void finishActivity(View view) {
-        Intent intent = new Intent(this, ProfilePage.class);
-        startActivity(intent);
+        // TODO BN: commented following two lines because user can navigate here from a few different places, and this
+        // TODO     should bring you back to where they came from, not just to Profile
+        //Intent intent = new Intent(this, ProfilePage.class);
+        //startActivity(intent);
         finish();
     }
 

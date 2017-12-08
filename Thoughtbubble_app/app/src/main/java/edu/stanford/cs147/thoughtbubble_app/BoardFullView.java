@@ -168,6 +168,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
             indivBoard.putExtra("CURR_BOARD", boardName);
             indivBoard.putExtra("boardID", boardID);
             startActivity(indivBoard);
+            finish();
         }
     }
 
