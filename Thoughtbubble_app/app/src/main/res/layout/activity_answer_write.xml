@@ -4,170 +4,187 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
     android:orientation="vertical"
     android:paddingBottom="0dp"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    android:background="@color/colorWhite"
     tools:context="edu.stanford.cs147.thoughtbubble_app.AnswerWriteActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/Profile"
             android:layout_width="fill_parent"
-            android:layout_weight="1"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:onClick="ProfilePage"
-            android:text="User" />
+            android:text="User"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/Discover"
             android:layout_width="fill_parent"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
+            android:layout_weight="1"
             android:onClick="DiscoverPage"
-            android:text="Discover" />
+            android:text="Discover"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/Ask"
             android:layout_width="fill_parent"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
+            android:layout_weight="1"
             android:onClick="AskPage"
-            android:text="Ask" />
+            android:text="Ask"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/Answer"
             android:layout_width="fill_parent"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
+            android:layout_weight="1"
             android:onClick="AnswerPage"
-            android:text="Answer" />
+            android:text="Answer"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp">
 
-        <ImageView
-            android:src="@drawable/anonymous"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
-
-        <TextView
-            android:id="@+id/answerWrite_question_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="12dp" />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="0dp"
-        android:background="@android:color/darker_gray"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_weight="2"
-        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/anonymous"
+                android:layout_marginRight="8dp"/>
+
+            <TextView
+                android:id="@+id/answerWrite_question_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="0dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Your Revised Question"
+                    android:textSize="16dp" />
+
+                <Switch
+                    android:id="@+id/switch_for_revising_question"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+
+                    />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/answer_revisedQuestion_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/tbLightGrey"
+                android:textSize="14dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your Revised Question" />
+                android:layout_marginBottom="8dp"
+                android:text="Your Answer"
+                android:textSize="16dp" />
 
-            <Switch
-                android:id="@+id/switch_for_revising_question"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-
-                />
-
+            <EditText
+                android:id="@+id/answer_answer_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:height="150dp"
+                android:background="@color/tbLightGrey"
+                android:textSize="14dp" />
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/answer_revisedQuestion_text"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/tbLightGrey" />
-    </LinearLayout>
+            android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_weight="2"
-        android:orientation="vertical">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/whitetealbutton"
+                android:onClick="cancelAnswer"
+                android:text="Cancel"
+                android:textColor="@color/tbTeal"
+                android:textSize="18dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Your Answer" />
-
-        <EditText
-            android:id="@+id/answer_answer_text"
-            android:height="150dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/tbLightGrey" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
-            android:layout_weight="1"
-            android:background="@drawable/whitetealbutton"
-            android:onClick="cancelAnswer"
-            android:text="Cancel"
-            android:textColor="@color/tbTeal"
-            android:textSize="18dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_weight="1"
-            android:background="@drawable/tealtealbutton"
-            android:onClick="sendAnswer"
-            android:text="Send"
-            android:textColor="@color/colorWhite"
-            android:textSize="18dp" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/tealtealbutton"
+                android:onClick="sendAnswer"
+                android:text="Send"
+                android:textColor="@color/colorWhite"
+                android:textSize="18dp" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
