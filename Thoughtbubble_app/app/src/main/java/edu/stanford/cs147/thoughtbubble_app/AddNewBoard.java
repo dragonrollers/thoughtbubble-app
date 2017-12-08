@@ -44,11 +44,12 @@ public class AddNewBoard extends DialogFragment {
         update.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                // TODO: SAVE THIS INFO TO DATABASE
                 String new_board_name = newBoard.getText().toString();
                 DBH.addBoard(authHelper.thisUserID, new_board_name);
+                int boardID = 0; //TODO GET ID FROM DATABASE
                 Intent indivBoardView = new Intent(v.getContext(), IndivBoardView.class);
-                indivBoardView.putExtra("CURRENT_BOARD", new_board_name);
+                indivBoardView.putExtra("CURR_BOARD", new_board_name);
+                //indivBoardView.putExtra("boardID", boardID);
                 startActivity(indivBoardView);
                 dismiss();
             }

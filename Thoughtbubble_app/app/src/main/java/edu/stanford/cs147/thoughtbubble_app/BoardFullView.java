@@ -27,8 +27,9 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
 
     private String TAG = "BoardFullView";
 
-    ArrayList<String> BoardArray;
+    private ArrayList<String> BoardArray;
     private ArrayAdapter<String> BoardAdapter;
+    private ArrayList<String> boardIDs;
     // Firebase
     private DatabaseHelper mDatabaseHelper;
     private AuthenticationHelper authHelper;
@@ -69,7 +70,8 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
         mDatabaseHelper = DatabaseHelper.getInstance();
         authHelper = AuthenticationHelper.getInstance();
 
-        BoardArray = new ArrayList<String>();
+        boardIDs = new ArrayList<>();
+        BoardArray = new ArrayList<>();
         BoardAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_list_item_1, BoardArray
         );
@@ -94,6 +96,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
 
     private void loadBoards(HashMap<String, String> boards) {
         for (Map.Entry<String, String> entry : boards.entrySet()) {
+            boardIDs.add(entry.getValue());
             DatabaseReference ref = mDatabaseHelper.boards.child(entry.getValue());
             ValueEventListener boardListener = new ValueEventListener() {
                 @Override
@@ -152,20 +155,17 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if(save){
 
-            // TODO: Save the question, answer, critique, and reflection (already saved into the global variables)
-            // into the database and the board that is selected
-            // WE NEED TO SAVE IT HERE, NOT IN THE NEXT ACTIVITY
+            // TODO: Save questionID under boardID into database
 
             Toast alert_saved = Toast.makeText(this, "Your Reflection is saved to the board", Toast.LENGTH_LONG);
             alert_saved.show();
+            Log.d(TAG, "Saving reflection to board[" + i + "]");
 
-            // ** I AM SETTING THIS TO 0 BECAUSE I AM USING FILLERS
-            // ONCE WE GET THE DATABASE WORKING, THE CODE SHOULD BE
-            // BoardArray.get(i)
-            // please text Jenny if this confuses you
-            String boardName = BoardArray.get(0);
+            String boardName = BoardArray.get(i);
+            String boardID = boardIDs.get(i);
             Intent indivBoard = new Intent(this, IndivBoardView.class);
-            indivBoard.putExtra("CURRENT_BOARD", boardName);
+            indivBoard.putExtra("CURR_BOARD", boardName);
+            indivBoard.putExtra("boardID", boardID);
             startActivity(indivBoard);
         }
     }
