@@ -1,5 +1,6 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -49,5 +50,10 @@ public class IndivBoardView extends AppCompatActivity {
 
     public void finishActivity(View view) {
         finish();
+    }
+
+    public void Setting(View view) {
+        Intent intent = new Intent(this, SettingActivity.class);
+        startActivity(intent);
     }
 }

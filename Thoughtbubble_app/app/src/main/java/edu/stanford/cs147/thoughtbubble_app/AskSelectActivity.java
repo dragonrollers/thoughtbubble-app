@@ -190,4 +190,9 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
+    public void Setting(View view) {
+        Intent intent = new Intent(this, SettingActivity.class);
+        startActivity(intent);
+    }
 }

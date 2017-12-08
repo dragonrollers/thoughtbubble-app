@@ -9,14 +9,92 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/search"
-            android:hint="Input your friend's name to search"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent">
-        </EditText>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="50dp">
+
+            <ImageView
+                android:id="@+id/settingImage"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:background="#00cca3"
+                android:onClick="Setting"
+                android:src="@drawable/settings"/>
+
+            <Button
+                android:id="@+id/Profile"
+                android:layout_width="fill_parent"
+                android:layout_weight="1"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:background="#00cca3"
+                android:layout_height="match_parent"
+                android:onClick="ProfilePage"
+                android:text="User" />
+
+            <Button
+                android:id="@+id/Discover"
+                android:layout_width="fill_parent"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:onClick="DiscoverPage"
+                android:background="#00cca3"
+                android:text="Discover" />
+
+            <Button
+                android:id="@+id/Ask"
+                android:layout_width="fill_parent"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:onClick="AskPage"
+                android:background="#00cca3"
+                android:text="Ask" />
+
+            <Button
+                android:id="@+id/Answer"
+                android:layout_width="fill_parent"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:onClick="AnswerPage"
+                android:background="#00cca3"
+                android:text="Answer" />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:textStyle="bold"
+            android:background="#016d57"
+            android:textSize="30dp"
+            android:onClick="signOut"
+            android:textColor="@color/colorWhite"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="sign out" />
+
+        <Button
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:textStyle="bold"
+            android:background="#016d57"
+            android:textSize="30dp"
+            android:onClick="notImplemented"
+            android:textColor="@color/colorWhite"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="Find Friends" />
 
 
 

@@ -388,4 +388,9 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
         }
         startActivity(writeAnswerActivity);
     }
+
+    public void Setting(View view) {
+        Intent intent = new Intent(this, SettingActivity.class);
+        startActivity(intent);
+    }
 }

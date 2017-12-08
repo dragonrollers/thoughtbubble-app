@@ -51,6 +51,11 @@ public class ProfilePage extends AppCompatActivity {
     private ValueEventListener currUserListener;
     private User currUser;
 
+    public void Setting(View view) {
+        Intent intent = new Intent(this, SettingActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -428,6 +433,8 @@ public class ProfilePage extends AppCompatActivity {
         //public void removeResult() {
 
         //}
+
+
 
     }
 

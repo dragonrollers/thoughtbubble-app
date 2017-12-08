@@ -95,4 +95,9 @@ public class SeeDetailedQuestion extends AppCompatActivity {
         boardFullView.putExtra("origin", "SeeDetailedQuestion");
         startActivity(boardFullView);
     }
+
+    public void Setting(View view) {
+        Intent intent = new Intent(this, SettingActivity.class);
+        startActivity(intent);
+    }
 }

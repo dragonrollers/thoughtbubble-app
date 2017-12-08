@@ -156,4 +156,9 @@ public class AskWriteActivity extends AppCompatActivity {
         dialogFragment.show(fm, "WE WILL INPUT TEXT THAT GUIDES THE USER TO ASK GOOD QUESTIONS");
         System.out.println(dialogFragment.getActivity());
     }
+
+    public void Setting(View view) {
+        Intent intent = new Intent(this, SettingActivity.class);
+        startActivity(intent);
+    }
 }
