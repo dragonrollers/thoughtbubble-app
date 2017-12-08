@@ -20,7 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class AnswerListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AskReviseDialog.Communicator {
+public class AnswerListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private String TAG = "AnswerList Activity";
 
@@ -99,9 +99,10 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
         System.out.println("ITEM CLICKED");
         clickedQuestion = questionArray.get(index); //todo: use this to retrieve the question, and question id
         if (unansweredView) {
-            FragmentManager manager = getFragmentManager();
-            AskReviseDialog dialog = new AskReviseDialog();
-            dialog.show(manager, null);
+            Intent writeAnswerActivity = new Intent(this, AnswerWriteActivity.class);
+            writeAnswerActivity.putExtra("questionID", clickedQuestion.questionID);
+            writeAnswerActivity.putExtra("questionText", clickedQuestion.questionText);
+            startActivity(writeAnswerActivity);
         } else {
             Intent seeDetailedQuestion = new Intent(this, SeeDetailedQuestion.class);
             //TODO: add the question id as an int to the intent
@@ -369,26 +370,11 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
         }
     }
 
-
     private void detachAnsweredQuestionsReadListener(){
         if (answeredQuestionsListener != null) {
             incomingQuestions.removeEventListener(answeredQuestionsListener);
             answeredQuestionsListener = null;
         }
-    }
-
-    @Override
-    public void onDialogMessage(String message) {
-        Intent writeAnswerActivity = new Intent(this, AnswerWriteActivity.class);
-        //TODO: add the question id as an int to the intent
-        writeAnswerActivity.putExtra("questionID", clickedQuestion.questionID);
-        writeAnswerActivity.putExtra("questionText", clickedQuestion.questionText);
-        if(message.equals("YES")){
-            writeAnswerActivity.putExtra("HIDE", "NO");
-        } else {
-            writeAnswerActivity.putExtra("HIDE", "YES");
-        }
-        startActivity(writeAnswerActivity);
     }
 
     public void Setting(View view) {

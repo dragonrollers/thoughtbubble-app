@@ -71,18 +71,7 @@ public class AnswerWriteActivity extends AppCompatActivity {
         // switch that controls whether to see the revised question
 
         Switch switchOne = (Switch) findViewById(R.id.switch_for_revising_question);
-
-        String switchOn = intent.getStringExtra("HIDE");
-
-        if(switchOn.equals("YES")){
-            switchOne.setChecked(true);
-        } else{
-            switchOne.setChecked(false);
-            EditText space_for_revising_question = (EditText) findViewById(R.id.answer_revisedQuestion_text);
-            space_for_revising_question.setVisibility(View.GONE);
-            EditText space_for_answering_question = (EditText) findViewById(R.id.answer_answer_text);
-            space_for_answering_question.setHeight(800); // magic number to control the size
-        }
+        switchOne.setChecked(true);
 
         switchOne.setOnCheckedChangeListener(
                 new CompoundButton.OnCheckedChangeListener() {
