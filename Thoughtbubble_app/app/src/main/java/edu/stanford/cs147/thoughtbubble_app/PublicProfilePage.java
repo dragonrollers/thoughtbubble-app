@@ -34,10 +34,10 @@ public class PublicProfilePage extends AppCompatActivity {
     private ArrayList<String> topics;
     private Boolean fromMain = false;
 
-    // Firebase database
-    private DatabaseHelper mDatabaseHelper;
-    private ChildEventListener allQuestionsListener;
-    private ChildEventListener yourQuestionsListener;
+
+    private ChildEventListener answeredQuestionsListener;
+    private DatabaseReference incomingQuestions;
+
 
     // Firebase auth
     private AuthenticationHelper authHelper;
@@ -49,11 +49,13 @@ public class PublicProfilePage extends AppCompatActivity {
     private QuestionAdapter questionAdapter;
 
     //TODO Replace with userID of user we're currently viewing, loaded from previous view
-    private String thisUserID;
+    private String thisProfileUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        authHelper = AuthenticationHelper.getInstance();
 
         //Makes status bar black and hides action bar
         getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
@@ -63,8 +65,10 @@ public class PublicProfilePage extends AppCompatActivity {
         getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
         getSupportActionBar().hide();
         setContentView(R.layout.activity_ask_write);
+
         DBH = DatabaseHelper.getInstance();
         storageHelper = StorageHelper.getInstance();
+
         setContentView(R.layout.activity_public_profile_page);
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
         int unselected = Color.parseColor("#00cca3");
@@ -80,9 +84,9 @@ public class PublicProfilePage extends AppCompatActivity {
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
 
         Intent data = getIntent();
-        thisUserID = data.getStringExtra("answererID");
 
-        // TODO: NEED TO QUERY ONLY THE USER'S ANSWERS
+        thisProfileUserID = data.getStringExtra("answererID");
+
 
         // Setting up places to display content
         questionArray = new ArrayList<Question>();
@@ -111,11 +115,13 @@ public class PublicProfilePage extends AppCompatActivity {
         listView1.setAdapter(questionAdapter);
 
         loadUserFromDatabase();
+
+        loadAnsweredQuestions();
     }
 
     private void loadUserFromDatabase() {
         Log.d(TAG, "loadUserFromDatabase");
-        final DatabaseReference currUserRef = DBH.users.child(thisUserID);
+        final DatabaseReference currUserRef = DBH.users.child(thisProfileUserID);
         if (currUserListener == null) {
             currUserListener = new ValueEventListener() {
                 @Override
@@ -156,12 +162,12 @@ public class PublicProfilePage extends AppCompatActivity {
     private void loadProfileImage(){
         //TODO Note this is untested because we haven't linked to this view
         mImageView = (ImageView) findViewById(R.id.profile_image);
-        Log.d(TAG, "userID " + thisUserID);
+        Log.d(TAG, "userID " + thisProfileUserID);
         // Load the image using Glide
         if (currUser.getHasProfile()) {
             Glide.with(this /* context */)
                     .using(new FirebaseImageLoader())
-                    .load(storageHelper.getProfileImageRef(thisUserID))
+                    .load(storageHelper.getProfileImageRef(thisProfileUserID))
                     .asBitmap()
                     .into(mImageView);
         } else {
@@ -172,6 +178,92 @@ public class PublicProfilePage extends AppCompatActivity {
                     .into(mImageView);
         }
     }
+
+
+
+    private void loadAnsweredQuestions() {
+        System.out.println("LOAD ANSWERED QUESTIONS WAS CALLED");
+        // TODO if no answered questions, display something appropriate!
+        questionArray.clear();
+
+        // If there are any incoming questions, attach a listener to the adapter to populate it with the questions in the DB
+        incomingQuestions = DBH.users.child(thisProfileUserID).child("incomingQuestions");
+        incomingQuestions.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    attachAnsweredQuestionsReadListener();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "Problem with to database: " + databaseError.toString());
+            }
+        });
+    }
+
+    // This listener listens to any changes that happen on this user's incoming questions portion of the database
+    private void attachAnsweredQuestionsReadListener(){
+        if (answeredQuestionsListener == null) {
+            answeredQuestionsListener = new ChildEventListener() {
+                @Override
+
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    //Log.d(TAG, "IN ON CHILD ADDED");
+
+                    String questionKey = dataSnapshot.getValue(String.class);
+
+                    DatabaseReference thisQuestion = DBH.questions.child(questionKey);
+
+                    // Get the question from that part of the database
+                    thisQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            //Log.d(TAG, "IN SINGLE VALUE EVENT LISTENER");
+
+                            Question question = dataSnapshot.getValue(Question.class);
+
+                            if (question.answerText != null) {
+                                // TODO add more than just question text
+                                questionArray.add(question);
+                                questionAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.e(TAG, "Error with database: " + databaseError.toString());
+                        }
+                    });
+
+                }
+
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    Question question = dataSnapshot.getValue(Question.class);
+
+                    // TODO add more than just question text
+                    questionArray.remove(question);
+                    questionAdapter.notifyDataSetChanged();
+                }
+
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
+                public void onCancelled(DatabaseError databaseError) {}
+            };
+
+            incomingQuestions.addChildEventListener(answeredQuestionsListener);
+        }
+    }
+
+
+
+
+
+
 
     public void ProfilePage(View view) {
         Intent intent = new Intent(this, ProfilePage.class);
@@ -201,4 +293,13 @@ public class PublicProfilePage extends AppCompatActivity {
     public void askQuestion(View view) {
         AskPage(view);
     }
+
+
+
+
+
+
+
 }
+
+
