@@ -263,7 +263,6 @@ public class ProfilePage extends AppCompatActivity {
             });
 
             interestContainer.addView(btn);
-            //profilelayout.addView(btn);
         }
         Button btn = new Button(this);
         btn.setText("+");
@@ -272,14 +271,12 @@ public class ProfilePage extends AppCompatActivity {
 
                 FragmentManager fm = getFragmentManager();
                 AddNewInterestDialogFragment dialogFragment = new AddNewInterestDialogFragment();
-                //EditText editText = (EditText) getDialog().findViewById(R.id.project_name);
                 dialogFragment.show(fm, null);
                 System.out.println(dialogFragment.getActivity());
             }
         });
 
         interestContainer.addView(btn);
-        //profilelayout.addView(btn);
         interestSuperContainer.addView(interestContainer);
     }
 
