@@ -99,9 +99,9 @@
             </LinearLayout>
 
             <ScrollView
+                android:id="@+id/personal_profile_interests"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/personal_profile_interests">
+                android:layout_height="wrap_content">
 
             </ScrollView>
 

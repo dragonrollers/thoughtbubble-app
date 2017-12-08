@@ -41,6 +41,10 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Makes status bar black and hides action bar
+        getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
+        getSupportActionBar().hide();
+        setContentView(R.layout.activity_ask_write);
         DBH = DatabaseHelper.getInstance();
         authHelper = AuthenticationHelper.getInstance();
 
@@ -186,6 +190,4 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
-
-
 }

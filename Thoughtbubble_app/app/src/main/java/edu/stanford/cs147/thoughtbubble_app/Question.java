@@ -9,7 +9,8 @@ public class Question {
     public String questionText;
     public String answerText;
     public String critiqueText;
-    public String timestamp;
+    public String askTimestamp;
+    public String answerTimestamp;
     public String answererID;
     public String questionerID;
     public String questionID;
@@ -26,11 +27,10 @@ public class Question {
      * database. Thus, all fields should be able to be filled. If there is no
      * critique text, then a null string can be passed in instead.
      */
-    public Question(String questionText, String answerText, String critiqueText, String timestamp, String answererID, String askerID, String questionID) {
+    public Question(String questionText, String answerText, String critiqueText, String answererID, String askerID, String questionID) {
         this.questionText = questionText;
         this.answerText = answerText;
         this.critiqueText = critiqueText;
-        this.timestamp = timestamp;
         this.answererID = answererID;
         this.questionerID = askerID;
         this.questionID = questionID;
@@ -65,12 +65,20 @@ public class Question {
         this.critiqueText = text;
     }
 
-    public String getTimestamp() {
-        return timestamp;
+    public String getAskTimestamp() {
+        return askTimestamp;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+    public void setAskTimestamp(String timestamp) {
+        this.askTimestamp = timestamp;
+    }
+
+    public String getAnswerTimestamp() {
+        return answerTimestamp;
+    }
+
+    public void setAnswerTimestamp(String timestamp) {
+        this.answerTimestamp = timestamp;
     }
 
     public String getQuestionerID() {
@@ -92,12 +100,22 @@ public class Question {
 
     public String toString(){
         String output = "";
+        if (this.questionID != null) { output += "QuestionID: " + this.questionID + "\n"; }
         output += "Question: " + this.questionText + "\n";
         output += "Answer: " + this.answerText + "\n";
         output += "Critique: " + this.critiqueText + "\n";
-        output += "Timestamp: " + this.timestamp + "\n";
+        output += "Ask timestamp: " + this.askTimestamp + "\n";
+        output += "Answer timestamp: " + this.answerTimestamp + "\n";
         output += "Answerer: " + this.answererID + "\n";
         output += "Questioner: " + this.questionerID + "\n";
         return output;
     }
+
+
+
+
+    public static int compareByAnswerTimestamp(Question q1, Question q2){
+        return q1.askTimestamp.compareTo(q2.askTimestamp);
+    }
+
 }

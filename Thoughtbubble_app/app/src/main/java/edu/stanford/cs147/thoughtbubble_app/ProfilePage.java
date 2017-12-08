@@ -34,6 +34,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfilePage extends AppCompatActivity {
 
@@ -56,6 +58,11 @@ public class ProfilePage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Makes status bar black and hides action bar
+        getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
+        getSupportActionBar().hide();
+        setContentView(R.layout.activity_ask_write);
         setContentView(R.layout.activity_profile_page);
 
         DBH = DatabaseHelper.getInstance();
@@ -79,16 +86,34 @@ public class ProfilePage extends AppCompatActivity {
 
     }
 
-    public void createBoardPage(ArrayList<String> boards) {
-        customBoard = new CustomPagerEnum();
-        Log.d(TAG, "boards is not null");
-        for (int i = 0; i < boards.size(); i++) {
-            customBoard.addBoard(boards.get(i));
-        }
+    public void createBoardPage(HashMap<String, String> boards) {
         Log.d(TAG, "createBoardPage");
+        customBoard = new CustomPagerEnum();
+        final CustomPagerAdapter boardAdapter = new CustomPagerAdapter(this);
+
+        for (Map.Entry<String, String> entry : boards.entrySet()) {
+            DatabaseReference ref = DBH.boards.child(entry.getValue());
+            ValueEventListener boardListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Board currBoard = dataSnapshot.getValue(Board.class);
+                    customBoard.addBoard(currBoard.getName());
+                    boardAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+            ref.addListenerForSingleValueEvent(boardListener);
+
+        }
+
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new CustomPagerAdapter(this));
+        viewPager.setAdapter(boardAdapter);
         viewPager.setPageMargin(64);
+
     }
 
 
@@ -203,11 +228,7 @@ public class ProfilePage extends AppCompatActivity {
                     currUser = dataSnapshot.getValue(User.class);
                     Log.d(TAG, "getting currUser");
                     topics = currUser.getTopics();
-                    ArrayList<String> boards = currUser.getBoards();
-                    boards = new ArrayList<>();
-                    boards.add("Mixed Race");
-                    boards.add("Ableism");
-                    boards.add("'Ethical' Capitalism");
+                    HashMap<String, String> boards = currUser.getBoards();
                     if (boards != null) {
                         Log.d(TAG, "boards is not null");
                         createBoardPage(boards);
@@ -295,9 +316,8 @@ public class ProfilePage extends AppCompatActivity {
     private void loadProfileImage() {
         mImageView = (ImageView) findViewById(R.id.profile_image);
         Log.d(TAG, "userID " + authHelper.thisUserID);
-
         // Load the image using Glide
-        if (currUser.getHasProfileImage()) {
+        if (currUser.getHasProfile()) {
             Glide.with(this /* context */)
                     .using(new FirebaseImageLoader())
                     .load(storageHelper.getProfileImageRef(authHelper.thisUserID))

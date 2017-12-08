@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -19,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BoardFullView extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -48,6 +51,11 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Makes status bar black and hides action bar
+        getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
+        getSupportActionBar().hide();
+        setContentView(R.layout.activity_ask_write);
         setContentView(R.layout.activity_board_full_view);
 
         String context = getIntent().getStringExtra("context");
@@ -80,9 +88,33 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
 
         // Attach a listener to the adapter to populate it with the questions in the DB
         attachAllQuestionsReadListener();
+
+        if(BoardArray.size()==0){
+            TextView tv = (TextView) findViewById(R.id.help);
+            tv.setText("THERE SEEMS TO BE NO BOARD! PLEASE MAKE ONE.");
+        }
     }
 
-    private void loadBoards() {
+    private void loadBoards(HashMap<String, String> boards) {
+        for (Map.Entry<String, String> entry : boards.entrySet()) {
+            DatabaseReference ref = mDatabaseHelper.boards.child(entry.getValue());
+            ValueEventListener boardListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Board currBoard = dataSnapshot.getValue(Board.class);
+                    BoardArray.add(currBoard.getName());
+                    BoardAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+            ref.addListenerForSingleValueEvent(boardListener);
+
+        }
+
         ListView list = (ListView) findViewById(R.id.feed_list);
         list.setOnItemClickListener(this);
         list.setAdapter(BoardAdapter);
@@ -97,9 +129,9 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     currUser = dataSnapshot.getValue(User.class);
                     Log.d(TAG, "getting currUser");
-                    BoardArray = currUser.getBoards();
-                    if (BoardArray != null) {
-                        loadBoards();
+                    HashMap<String, String> boards = currUser.getBoards();
+                    if (boards != null) {
+                        loadBoards(boards);
                     }
                 }
 

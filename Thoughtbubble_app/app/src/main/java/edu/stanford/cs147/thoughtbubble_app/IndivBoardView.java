@@ -16,6 +16,11 @@ public class IndivBoardView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Makes status bar black and hides action bar
+        getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
+        getSupportActionBar().hide();
+        setContentView(R.layout.activity_ask_write);
         setContentView(R.layout.activity_indiv_board_view);
 
         String boardName = getIntent().getStringExtra("CURRENT_BOARD");
@@ -32,8 +37,6 @@ public class IndivBoardView extends AppCompatActivity {
 
         // TODO : PLEASE FILL IN THE QUESTIONARRAY WITH A REAL DATA
         ArrayList<Question> questionArray = new ArrayList<Question>();
-        questionArray.add(new Question("YQ1", "YA1", "Critique1", "10:43", "Grace", "Bonnie", "1"));
-        questionArray.add(new Question("YQ2", "YA2", "Critique2", "10:13", "Jenny", "Bonnie", "2"));
 
         QuestionAdapter questionAdapter = new QuestionAdapter(this,
                 R.layout.listview_item_row, questionArray);
