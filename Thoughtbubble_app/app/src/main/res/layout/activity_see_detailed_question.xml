@@ -149,6 +149,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginLeft="4dp"
+                            android:scrollbars = "vertical"
                             android:textSize="18dp" />
 
                     </LinearLayout>
@@ -168,6 +169,7 @@
                         <TextView
                             android:id="@+id/detailedQ_critique"
                             android:layout_width="wrap_content"
+                            android:scrollbars = "vertical"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginLeft="4dp"
