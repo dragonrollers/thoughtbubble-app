@@ -58,7 +58,8 @@
         <activity android:name=".IndivBoardView" />
         <activity android:name=".AddNewBoard" />
         <activity android:name=".AskReviseDialog" />
-        <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".SettingActivity" />
+        <activity android:name=".BoardListView"></activity>
     </application>
 
 </manifest>

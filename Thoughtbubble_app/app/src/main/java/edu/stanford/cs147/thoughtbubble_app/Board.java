@@ -8,17 +8,23 @@ import java.util.ArrayList;
 
 public class Board {
     private String name;
+    private String id;
     private ArrayList<String> questions;
 
     public Board () {}
 
-    public Board(String name){
+    public Board(String name, String id){
         this.name = name;
+        this.id = id;
     }
 
     public String getName() { return name; }
 
     public void setName(String name) { this.name = name; }
+
+    public String setID(String id) {return this.id; }
+
+    public String getID(String id) {return this.id; }
 
     public ArrayList<String> getQuestions() { return questions; }
 

@@ -27,7 +27,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
 
     private String TAG = "BoardFullView";
 
-    ArrayList<String> BoardArray;
+    ArrayList<Board> BoardArray;
     private ArrayAdapter<String> BoardAdapter;
     // Firebase
     private DatabaseHelper mDatabaseHelper;
@@ -69,9 +69,9 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
         mDatabaseHelper = DatabaseHelper.getInstance();
         authHelper = AuthenticationHelper.getInstance();
 
-        BoardArray = new ArrayList<String>();
+        BoardArray = new ArrayList<Board>();
         BoardAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_list_item_1, BoardArray
+                this, android.R.layout.board_list_view, BoardArray
         );
 
         loadUserFromDatabase();
@@ -102,7 +102,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Board currBoard = dataSnapshot.getValue(Board.class);
-                    BoardArray.add(currBoard.getName());
+                    BoardArray.add(currBoard);
                     BoardAdapter.notifyDataSetChanged();
                 }
 
