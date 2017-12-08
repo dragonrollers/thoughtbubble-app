@@ -118,8 +118,11 @@ class DatabaseHelper {
         });
     }
 
-    public void addQuestionToBoard(String thisUserID, String questionID, String thought) {
+    public void addQuestionToBoard(String thisUserID, String boardID, String questionID, String thought) {
         DatabaseReference ref = users.child(thisUserID).child("savedQuestions");
+        ref.child(questionID).setValue(thought);
+
+        ref = boards.child(boardID).child("questions");
         ref.child(questionID).setValue(thought);
     }
 

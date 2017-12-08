@@ -164,7 +164,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
             String boardName = BoardArray.get(i);
             String boardID = boardIDs.get(i);
             String thisUserID = authHelper.thisUserID;
-            mDatabaseHelper.addQuestionToBoard(thisUserID, questionID, reflection);
+            mDatabaseHelper.addQuestionToBoard(thisUserID, boardID, questionID, reflection);
             Intent indivBoard = new Intent(this, IndivBoardView.class);
             indivBoard.putExtra("CURR_BOARD", boardName);
             indivBoard.putExtra("boardID", boardID);
