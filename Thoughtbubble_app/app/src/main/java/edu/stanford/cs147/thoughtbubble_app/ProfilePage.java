@@ -129,7 +129,7 @@ public class ProfilePage extends AppCompatActivity {
         String newFirstName = ((EditText) nameContainer.getChildAt(0)).getText().toString();
         String newLastName = ((EditText) nameContainer.getChildAt(1)).getText().toString();
 
-        if (newFirstName.trim().length() == 0 || newLastName.trim().length() == 0){
+        if (newFirstName.trim().length() == 0 || newLastName.trim().length() == 0) {
             Toast.makeText(this, "Please add a first and last name", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -153,13 +153,13 @@ public class ProfilePage extends AppCompatActivity {
         //Add edit text field for first name
         EditText firstNameInput = new EditText(this);
         firstNameInput.setHint("First Name");
-        firstNameInput.setTextSize(24);
+        firstNameInput.setTextSize(18);
         nameContainer.addView(firstNameInput, 0);
 
         //Add edit text field for second name
         EditText lastNameInput = new EditText(this);
         lastNameInput.setHint("Last Name");
-        lastNameInput.setTextSize(24);
+        lastNameInput.setTextSize(18);
         nameContainer.addView(lastNameInput, 1);
 
         //Add button to save name
@@ -429,7 +429,6 @@ public class ProfilePage extends AppCompatActivity {
         //public void removeResult() {
 
         //}
-
 
 
     }
