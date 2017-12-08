@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class Board {
     private String name;
-    private HashMap<String, Boolean> questions;
+    private HashMap<String, String> questions;
 
     public Board () {}
 
@@ -21,7 +21,7 @@ public class Board {
 
     public void setName(String name) { this.name = name; }
 
-    public HashMap<String, Boolean> getQuestions() { return questions; }
+    public HashMap<String, String> getQuestions() { return questions; }
 
-    public void setQuestions(HashMap<String, Boolean> questions) { this.questions = questions; }
+    public void setQuestions(HashMap<String, String> questions) { this.questions = questions; }
 }

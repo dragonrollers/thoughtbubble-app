@@ -47,6 +47,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
     private String answer = null;
     private String answererID = null;
     private String questionID = null;
+    private String reflection = null;
 
     // strings to remember the newly passed intent
 
@@ -152,6 +153,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
         questionID = currIntent.getStringExtra("questionID");
         answer = currIntent.getStringExtra("answerText");
         answererID = currIntent.getStringExtra("answererID");
+        reflection = currIntent.getStringExtra("reflection");
     }
 
     @Override
@@ -166,7 +168,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
             Log.d(TAG, "questionID=" + questionID);
             String boardName = BoardArray.get(i);
             String boardID = boardIDs.get(i);
-            mDatabaseHelper.addQuestionToBoard(boardID, questionID);
+            mDatabaseHelper.addQuestionToBoard(boardID, questionID, reflection);
             Intent indivBoard = new Intent(this, IndivBoardView.class);
             indivBoard.putExtra("CURR_BOARD", boardName);
             indivBoard.putExtra("boardID", boardID);

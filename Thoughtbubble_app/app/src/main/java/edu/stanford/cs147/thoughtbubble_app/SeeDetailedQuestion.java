@@ -111,7 +111,7 @@ public class SeeDetailedQuestion extends AppCompatActivity {
         boardFullView.putExtra("questionText", questionText);
         boardFullView.putExtra("answerText", answerText);
         boardFullView.putExtra("critiqueText", critiqueText);
-        boardFullView.putExtra("reflection", reflection.getText());
+        boardFullView.putExtra("reflection", reflection.getText() + "");
         boardFullView.putExtra("answererID", answererID);
         boardFullView.putExtra("questionID", questionID);
         boardFullView.putExtra("origin", "SeeDetailedQuestion");

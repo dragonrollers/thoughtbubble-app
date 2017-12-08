@@ -127,7 +127,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Question question = questionArray.get(index);
         Intent seeDetailedQuestion = new Intent(this, SeeDetailedQuestion.class);
 
-        seeDetailedQuestion.putExtra("questionID", question.questionID);
+        String questionID = "-L-QI10yJT4iMfbmQ84w"; //TODO Hardcoded because question.questionID is actually null, need to fix
+        seeDetailedQuestion.putExtra("questionID", questionID);
         seeDetailedQuestion.putExtra("questionText", question.questionText);
         seeDetailedQuestion.putExtra("answerText", question.answerText);
         seeDetailedQuestion.putExtra("critiqueText", question.critiqueText);

@@ -114,9 +114,9 @@ class DatabaseHelper {
         });
     }
 
-    public void addQuestionToBoard(String boardID, String questionID) {
-        DatabaseReference ref = boards.child(boardID);
-        ref.child(questionID).setValue(true);
+    public void addQuestionToBoard(String boardID, String questionID, String thought) {
+        DatabaseReference ref = boards.child(boardID).child("questions");
+        ref.child(questionID).setValue(thought);
     }
 
     public void writeAskToDatabase(String questionText, String thisUserID, String sendToID) {
