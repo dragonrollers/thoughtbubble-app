@@ -178,12 +178,13 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
     }
 
     public void NewBoard(View view) {
-        // TODO: SAVE THE NEW BOARD INTO THE DATABASE
-
         FragmentManager fm = getFragmentManager();
         AddNewBoard addNewBoardFragment = new AddNewBoard();
+        Bundle args = new Bundle();
+        args.putString("questionID", questionID);
+        args.putString("reflection", reflection);
+        addNewBoardFragment.setArguments(args);
         addNewBoardFragment.show(fm, null);
-
     }
 }
 

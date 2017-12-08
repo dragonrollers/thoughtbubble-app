@@ -119,12 +119,40 @@ class DatabaseHelper {
         return newBoardKey;
     }
 
-    public void addQuestionToBoard(String thisUserID, String boardID, String questionID, String thought) {
-        DatabaseReference ref = users.child(thisUserID).child("savedQuestions");
-        ref.child(questionID).setValue(thought);
+    public void addQuestionToBoard(final String thisUserID, final String boardID, final String questionID, final String thought) {
+        Log.d(TAG, "Adding question to board");
+        Log.d(TAG, "boardID=" + boardID);
+        Log.d(TAG, "questionID=" + questionID);
+        Log.d(TAG, "thought=" + thought);
 
-        ref = boards.child(boardID).child("questions");
-        ref.child(questionID).setValue(thought);
+        DatabaseReference boardRef = boards.child(boardID);
+        boardRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Board currBoard = dataSnapshot.getValue(Board.class);
+                HashMap<String, String> questions = currBoard.getQuestions();
+                if (questions == null) questions = new HashMap<>();
+                questions.put(boardID, thought);
+                currBoard.setQuestions(questions);
+
+                Map updatedData = new HashMap();
+                updatedData.put("boards/" + boardID, currBoard);
+                updatedData.put("users/" + thisUserID + "/savedQuestions/" + questionID, thought);
+                databaseReference.updateChildren(updatedData, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                        if (databaseError != null) {
+                            Log.e(TAG, "Problem writing to database: " + databaseError.toString());
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void writeAskToDatabase(String questionText, String thisUserID, String sendToID) {
