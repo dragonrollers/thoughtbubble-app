@@ -109,6 +109,11 @@
                     android:textSize="24dp" />
             </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ask me about..."/>
+
             <ScrollView
                 android:id="@+id/personal_profile_interests"
                 android:layout_width="match_parent"
