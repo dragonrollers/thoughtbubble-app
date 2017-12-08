@@ -28,7 +28,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
     private String TAG = "BoardFullView";
 
     ArrayList<Board> BoardArray;
-    private ArrayAdapter<String> BoardAdapter;
+    private ArrayAdapter<Board> BoardAdapter;
     // Firebase
     private DatabaseHelper mDatabaseHelper;
     private AuthenticationHelper authHelper;
@@ -70,9 +70,13 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
         authHelper = AuthenticationHelper.getInstance();
 
         BoardArray = new ArrayList<Board>();
-        BoardAdapter = new ArrayAdapter<>(
-                this, android.R.layout.board_list_view, BoardArray
+        BoardAdapter = new ArrayAdapter<Board>(
+                this, R.layout.board_list_view, BoardArray
         );
+
+        ListView listView1 = (ListView)findViewById(R.id.feed_list);
+        listView1.setOnItemClickListener(this);
+        listView1.setAdapter(BoardAdapter);
 
         loadUserFromDatabase();
 
@@ -165,7 +169,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
                     Question question = dataSnapshot.getValue(Question.class);
 
                     // TODO store more than just question text in question array
-                    BoardAdapter.add(question.questionText);
+                    // BoardAdapter.add(question.questionText);
                 }
 
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
@@ -196,7 +200,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
             // ONCE WE GET THE DATABASE WORKING, THE CODE SHOULD BE
             // BoardArray.get(i)
             // please text Jenny if this confuses you
-            String boardName = BoardArray.get(0);
+            String boardName = BoardArray.get(0).getName();
             Intent indivBoard = new Intent(this, IndivBoardView.class);
             indivBoard.putExtra("CURRENT_BOARD", boardName);
             startActivity(indivBoard);

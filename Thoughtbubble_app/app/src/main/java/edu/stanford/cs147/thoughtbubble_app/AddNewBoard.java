@@ -44,9 +44,10 @@ public class AddNewBoard extends DialogFragment {
         update.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                // TODO: SAVE THIS INFO TO DATABASE
+                // TODO: GET NEW BOARD
                 String new_board_name = newBoard.getText().toString();
-                DBH.addBoard(authHelper.thisUserID, new_board_name);
+                //String new_board_id = newBoard.getId();
+                DBH.addBoard(authHelper.thisUserID, new_board_name, "0");
                 Intent indivBoardView = new Intent(v.getContext(), IndivBoardView.class);
                 indivBoardView.putExtra("CURRENT_BOARD", new_board_name);
                 startActivity(indivBoardView);

@@ -1,6 +1,5 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -93,8 +92,10 @@ class DatabaseHelper {
         ref.addListenerForSingleValueEvent(topicsListener);
     }
 
-    public void addBoard(String thisUserID, String boardName) {
-        Board newBoard = new Board(boardName);
+    public void addBoard(String thisUserID, String boardName, String boardID) {
+
+        // TODO: BOARDID FROM DATABASE
+        Board newBoard = new Board(boardName, boardID);
         DatabaseReference newBoardRef = boards.push();
         String newBoardKey = newBoardRef.getKey();
 
