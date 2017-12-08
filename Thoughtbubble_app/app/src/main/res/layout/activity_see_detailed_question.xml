@@ -78,18 +78,17 @@
         android:paddingBottom="8dp"
         android:paddingTop="16dp">
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:id="@+id/profile_image_detailed_question"
-            android:onClick="viewProfile"
-            android:src ="@drawable/anonymous" />
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/profile_image_detailed_question"
+                android:src ="@drawable/anonymous" />
 
             <TextView
                 android:id="@+id/detailedQ_question"
@@ -99,12 +98,21 @@
                 android:textSize="18dp"
                 android:textStyle="bold" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="4dp"
-                android:background="@android:color/darker_gray" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@android:color/darker_gray" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -115,6 +123,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginRight="8dp"
+                    android:onClick="viewProfile"
                     android:src="@drawable/anonymous" />
 
                 <LinearLayout
