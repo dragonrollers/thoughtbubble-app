@@ -2,6 +2,7 @@ package edu.stanford.cs147.thoughtbubble_app;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +10,26 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 public class QuestionAdapter extends ArrayAdapter<Question> {
 
-    Context context;
+    private String TAG = "QuestionAdapter";
+
+    private Context context;
     int layoutResourceId;
     ArrayList<Question> data = null;
+
+    private DatabaseHelper DBH;
+    private StorageHelper storageHelper;
+
 
     public QuestionAdapter(Context context, int layoutResourceId, ArrayList<Question> data) {
         super(context, layoutResourceId, data);
@@ -47,11 +61,27 @@ public class QuestionAdapter extends ArrayAdapter<Question> {
 
 
         Question question = data.get(position);
-        // TODO: SET THIS IMAGE FROM THE DATABASE. YOU CAN GET THE ANSWERER ID BY UNCOMMENTING THE LINE BELOW:
-        // String answererID = question.answererID
-        holder.profileImage.setImageResource(R.drawable.anonymous);
+
         holder.questionContent.setText(question.questionText);
         holder.answerContent.setText(question.answerText);
+
+        final String answererID = question.answererID;
+        final ImageView profileImage = holder.profileImage;
+        DBH = DatabaseHelper.getInstance();
+        storageHelper = storageHelper.getInstance();
+        DatabaseReference answererHasProfile = DBH.users.child(answererID).child("hasProfile");
+        answererHasProfile.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Boolean hasProfile = dataSnapshot.getValue(Boolean.class);
+                 getProfileImage(hasProfile, answererID, profileImage);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         return row;
     }
@@ -62,4 +92,25 @@ public class QuestionAdapter extends ArrayAdapter<Question> {
         TextView questionContent;
         TextView answerContent;
     }
+
+
+    private void getProfileImage(Boolean hasProfile, String answererID, ImageView mImageView) {
+        Log.d(TAG, "answererID " + answererID);
+        // Load the image using Glide
+        if (hasProfile) {
+            Glide.with(context)
+                    .using(new FirebaseImageLoader())
+                    .load(storageHelper.getProfileImageRef(answererID))
+                    .asBitmap()
+                    .into(mImageView);
+        } else {
+            Glide.with(context)
+                    .using(new FirebaseImageLoader())
+                    .load(storageHelper.getProfileImageRef("blank-user"))
+                    .asBitmap()
+                    .into(mImageView);
+        }
+
+    }
+
 }

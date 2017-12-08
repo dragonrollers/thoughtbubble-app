@@ -116,7 +116,8 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:id="@+id/profile_image_detailed_question"
-                    android:onClick="viewProfile"/>
+                    android:onClick="viewProfile"
+                    android:layout_marginRight="6dp"/>
 
 
                 <LinearLayout

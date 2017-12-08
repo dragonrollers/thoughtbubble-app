@@ -1,6 +1,5 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -77,8 +76,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
         // Setting up places to display content
         questionArray = new ArrayList<Question>();
         // TODO : REMOVE DUMMY DATA WHEN FULLY IMPLEMENTED
-        //questionArray.add(new Question("YQ1", "YA1", "Critique1", "10:43", "Grace", "Bonnie", "7"));
-        //questionArray.add(new Question("YQ2", "YA2", "Critique2", "10:13", "Jenny", "Bonnie", "11"));
+
 
         questionAdapter = new AnonQuestionAdapter(this,
                 R.layout.unanswered_question_items, questionArray);
