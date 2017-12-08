@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,7 +27,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
     private String TAG = "BoardFullView";
 
     ArrayList<Board> BoardArray;
-    private ArrayAdapter<Board> BoardAdapter;
+    private BoardArrayAdapter BoardAdapter;
     // Firebase
     private DatabaseHelper mDatabaseHelper;
     private AuthenticationHelper authHelper;
@@ -70,7 +69,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
         authHelper = AuthenticationHelper.getInstance();
 
         BoardArray = new ArrayList<Board>();
-        BoardAdapter = new ArrayAdapter<Board>(
+        BoardAdapter = new BoardArrayAdapter(
                 this, R.layout.board_list_view, BoardArray
         );
 
