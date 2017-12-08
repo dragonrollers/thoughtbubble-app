@@ -13,14 +13,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class AskSelectActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -28,7 +27,7 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
     private String TAG = "AskSelectActivity";
 
     private DatabaseHelper DBH;
-    private ValueEventListener friendsListener;
+    private ChildEventListener friendsListener;
 
     private AuthenticationHelper authHelper;
 
@@ -79,9 +78,26 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
         list.setAdapter(friendsAdapter); //displays the list in the xml
 
 
-        // Attach a listener to the friends list in the DB to populate the adapter
+        Log.d(TAG, "BEFORE LISTENER");
+        // If the user has friends, attach a listener to the friends list in the DB to populate the adapter
+        DBH.users.child(authHelper.thisUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.hasChild("friends")) {
+                    Log.d(TAG, "HAS FRIENDs");
+                    attachFriendsReadListener();
+                } else {
+                    addNoFriendsFeedback();
+                }
+            }
 
-        attachFriendsReadListener();
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "Failed to read value.");
+            }
+        });
+
+
 
     }
 
@@ -112,44 +128,54 @@ public class AskSelectActivity extends AppCompatActivity implements AdapterView.
     //      ^ That might not be the best practice, so we can change if necessary!
     private void attachFriendsReadListener() {
         if (friendsListener == null) { // It start out null eventually when we add authentication
-
-            // Define the listener
-            friendsListener = new ValueEventListener() {
-
+            Log.d(TAG, "ATTACHING FRIENDS LISTENER");
+            friendsListener = new ChildEventListener() {
                 @Override
-                // TODO is there a better way to do this that doesn't require pulling the whole list every time?
-                // Whenever any data changes in the friends list, clear the adapter and populate it with the updated data
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    // Get the updated friends list
-                    GenericTypeIndicator<ArrayList<HashMap<String, String>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, String>>>() {
-                    };
-                    ArrayList<HashMap<String, String>> friendList = dataSnapshot.getValue(t);
-
-                    // Populate the adapter with the updated data
-                    friendsAdapter.clear();
-                    if (friendList != null) { //Make sure that user has friends
-                        for (HashMap<String, String> h : friendList) {
-                            friendsAdapter.add(h.get("friendName"));
-                            String[] friend = {h.get("friendID"), h.get("friendName")};
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    final String friendID = dataSnapshot.getKey();
+                    Log.d(TAG, "FRIEND ID: " + friendID);
+                    DatabaseReference friendNameRef = DBH.users.child(friendID).child("fullName");
+                    friendNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String name = dataSnapshot.getValue(String.class);
+                            friendsAdapter.add(name);
+                            Log.d(TAG, "FRIEND NAME: " + name);
+                            String[] friend = {friendID, name};
                             friendsArray.add(friend);
                         }
-                    } else { //In event that user does not have friends
-                        addNoFriendsFeedback();
-                    }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.w(TAG, "Failed to read value.");
+                        }
+                    });
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    // NOT IMPLEMENTING BECAUSE I DON'T KNOW WHAT WOULD HAPPEN IF DATA CHANGED AND THEN WAS REMOVED - COULD CRASH
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.w(TAG, "Failed to read value.");
+
                 }
             };
 
-
             // Actually attach the listener
             DatabaseReference friends = DBH.users.child(authHelper.thisUserID).child("friends");
-            friends.addValueEventListener(friendsListener);
+            friends.addChildEventListener(friendsListener);
 
 
         }

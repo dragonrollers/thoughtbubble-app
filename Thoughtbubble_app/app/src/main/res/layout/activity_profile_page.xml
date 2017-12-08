@@ -4,18 +4,19 @@
     android:id="@+id/activity_profile_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
     android:orientation="vertical"
     android:paddingBottom="0dp"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    android:background="@color/colorWhite"
     tools:context="edu.stanford.cs147.thoughtbubble_app.ProfilePage">
 
+    <!-- Toolbar -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:orientation="horizontal">
 
 
         <ImageView
@@ -29,187 +30,168 @@
         <Button
             android:id="@+id/Profile"
             android:layout_width="fill_parent"
-            android:layout_weight="1"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:onClick="ProfilePage"
-            android:text="User" />
+            android:text="User"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/Discover"
             android:layout_width="fill_parent"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
+            android:layout_weight="1"
             android:onClick="DiscoverPage"
-            android:text="Discover" />
+            android:text="Discover"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/Ask"
             android:layout_width="fill_parent"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
+            android:layout_weight="1"
             android:onClick="AskPage"
-            android:text="Ask" />
+            android:text="Ask"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/Answer"
             android:layout_width="fill_parent"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
+            android:layout_weight="1"
             android:onClick="AnswerPage"
-            android:text="Answer" />
+            android:text="Answer"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
+
+    <!-- Content -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/profile_image"
-            android:onClick="changeimage"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
+        <!-- User Profile -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom = "8dp"
+                android:onClick="changeimage" />
+
+            <LinearLayout
+                android:id="@+id/personal_profile_name_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/personal_profile_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:onClick="EditName"
+                    android:textSize="24dp" />
+            </LinearLayout>
+
+            <ScrollView
+                android:id="@+id/personal_profile_interests"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </ScrollView>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="0dp"
+            android:background="@android:color/darker_gray" />
+
+
+        <!--<LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="8dp"
+             android:gravity="center_vertical"
+             android:orientation="vertical">
+
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="1"
+                 android:text="Your Recent Questions"
+                 android:textSize="18dp" />
+
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="0.05"
+                 android:text="View More"
+                 android:textSize="18dp" />
+
+         </LinearLayout> -->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/profile_name"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:onClick="EditName"
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent" />
-
-
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1"
-                android:id="@+id/editNameBox">
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/first_name_view"
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:hint="First Name" />
-
-                <EditText
-                    android:id="@+id/last_name_view"
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:hint="Last Name" />
-
-            </LinearLayout>
-
-            <ViewSwitcher
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/my_switcher"
-                android:layout_width="match_parent"
-                android:layout_weight="5"
-                android:layout_height="50dp" >
-
-                <Button
-                    android:id="@+id/edit"
-                    android:clickable="true"
-                    android:textSize="10dp"
-                    android:onClick="EditProfile"
-                    android:layout_marginLeft="3dp"
-                    android:text="Edit Name"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content" />
-
-                <Button
-                    android:id="@+id/save"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="EnableSave"
-                    android:layout_marginLeft="3dp"
-                    android:textSize="10dp"
-                    android:text="Save Name" />
+                    android:layout_marginRight="8dp"
+                    android:text="Your Collections:"
+                    android:textSize="18dp" />
 
-            </ViewSwitcher>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="ViewFullList"
+                    android:text="(full list)"
+                    android:textColor="@color/tbLightGrey" />
+            </LinearLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:gravity="center"
+                android:paddingLeft="100dp"
+                android:paddingRight="100dp" />
 
         </LinearLayout>
 
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/profilelayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            />
-
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="right"
-        android:paddingBottom="16dp">
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:layout_marginBottom="0dp"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Your Collections"
-                android:textSize="18dp" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Full List"
-                android:onClick="ViewFullList" />
-        </LinearLayout>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center"
-            android:clipToPadding="false"
-            android:gravity="center"
-            android:paddingLeft="100dp"
-            android:paddingRight="100dp"
-            />
-
-    </LinearLayout>
 
 </LinearLayout>

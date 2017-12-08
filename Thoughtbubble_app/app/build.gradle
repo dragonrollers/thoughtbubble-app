@@ -52,6 +52,10 @@ dependencies {
 
     // board fragmented view
     compile 'com.android.support:support-v4:25.4.0'
+
+    //question flexbox view
+    compile 'org.apmem.tools:layouts:1.10@aar'
+    //compile 'com.google.android:flexbox:0.3.1'
 }
 
 // For Firebase

@@ -126,12 +126,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
 
-        // Show your friend's feed first
-        //loadFriendsContent();
-
-
-
-
     }
 
     @Override

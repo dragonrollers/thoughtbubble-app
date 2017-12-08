@@ -82,6 +82,7 @@ public class AuthenticationHelper {
                     Map updatedData = new HashMap();
 
                     // Get name
+                    updatedData.put(thisUserPath + "fullName", user.getDisplayName());
                     String[] name = user.getDisplayName().split(" ");
                     updatedData.put(thisUserPath + "firstName", name[0]);
                     if (name.length > 1){

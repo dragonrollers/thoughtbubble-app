@@ -134,7 +134,7 @@ public class AnswerWriteActivity extends AppCompatActivity {
         Log.d(TAG, "About to send answer to question " + questionID);
 
 
-        // Get the friends list and once that's done write the answer to DB
+        // Get the friends list and once that's done write the answer to DBw
         // TODO putting the write to DB inside the listener feels so hacky, is there a way to do it with an onComplete listener?
         DatabaseReference friendsRef = DBH.users.child(authHelper.thisUserID).child("friends");
 
@@ -147,18 +147,16 @@ public class AnswerWriteActivity extends AppCompatActivity {
                 ArrayList<String> friendsIDList = new ArrayList<>();
 
                 // Get the updated friends list
-                GenericTypeIndicator<ArrayList<HashMap<String, String>>> t = new GenericTypeIndicator<ArrayList<HashMap<String, String>>>() {
+                GenericTypeIndicator<HashMap<String, String>> t = new GenericTypeIndicator<HashMap<String, String>>() {
                 };
-                ArrayList<HashMap<String, String>> friendList = dataSnapshot.getValue(t);
+                HashMap<String, String> friendList = dataSnapshot.getValue(t);
+                Log.d(TAG, "FRIENDS MAP: " + friendList.toString());
 
                 // Populate the ArrayList with the updated data
                 //friendsIDList.clear();
                 if (friendList != null) { //Make sure that user has friends
-                    for (HashMap<String, String> h : friendList) {
+                    friendsIDList = new ArrayList(friendList.keySet());
 
-                        friendsIDList.add(h.get("friendID"));
-                        Log.d(TAG, "FRIEND: " + h.get("friendName") + " " + h.get("friendID"));
-                    }
                 }
 
                 Log.d(TAG, "FRIENDS LIST: " + friendsIDList.toString());

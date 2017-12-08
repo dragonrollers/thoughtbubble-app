@@ -4,6 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
+
+    android:padding="16px"
     tools:context="edu.stanford.cs147.thoughtbubble_app.AddNewInterestDialogFragment">
 
     <LinearLayout
