@@ -131,6 +131,11 @@ public class AnswerWriteActivity extends AppCompatActivity {
         final String revisedQuestionText = revisedQuestion.getText().toString();
         final String answerText = answer.getText().toString();
 
+        if (answerText.trim().length() == 0 ){
+            Toast.makeText(this, "Be sure not to send an empty answer!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Log.d(TAG, "About to send answer to question " + questionID);
 
 
