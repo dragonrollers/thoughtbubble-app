@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,12 +34,30 @@ public class PublicProfilePage extends AppCompatActivity {
     private ArrayList<String> topics;
     private Boolean fromMain = false;
 
+    // Firebase database
+    private DatabaseHelper mDatabaseHelper;
+    private ChildEventListener allQuestionsListener;
+    private ChildEventListener yourQuestionsListener;
+
+    // Firebase auth
+    private AuthenticationHelper authHelper;
+    // Choose an arbitrary request code value
+    private static final int RC_SIGN_IN = 123;
+
+
+    private ArrayList<Question> questionArray;
+    private QuestionAdapter questionAdapter;
+
     //TODO Replace with userID of user we're currently viewing, loaded from previous view
     private String thisUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Makes status bar black and hides action bar
+        getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
+        getSupportActionBar().hide();
 
         //Makes status bar black and hides action bar
         getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
@@ -60,6 +81,35 @@ public class PublicProfilePage extends AppCompatActivity {
 
         Intent data = getIntent();
         thisUserID = data.getStringExtra("answererID");
+
+        // TODO: NEED TO QUERY ONLY THE USER'S ANSWERS
+
+        // Setting up places to display content
+        questionArray = new ArrayList<Question>();
+
+        questionAdapter = new QuestionAdapter(this,
+                R.layout.listview_item_row, questionArray);
+
+        final ListView listView1 = (ListView)findViewById(R.id.feed_list);
+        //listView1.setOnItemClickListener(this);
+        listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Question question = questionArray.get(position);
+                Intent seeDetailedQuestion = new Intent(getApplicationContext(), SeeDetailedQuestion.class);
+
+                seeDetailedQuestion.putExtra("questionID", question.questionID);
+                seeDetailedQuestion.putExtra("questionText", question.questionText);
+                seeDetailedQuestion.putExtra("answerText", question.answerText);
+                seeDetailedQuestion.putExtra("critiqueText", question.critiqueText);
+                seeDetailedQuestion.putExtra("answererID", question.answererID);
+                seeDetailedQuestion.putExtra("questionerID", question.questionerID);
+                seeDetailedQuestion.putExtra("origin", "Main");
+                startActivity(seeDetailedQuestion);
+            }
+        });
+        listView1.setAdapter(questionAdapter);
+
         loadUserFromDatabase();
     }
 
@@ -96,7 +146,7 @@ public class PublicProfilePage extends AppCompatActivity {
             if (i != topics.size() - 1) topicsText +=  ", ";
         }
 
-        TextView nameField = (TextView) findViewById(R.id.profile_name);
+        TextView nameField = (TextView) findViewById(R.id.personal_profile_name);
         nameField.setText(name);
 
         TextView topicsField = (TextView) findViewById(R.id.profile_topics);
@@ -148,4 +198,7 @@ public class PublicProfilePage extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void askQuestion(View view) {
+        AskPage(view);
+    }
 }
