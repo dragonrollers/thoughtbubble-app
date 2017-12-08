@@ -46,6 +46,7 @@ public class ProfilePage extends AppCompatActivity {
 
     // user board
     CustomPagerEnum customBoard;
+    private ArrayList<String> boardIDs;
 
     private DatabaseHelper DBH;
     private AuthenticationHelper authHelper;
@@ -73,7 +74,8 @@ public class ProfilePage extends AppCompatActivity {
         DBH = DatabaseHelper.getInstance();
         authHelper = AuthenticationHelper.getInstance();
         storageHelper = StorageHelper.getInstance();
-        topics = new ArrayList<String>();
+        topics = new ArrayList<>();
+        boardIDs = new ArrayList<>();
         loadUserFromDatabase();
 
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
@@ -97,7 +99,9 @@ public class ProfilePage extends AppCompatActivity {
         final CustomPagerAdapter boardAdapter = new CustomPagerAdapter(this);
 
         for (Map.Entry<String, String> entry : boards.entrySet()) {
-            DatabaseReference ref = DBH.boards.child(entry.getValue());
+            String boardID = entry.getValue();
+            boardIDs.add(boardID);
+            DatabaseReference ref = DBH.boards.child(boardID);
             ValueEventListener boardListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -377,6 +381,7 @@ public class ProfilePage extends AppCompatActivity {
         @Override
         public Object instantiateItem(ViewGroup collection, int position) {
             final String boardString = customBoard.getArray().get(position);
+            final String boardID = boardIDs.get(position);
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View layout = (View) inflater.inflate(customBoard.getLayoutResId(), collection, false);
             TextView tv = (TextView) layout.findViewById(R.id.textView);
@@ -387,12 +392,12 @@ public class ProfilePage extends AppCompatActivity {
                 public void onClick(View v) {
                     //this will log the page number that was click
 
+                    Log.i("TAG", "This page was clicked=" + boardString + " id=" + boardID);
                     Intent intent = new Intent(getBaseContext(), IndivBoardView.class);
-
-                    intent.putExtra("CURRENT_BOARD", boardString);
+                    intent.putExtra("CURR_BOARD", boardString);
+                    intent.putExtra("boardID", boardID);
                     startActivity(intent);
 
-                    //Log.i("TAG", "This page was clicked: " + boardString);
                 }
             });
 

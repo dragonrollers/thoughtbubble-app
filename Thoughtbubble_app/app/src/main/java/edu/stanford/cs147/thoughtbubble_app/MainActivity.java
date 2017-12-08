@@ -332,13 +332,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     //Log.d(TAG, "IN ON CHILD ADDED");
 
-                    String questionID = dataSnapshot.getKey();
+                    final String questionID = dataSnapshot.getKey();
                     DatabaseReference questionRef = mDatabaseHelper.questions.child(questionID);
 
                     questionRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Question question = dataSnapshot.getValue(Question.class);
+                            question.questionID = questionID;
                             questionArray.add(0, question);
 
                             questionAdapter.notifyDataSetChanged();
@@ -413,12 +414,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 // Whenever a child is added to the "questions" part of the database, add the new question to the adapter
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     //Log.d(TAG, "IN ON CHILD ADDED");
-                    String questionID = dataSnapshot.getValue(String.class);
+                    final String questionID = dataSnapshot.getValue(String.class);
                     DatabaseReference thisQuestion = mDatabaseHelper.questions.child(questionID);
                     thisQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Question question = dataSnapshot.getValue(Question.class);
+                            question.questionID = questionID;
 
                             Log.d(TAG, question.toString());
 

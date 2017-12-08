@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -26,8 +27,9 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
 
     private String TAG = "BoardFullView";
 
-    ArrayList<String> BoardArray;
+    private ArrayList<String> BoardArray;
     private ArrayAdapter<String> BoardAdapter;
+    private ArrayList<String> boardIDs;
     // Firebase
     private DatabaseHelper mDatabaseHelper;
     private AuthenticationHelper authHelper;
@@ -44,6 +46,8 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
     private String question = null;
     private String answer = null;
     private String answererID = null;
+    private String questionID = null;
+    private String reflection = null;
 
     // strings to remember the newly passed intent
 
@@ -68,7 +72,8 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
         mDatabaseHelper = DatabaseHelper.getInstance();
         authHelper = AuthenticationHelper.getInstance();
 
-        BoardArray = new ArrayList<String>();
+        boardIDs = new ArrayList<>();
+        BoardArray = new ArrayList<>();
         BoardAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_list_item_1, BoardArray
         );
@@ -84,13 +89,11 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
             saveDataToGlobal();
 
         }
-
-        // Attach a listener to the adapter to populate it with the questions in the DB
-        attachAllQuestionsReadListener();
     }
 
     private void loadBoards(HashMap<String, String> boards) {
         for (Map.Entry<String, String> entry : boards.entrySet()) {
+            boardIDs.add(entry.getValue());
             DatabaseReference ref = mDatabaseHelper.boards.child(entry.getValue());
             ValueEventListener boardListener = new ValueEventListener() {
                 @Override
@@ -126,6 +129,9 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
                     HashMap<String, String> boards = currUser.getBoards();
                     if (boards != null) {
                         loadBoards(boards);
+                    } else {
+                        TextView tv = (TextView) findViewById(R.id.help);
+                        tv.setText("You don't have any boards currently. Want to make your first one?");
                     }
                 }
 
@@ -139,61 +145,30 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void saveDataToGlobal(){
-        critique = getIntent().getStringExtra("critiqueText");
-        question = getIntent().getStringExtra("questionText");
-        answer = getIntent().getStringExtra("answerText");
-        answererID = getIntent().getStringExtra("answererID");
-    }
-
-    // This listener listens for any content added to the "questions" child of the database and when anything
-    // is added, the question's text is added to the questionAdapter on the Discover page
-    // TODO properly implement child removed/changed methods, or choose a different listener if more appropriate
-    private void attachAllQuestionsReadListener(){
-        if (allQuestionsListener == null) { // It start out null eventually when we add authentication
-            allQuestionsListener = new ChildEventListener() {
-                @Override
-
-                // Whenever a child is added to the "questions" part of the database, add the new question to the adapter
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                    Question question = dataSnapshot.getValue(Question.class);
-
-                    // TODO store more than just question text in question array
-                    BoardAdapter.add(question.questionText);
-                }
-
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
-
-                public void onChildRemoved(DataSnapshot dataSnapshot) {}
-
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-
-                public void onCancelled(DatabaseError databaseError) {}
-            };
-
-            mDatabaseHelper.questions.addChildEventListener(allQuestionsListener);
-        }
+        Intent currIntent = getIntent();
+        critique = currIntent.getStringExtra("critiqueText");
+        question = currIntent.getStringExtra("questionText");
+        questionID = currIntent.getStringExtra("questionID");
+        answer = currIntent.getStringExtra("answerText");
+        answererID = currIntent.getStringExtra("answererID");
+        reflection = currIntent.getStringExtra("reflection");
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if(save){
-
-            // TODO: Save the question, answer, critique, and reflection (already saved into the global variables)
-            // into the database and the board that is selected
-            // WE NEED TO SAVE IT HERE, NOT IN THE NEXT ACTIVITY
-
             Toast alert_saved = Toast.makeText(this, "Your Reflection is saved to the board", Toast.LENGTH_LONG);
             alert_saved.show();
-
-            // ** I AM SETTING THIS TO 0 BECAUSE I AM USING FILLERS
-            // ONCE WE GET THE DATABASE WORKING, THE CODE SHOULD BE
-            // BoardArray.get(i)
-            // please text Jenny if this confuses you
-            String boardName = BoardArray.get(0);
+            Log.d(TAG, "Saving reflection to board[" + i + "]");
+            Log.d(TAG, "questionID=" + questionID);
+            String boardName = BoardArray.get(i);
+            String boardID = boardIDs.get(i);
+            mDatabaseHelper.addQuestionToBoard(boardID, questionID, reflection);
             Intent indivBoard = new Intent(this, IndivBoardView.class);
-            indivBoard.putExtra("CURRENT_BOARD", boardName);
+            indivBoard.putExtra("CURR_BOARD", boardName);
+            indivBoard.putExtra("boardID", boardID);
             startActivity(indivBoard);
+            finish();
         }
     }
 
