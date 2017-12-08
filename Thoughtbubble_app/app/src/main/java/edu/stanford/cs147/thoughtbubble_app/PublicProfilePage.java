@@ -1,5 +1,6 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,9 +28,7 @@ public class PublicProfilePage extends AppCompatActivity {
     private ValueEventListener currUserListener;
     private User currUser;
     private ArrayList<String> topics;
-
-    //TODO Replace with userID of user we're currently viewing, loaded from previous view
-    private String thisUserID = "2wBLMKWKNmefVO31DIW7fIFS1933";
+    private String thisUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +54,8 @@ public class PublicProfilePage extends AppCompatActivity {
         discover.setBackgroundColor(unselected);
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
 
+        Intent data = getIntent();
+        thisUserID = data.getStringExtra("answererID");
         loadUserFromDatabase();
     }
 
