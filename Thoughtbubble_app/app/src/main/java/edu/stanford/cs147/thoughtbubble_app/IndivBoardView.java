@@ -49,6 +49,8 @@ public class IndivBoardView extends AppCompatActivity {
     }
 
     public void finishActivity(View view) {
+        Intent intent = new Intent(this, ProfilePage.class);
+        startActivity(intent);
         finish();
     }
 
