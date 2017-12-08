@@ -165,33 +165,11 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Your Recent Questions"
-            android:layout_weight="1"
-            android:textSize="18dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="View More"
-            android:layout_weight="0.05"
-            android:textSize="18dp" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
+        android:layout_height="280dp"
+        android:layout_marginBottom="0dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -214,11 +192,9 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
+            android:layout_height="200dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
-            android:layout_marginBottom="8dp"
             android:clipToPadding="false"
             android:gravity="center"
             android:paddingLeft="100dp"

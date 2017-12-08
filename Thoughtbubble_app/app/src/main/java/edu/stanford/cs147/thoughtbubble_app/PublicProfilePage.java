@@ -34,6 +34,11 @@ public class PublicProfilePage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Makes status bar black and hides action bar
+        getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
+        getSupportActionBar().hide();
+        setContentView(R.layout.activity_ask_write);
         DBH = DatabaseHelper.getInstance();
         storageHelper = StorageHelper.getInstance();
         setContentView(R.layout.activity_public_profile_page);
@@ -98,7 +103,7 @@ public class PublicProfilePage extends AppCompatActivity {
         mImageView = (ImageView) findViewById(R.id.profile_image);
         Log.d(TAG, "userID " + thisUserID);
         // Load the image using Glide
-        if (currUser.getHasProfileImage()) {
+        if (currUser.getHasProfile()) {
             Glide.with(this /* context */)
                     .using(new FirebaseImageLoader())
                     .load(storageHelper.getProfileImageRef(thisUserID))

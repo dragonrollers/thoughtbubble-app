@@ -27,6 +27,10 @@ public class AskWriteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Makes status bar black and hides action bar
+        getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_ask_write);
 
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
@@ -144,12 +148,12 @@ public class AskWriteActivity extends AppCompatActivity {
     }
 
 
-    public void needhelp(View view) {
+    public void needHelp(View view) {
         FragmentManager fm = getFragmentManager();
-        AskingQuestionHelp dialogFragment = new AskingQuestionHelp ();
+        AskingQuestionHelp dialogFragment = new AskingQuestionHelp();
         Bundle args = new Bundle();
         dialogFragment.setArguments(args);
-        dialogFragment.show(fm, "Getting help to ask good questions");
+        dialogFragment.show(fm, "WE WILL INPUT TEXT THAT GUIDES THE USER TO ASK GOOD QUESTIONS");
         System.out.println(dialogFragment.getActivity());
     }
 }

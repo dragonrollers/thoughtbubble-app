@@ -1,5 +1,6 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +24,7 @@ class DatabaseHelper {
     public DatabaseReference databaseReference;
     public DatabaseReference questions;
     public DatabaseReference users;
+    public DatabaseReference boards;
 
 
     private DatabaseHelper() {
@@ -33,6 +35,7 @@ class DatabaseHelper {
         databaseReference = database.getReference();
         questions = database.getReference().child("questions");
         users = database.getReference().child("users");
+        boards = database.getReference().child("boards");
     }
 
 
@@ -88,6 +91,27 @@ class DatabaseHelper {
             }
         };
         ref.addListenerForSingleValueEvent(topicsListener);
+    }
+
+    public void addBoard(String thisUserID, String boardName) {
+        Board newBoard = new Board(boardName);
+        DatabaseReference newBoardRef = boards.push();
+        String newBoardKey = newBoardRef.getKey();
+
+        // Create data to update
+        Map updatedData = new HashMap();
+        updatedData.put("boards/" + newBoardKey, newBoard);
+        updatedData.put("users/" + thisUserID + "/boards/" + newBoardKey, newBoardKey);
+
+        // Do the update
+        databaseReference.updateChildren(updatedData, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    Log.e(TAG, "Problem writing to database: " + databaseError.toString());
+                }
+            }
+        });
     }
 
     public void writeAskToDatabase(String questionText, String thisUserID, String sendToID) {
