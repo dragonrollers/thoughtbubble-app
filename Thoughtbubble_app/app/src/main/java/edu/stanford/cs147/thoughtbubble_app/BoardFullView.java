@@ -46,6 +46,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
     private String question = null;
     private String answer = null;
     private String answererID = null;
+    private String questionID = null;
 
     // strings to remember the newly passed intent
 
@@ -145,10 +146,12 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void saveDataToGlobal(){
-        critique = getIntent().getStringExtra("critiqueText");
-        question = getIntent().getStringExtra("questionText");
-        answer = getIntent().getStringExtra("answerText");
-        answererID = getIntent().getStringExtra("answererID");
+        Intent currIntent = getIntent();
+        critique = currIntent.getStringExtra("critiqueText");
+        question = currIntent.getStringExtra("questionText");
+        questionID = currIntent.getStringExtra("questionID");
+        answer = currIntent.getStringExtra("answerText");
+        answererID = currIntent.getStringExtra("answererID");
     }
 
     @Override
@@ -160,9 +163,10 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
             Toast alert_saved = Toast.makeText(this, "Your Reflection is saved to the board", Toast.LENGTH_LONG);
             alert_saved.show();
             Log.d(TAG, "Saving reflection to board[" + i + "]");
-
+            Log.d(TAG, "questionID=" + questionID);
             String boardName = BoardArray.get(i);
             String boardID = boardIDs.get(i);
+            mDatabaseHelper.addQuestionToBoard(boardID, questionID);
             Intent indivBoard = new Intent(this, IndivBoardView.class);
             indivBoard.putExtra("CURR_BOARD", boardName);
             indivBoard.putExtra("boardID", boardID);

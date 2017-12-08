@@ -1,6 +1,7 @@
 package edu.stanford.cs147.thoughtbubble_app;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by potsui on 12/6/17.
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 
 public class Board {
     private String name;
-    private ArrayList<String> questions;
+    private HashMap<String, Boolean> questions;
 
     public Board () {}
 
@@ -20,7 +21,7 @@ public class Board {
 
     public void setName(String name) { this.name = name; }
 
-    public ArrayList<String> getQuestions() { return questions; }
+    public HashMap<String, Boolean> getQuestions() { return questions; }
 
-    public void setQuestions(ArrayList<String> questions) { this.questions = questions; }
+    public void setQuestions(HashMap<String, Boolean> questions) { this.questions = questions; }
 }

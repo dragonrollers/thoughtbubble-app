@@ -114,6 +114,11 @@ class DatabaseHelper {
         });
     }
 
+    public void addQuestionToBoard(String boardID, String questionID) {
+        DatabaseReference ref = boards.child(boardID);
+        ref.child(questionID).setValue(true);
+    }
+
     public void writeAskToDatabase(String questionText, String thisUserID, String sendToID) {
 
         // Create Question object from given data

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 public class SeeDetailedQuestion extends AppCompatActivity {
 
     private Intent extraInfo;
+    private String TAG = "SeeDetailedQuestion";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,12 +105,15 @@ public class SeeDetailedQuestion extends AppCompatActivity {
         String answerText = extraInfo.getStringExtra("answerText");
         String questionText = extraInfo.getStringExtra("questionText");
         String answererID = extraInfo.getStringExtra("answererID");
+        String questionID = extraInfo.getStringExtra("questionID");
+        Log.d(TAG, "Po is wondering if questionID is null here..." + questionID);
         boardFullView.putExtra("context", "save");
         boardFullView.putExtra("questionText", questionText);
         boardFullView.putExtra("answerText", answerText);
         boardFullView.putExtra("critiqueText", critiqueText);
         boardFullView.putExtra("reflection", reflection.getText());
         boardFullView.putExtra("answererID", answererID);
+        boardFullView.putExtra("questionID", questionID);
         boardFullView.putExtra("origin", "SeeDetailedQuestion");
         startActivity(boardFullView);
     }
