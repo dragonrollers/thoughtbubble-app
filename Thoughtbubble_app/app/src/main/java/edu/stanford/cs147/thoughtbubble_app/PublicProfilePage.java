@@ -224,6 +224,7 @@ public class PublicProfilePage extends AppCompatActivity {
                             //Log.d(TAG, "IN SINGLE VALUE EVENT LISTENER");
 
                             Question question = dataSnapshot.getValue(Question.class);
+                            question.questionID = dataSnapshot.getKey();
 
                             if (question.answerText != null) {
                                 // TODO add more than just question text
