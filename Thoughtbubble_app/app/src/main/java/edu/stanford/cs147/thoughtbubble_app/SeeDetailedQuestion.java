@@ -7,8 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +24,8 @@ public class SeeDetailedQuestion extends AppCompatActivity {
 
     private DatabaseHelper DBH;
     private AuthenticationHelper authHelper;
+    private StorageHelper storageHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,7 @@ public class SeeDetailedQuestion extends AppCompatActivity {
 
         DBH = DatabaseHelper.getInstance();
         authHelper = AuthenticationHelper.getInstance();
+        storageHelper = StorageHelper.getInstance();
 
         //Makes status bar black and hides action bar
         getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
@@ -73,7 +79,25 @@ public class SeeDetailedQuestion extends AppCompatActivity {
 
     private void fillWithQuestionDetails(Intent extraInfo){
         // TODO: Backend side need to retrieve the user image
-        // with String answererID = extraInfo.getStringExtra("answererID");
+
+        // Fill in profile picture of answerer
+        final ImageView mImageView = (ImageView) findViewById(R.id.profile_image_detailed_question);
+        final String answererID = extraInfo.getStringExtra("answererID");
+        DatabaseReference answererHasProfile = DBH.users.child(answererID).child("hasProfile");
+        answererHasProfile.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Boolean hasProfile = dataSnapshot.getValue(Boolean.class);
+                loadProfileImage(hasProfile, answererID, mImageView);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         String critiqueText = extraInfo.getStringExtra("critiqueText");
         String answerText = extraInfo.getStringExtra("answerText");
         String questionText = extraInfo.getStringExtra("questionText");
@@ -87,6 +111,7 @@ public class SeeDetailedQuestion extends AppCompatActivity {
         TextView critiqueView = (TextView) findViewById(R.id.detailedQ_critique);
         critiqueView.setText(critiqueText);
 
+        // Fill in any saved thought
         String questionID = extraInfo.getStringExtra("questionID");
         final EditText thoughtEditText = (EditText) findViewById(R.id.detailedQ_thought_input);
         DatabaseReference thisSavedQuestion = DBH.users.child(authHelper.thisUserID).child("savedQuestions").child(questionID);
@@ -104,6 +129,25 @@ public class SeeDetailedQuestion extends AppCompatActivity {
         });
 
 
+
+    }
+
+    private void loadProfileImage(Boolean hasProfile, String answererID, ImageView mImageView) {
+        Log.d(TAG, "answererID " + answererID);
+        // Load the image using Glide
+        if (hasProfile) {
+            Glide.with(this /* context */)
+                    .using(new FirebaseImageLoader())
+                    .load(storageHelper.getProfileImageRef(answererID))
+                    .asBitmap()
+                    .into(mImageView);
+        } else {
+            Glide.with(this /* context */)
+                    .using(new FirebaseImageLoader())
+                    .load(storageHelper.getProfileImageRef("blank-user"))
+                    .asBitmap()
+                    .into(mImageView);
+        }
 
     }
 

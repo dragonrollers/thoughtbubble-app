@@ -78,18 +78,19 @@
         android:paddingBottom="8dp"
         android:paddingTop="16dp">
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:id="@+id/profile_image_detailed_question"
-            android:onClick="viewProfile"
-            android:src ="@drawable/anonymous" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
             android:orientation="vertical">
+
+            <!--Commented out because I (BN) didn't want the necessarily anonymous picture at the top of every one of these pages-->
+            <!--<ImageView-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:src="@drawable/anonymous" />-->
 
             <TextView
                 android:id="@+id/detailedQ_question"
@@ -114,13 +115,16 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_marginRight="8dp"
-                    android:src="@drawable/anonymous" />
+                    android:id="@+id/profile_image_detailed_question"
+                    android:onClick="viewProfile"/>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -131,11 +135,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="left"
-                            android:text="ANSWER: "
+                            android:text="REVISED QUESTION: "
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/detailedQ_answer"
+                            android:id="@+id/detailedQ_critique"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -153,11 +157,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="left"
-                            android:text="CRITIQUE"
+                            android:text="ANSWER: "
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/detailedQ_critique"
+                            android:id="@+id/detailedQ_answer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
