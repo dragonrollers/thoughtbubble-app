@@ -204,8 +204,15 @@ public class ProfilePage extends AppCompatActivity {
                     Log.d(TAG, "getting currUser");
                     topics = currUser.getTopics();
                     ArrayList<String> boards = currUser.getBoards();
+                    boards = new ArrayList<>();
+                    boards.add("Mixed Race");
+                    boards.add("Ableism");
+                    boards.add("'Ethical' Capitalism");
                     if (boards != null) {
+                        Log.d(TAG, "boards is not null");
                         createBoardPage(boards);
+                    } else {
+                        Log.d(TAG, "boards is null");
                     }
                     loadProfileImage();
                     loadProfileText();
@@ -235,7 +242,7 @@ public class ProfilePage extends AppCompatActivity {
     private void loadInterests() {
         ScrollView interestSuperContainer = (ScrollView) findViewById(R.id.personal_profile_interests);
 
-        if (interestSuperContainer.getChildCount() > 0){
+        if (interestSuperContainer.getChildCount() > 0) {
             interestSuperContainer.removeAllViews();
         }
 
