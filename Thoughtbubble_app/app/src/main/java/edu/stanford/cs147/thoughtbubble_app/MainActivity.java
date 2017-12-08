@@ -6,20 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -175,7 +169,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             if (resultCode == RESULT_OK) {
                 // Handle the case where this is a new user
                 authHelper.handleNewUserCreation();
+                onSignedInInitialize(); // Redundant if coming from main activity but not if coming from settings->sign-out
                 Toast.makeText(MainActivity.this, "Signed in!", Toast.LENGTH_SHORT).show();
+
                 return;
             } else {
                 // MUST BE SET TO FALSE TO ALLOW FUTURE SIGN-IN
@@ -205,35 +201,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
 
-    // Sign-out menu (hamburger)
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sign_out_menu:
-                // sign out
-                AuthUI.getInstance()
-                        .signOut(this)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            public void onComplete(@NonNull Task<Void> task) {
-                                // user is now signed out
-
-                                // MUST BE SET TO FALSE TO ALLOW FUTURE SIGN-IN
-                                authHelper.signInAlreadyStarted = false;
-                                onSignedOutCleanup();
-                            }
-                        });
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     @Override
     protected void onResume(){

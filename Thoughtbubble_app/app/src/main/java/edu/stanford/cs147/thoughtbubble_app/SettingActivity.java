@@ -31,7 +31,7 @@ public class SettingActivity extends AppCompatActivity {
                         authHelper.signInAlreadyStarted = false;
                     }
                 });
-        startActivityForResult(authHelper.getAuthUIInstance(), RC_SIGN_IN);
+        finish();
     }
 
     public void notImplemented(View view) {
