@@ -77,7 +77,11 @@ public class AskWriteActivity extends AppCompatActivity {
                     Intent selectIntent = new Intent(AskWriteActivity.this, AskSelectActivity.class);
                     startActivityForResult(selectIntent, SELECT_END_CODE);
                 } else {
-                    //TODO: error checking, don't allow sending of blank messages
+                    if (getInputText().trim().length() == 0){
+                        Toast.makeText(AskWriteActivity.this,
+                                "Be sure not to send an empty ask!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     DBH.writeAskToDatabase(getInputText(), authHelper.thisUserID, sendTo[0]);
                     Toast.makeText(AskWriteActivity.this, "Ask Sent!", Toast.LENGTH_SHORT).show();
                     finish();
@@ -119,6 +123,11 @@ public class AskWriteActivity extends AppCompatActivity {
             Toast.makeText(this, "Send To: " + sendTo[1], Toast.LENGTH_SHORT).show();
         }
         if (requestCode == SELECT_END_CODE) {
+            if (getInputText().trim().length() == 0){ //validate user input
+                Toast.makeText(AskWriteActivity.this,
+                        "Be sure not to send an empty ask!", Toast.LENGTH_SHORT).show();
+                return;
+            }
             //was reached by hitting send, then launching the select person activity so the current
             //activity should just write to database and return
             DBH.writeAskToDatabase(getInputText(), authHelper.thisUserID, sendTo[0]);
