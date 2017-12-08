@@ -28,7 +28,9 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
     //ArrayAdapter adapter;
 
     ArrayList<Question> questionArray;
-    private AnonQuestionAdapter questionAdapter;
+    private AnonQuestionAdapter unansweredQuestionAdapter;
+    private QuestionAdapter answeredQuestionAdapter;
+    private ListView listView1;
 
     Question clickedQuestion;
 
@@ -75,15 +77,19 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
         // Setting up places to display content
         questionArray = new ArrayList<Question>();
-        // TODO : REMOVE DUMMY DATA WHEN FULLY IMPLEMENTED
 
 
-        questionAdapter = new AnonQuestionAdapter(this,
+        unansweredQuestionAdapter= new AnonQuestionAdapter(this,
                 R.layout.unanswered_question_items, questionArray);
+
+        answeredQuestionAdapter = new QuestionAdapter(this,
+                R.layout.no_profile_pic_question_row, questionArray);
+
+        Log.d(TAG, "unanswered is null: " + (unansweredQuestionAdapter==null));
+        Log.d(TAG, "answered is null: " + (answeredQuestionAdapter==null));
 
         ListView listView1 = (ListView)findViewById(R.id.ask_unanswered_list);
         listView1.setOnItemClickListener(this);
-        listView1.setAdapter(questionAdapter);
 
         switchToUnansweredHeader();
         loadUnansweredContent();
@@ -181,17 +187,25 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
 
     private void loadUnansweredContent() {
+        Log.d(TAG, "In load unanswered content");
         unansweredView = true;
+        Log.d(TAG, "unanswered is null2: " + (unansweredQuestionAdapter==null));
+        Log.d(TAG, "answered is null2: " + (answeredQuestionAdapter==null));
+        listView1.setAdapter(unansweredQuestionAdapter);
+        Log.d(TAG, "Set unanswered adapter");
         loadUnansweredQuestions();
-        questionAdapter.notifyDataSetChanged();
+        unansweredQuestionAdapter.notifyDataSetChanged();
         switchToUnansweredHeader();
 
     }
 
     private void loadAnsweredContent() {
         unansweredView = false;
+        Log.d(TAG, "unanswered is null3: " + (unansweredQuestionAdapter==null));
+        Log.d(TAG, "answered is null3: " + (answeredQuestionAdapter==null));
+        listView1.setAdapter(answeredQuestionAdapter);
         loadAnsweredQuestions();
-        questionAdapter.notifyDataSetChanged();
+        answeredQuestionAdapter.notifyDataSetChanged();
         switchToAnsweredHeader();
     }
 
@@ -271,7 +285,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
                                 // TODO add more than just question text
                                 questionArray.add(question);
                                 //Log.d(TAG, question.toString());
-                                questionAdapter.notifyDataSetChanged();
+                                unansweredQuestionAdapter.notifyDataSetChanged();
                             }
                         }
 
@@ -290,7 +304,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
                     // TODO add more than just question text
                     questionArray.remove(question.questionText);
-                    questionAdapter.notifyDataSetChanged();
+                    unansweredQuestionAdapter.notifyDataSetChanged();
                 }
 
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
@@ -337,7 +351,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
                             if (question.answerText != null) {
                                 // TODO add more than just question text
                                 questionArray.add(question);
-                                questionAdapter.notifyDataSetChanged();
+                                answeredQuestionAdapter.notifyDataSetChanged();
                             }
                         }
 
@@ -356,7 +370,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
                     // TODO add more than just question text
                     questionArray.remove(question);
-                    questionAdapter.notifyDataSetChanged();
+                    answeredQuestionAdapter.notifyDataSetChanged();
                 }
 
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {}

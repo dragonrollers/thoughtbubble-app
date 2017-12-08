@@ -65,23 +65,25 @@ public class QuestionAdapter extends ArrayAdapter<Question> {
         holder.questionContent.setText(question.questionText);
         holder.answerContent.setText(question.answerText);
 
-        final String answererID = question.answererID;
-        final ImageView profileImage = holder.profileImage;
-        DBH = DatabaseHelper.getInstance();
-        storageHelper = storageHelper.getInstance();
-        DatabaseReference answererHasProfile = DBH.users.child(answererID).child("hasProfile");
-        answererHasProfile.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Boolean hasProfile = dataSnapshot.getValue(Boolean.class);
-                 getProfileImage(hasProfile, answererID, profileImage);
-            }
+        if (holder.profileImage != null) {
+            final String answererID = question.answererID;
+            final ImageView profileImage = holder.profileImage;
+            DBH = DatabaseHelper.getInstance();
+            storageHelper = storageHelper.getInstance();
+            DatabaseReference answererHasProfile = DBH.users.child(answererID).child("hasProfile");
+            answererHasProfile.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Boolean hasProfile = dataSnapshot.getValue(Boolean.class);
+                    getProfileImage(hasProfile, answererID, profileImage);
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
 
         return row;
     }

@@ -92,7 +92,7 @@ public class PublicProfilePage extends AppCompatActivity {
         questionArray = new ArrayList<Question>();
 
         questionAdapter = new QuestionAdapter(this,
-                R.layout.listview_item_row, questionArray);
+                R.layout.no_profile_pic_question_row, questionArray);
 
         final ListView listView1 = (ListView)findViewById(R.id.feed_list);
         //listView1.setOnItemClickListener(this);

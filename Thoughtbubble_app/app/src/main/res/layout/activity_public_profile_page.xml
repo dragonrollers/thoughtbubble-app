@@ -124,6 +124,13 @@
             android:layout_gravity="center"
             android:onClick="askQuestion"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Previously Answered Questions:"
+            android:textSize="18dp" />
+
         <ListView
             android:id="@+id/feed_list"
             android:layout_width="match_parent"
