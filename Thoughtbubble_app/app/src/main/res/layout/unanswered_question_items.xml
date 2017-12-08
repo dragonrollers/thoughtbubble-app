@@ -8,14 +8,15 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/userName"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/anonymous"
+            android:layout_marginRight="6dp"
             />
 
         <LinearLayout
@@ -27,15 +28,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:textStyle="bold"
-                android:textSize="12dp"
-                android:textColor="#000000"/>
+                android:textSize="16dp"
+                android:textColor="@color/colorGrey"/>
 
             <TextView android:id="@+id/answerContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="12dp"
-                android:textColor="#000000"/>
+                android:textColor="@color/tbLightGrey"/>
 
         </LinearLayout>
 
