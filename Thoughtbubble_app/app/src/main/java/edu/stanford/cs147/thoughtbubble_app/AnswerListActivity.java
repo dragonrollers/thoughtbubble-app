@@ -108,6 +108,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
             seeDetailedQuestion.putExtra("questionID", clickedQuestion.questionID);
             seeDetailedQuestion.putExtra("questionText", clickedQuestion.questionText);
             seeDetailedQuestion.putExtra("answerText", clickedQuestion.answerText);
+            seeDetailedQuestion.putExtra("origin", "Answer");
             startActivity(seeDetailedQuestion);
         }
 

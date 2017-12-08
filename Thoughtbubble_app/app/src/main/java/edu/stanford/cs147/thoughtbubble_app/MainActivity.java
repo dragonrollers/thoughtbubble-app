@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         seeDetailedQuestion.putExtra("critiqueText", question.critiqueText);
         seeDetailedQuestion.putExtra("answererID", question.answererID);
         seeDetailedQuestion.putExtra("questionerID", question.questionerID);
+        seeDetailedQuestion.putExtra("origin", "Main");
         startActivity(seeDetailedQuestion);
 
     }

@@ -22,9 +22,19 @@ public class SeeDetailedQuestion extends AppCompatActivity {
         setContentView(R.layout.activity_ask_write);
         setContentView(R.layout.activity_see_detailed_question);
 
+
+
         extraInfo = getIntent();
 
         fillWithQuestionDetails(extraInfo);
+
+        setColor(extraInfo);
+
+    }
+
+    private void setColor(Intent extraInfo){
+
+
 
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
         int unselected = Color.parseColor("#00cca3");
@@ -33,11 +43,18 @@ public class SeeDetailedQuestion extends AppCompatActivity {
         TextView ask = (TextView) findViewById(R.id.Ask);
         TextView discover = (TextView) findViewById(R.id.Discover);
         TextView answer = (TextView) findViewById(R.id.Answer);
+
         profile.setBackgroundColor(unselected);
         ask.setBackgroundColor(unselected);
         answer.setBackgroundColor(unselected);
         discover.setBackgroundColor(selected);
+
+        if(extraInfo.getStringExtra("origin").equals("Answer")){
+            answer.setBackgroundColor(selected);
+            discover.setBackgroundColor(unselected);
+        }
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
+
 
     }
 

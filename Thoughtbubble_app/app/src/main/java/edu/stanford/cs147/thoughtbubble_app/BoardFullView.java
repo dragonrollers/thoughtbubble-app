@@ -215,10 +215,5 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
         addNewBoardFragment.show(fm, null);
 
     }
-
-    public void Setting(View view) {
-        Intent intent = new Intent(this, SettingActivity.class);
-        startActivity(intent);
-    }
 }
 
