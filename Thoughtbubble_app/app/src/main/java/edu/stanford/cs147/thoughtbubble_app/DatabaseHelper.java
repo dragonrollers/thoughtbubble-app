@@ -97,7 +97,7 @@ class DatabaseHelper {
         ref.addListenerForSingleValueEvent(topicsListener);
     }
 
-    public void addBoard(String thisUserID, String boardName) {
+    public String addBoard(String thisUserID, String boardName) {
         Board newBoard = new Board(boardName);
         DatabaseReference newBoardRef = boards.push();
         String newBoardKey = newBoardRef.getKey();
@@ -116,6 +116,7 @@ class DatabaseHelper {
                 }
             }
         });
+        return newBoardKey;
     }
 
     public void addQuestionToBoard(String thisUserID, String boardID, String questionID, String thought) {

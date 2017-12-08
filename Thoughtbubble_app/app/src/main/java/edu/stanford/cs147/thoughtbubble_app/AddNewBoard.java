@@ -9,6 +9,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Jenny on 12/2/17.
  */
@@ -44,12 +53,11 @@ public class AddNewBoard extends DialogFragment {
         update.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                String new_board_name = newBoard.getText().toString();
-                DBH.addBoard(authHelper.thisUserID, new_board_name);
-                int boardID = 0; //TODO GET ID FROM DATABASE
+                final String new_board_name = newBoard.getText().toString();
+                String boardID = DBH.addBoard(authHelper.thisUserID, new_board_name);
                 Intent indivBoardView = new Intent(v.getContext(), IndivBoardView.class);
                 indivBoardView.putExtra("CURR_BOARD", new_board_name);
-                //indivBoardView.putExtra("boardID", boardID);
+                indivBoardView.putExtra("boardID", boardID);
                 startActivity(indivBoardView);
                 dismiss();
             }
