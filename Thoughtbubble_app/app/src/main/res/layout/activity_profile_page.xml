@@ -98,10 +98,17 @@
                     android:textSize="24dp" />
             </LinearLayout>
 
-            <org.apmem.tools.layouts.FlowLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/personal_profile_interests"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></org.apmem.tools.layouts.FlowLayout>
+                android:layout_height="wrap_content"
+                android:id="@+id/personal_profile_interests">
+                <!--<org.apmem.tools.layouts.FlowLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/personal_profile_interests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </org.apmem.tools.layouts.FlowLayout> -->
+            </ScrollView>
+
 
 
             <!--  <LinearLayout

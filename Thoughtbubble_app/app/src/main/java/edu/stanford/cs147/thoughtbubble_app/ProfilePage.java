@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
@@ -75,10 +76,6 @@ public class ProfilePage extends AppCompatActivity {
         answer.setBackgroundColor(unselected);
         discover.setBackgroundColor(unselected);
         // Setting the color of the top bar -- pretty hacky -- do not touch this block//
-
-        // name edit box
-//        LinearLayout editName = (LinearLayout) findViewById(R.id.editNameBox);
-//        editName.setVisibility(View.GONE);
 
     }
 
@@ -236,7 +233,13 @@ public class ProfilePage extends AppCompatActivity {
     }
 
     private void loadInterests() {
+        ScrollView interestSuperContainer = (ScrollView) findViewById(R.id.personal_profile_interests);
 
+        if (interestSuperContainer.getChildCount() > 0){
+            interestSuperContainer.removeAllViews();
+        }
+
+        org.apmem.tools.layouts.FlowLayout interestContainer = new org.apmem.tools.layouts.FlowLayout(this);
 
         if (topics == null) {
             topics = new ArrayList<String>();
@@ -259,6 +262,7 @@ public class ProfilePage extends AppCompatActivity {
                 }
             });
 
+            interestContainer.addView(btn);
             //profilelayout.addView(btn);
         }
         Button btn = new Button(this);
@@ -273,12 +277,15 @@ public class ProfilePage extends AppCompatActivity {
                 System.out.println(dialogFragment.getActivity());
             }
         });
+
+        interestContainer.addView(btn);
         //profilelayout.addView(btn);
+        interestSuperContainer.addView(interestContainer);
     }
 
     private void loadProfileText() {
         loadName();
-        //loadInterests();
+        loadInterests();
     }
 
     private void loadProfileImage() {
