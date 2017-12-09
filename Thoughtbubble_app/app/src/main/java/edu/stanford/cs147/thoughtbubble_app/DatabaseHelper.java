@@ -97,7 +97,7 @@ class DatabaseHelper {
         ref.addListenerForSingleValueEvent(topicsListener);
     }
 
-    public void addBoard(String thisUserID, String boardName) {
+    public String addBoard(String thisUserID, String boardName) {
         Board newBoard = new Board(boardName);
         DatabaseReference newBoardRef = boards.push();
         String newBoardKey = newBoardRef.getKey();
@@ -116,11 +116,24 @@ class DatabaseHelper {
                 }
             }
         });
+        return newBoardKey;
     }
 
-    public void addQuestionToBoard(String thisUserID, String questionID, String thought) {
-        DatabaseReference ref = users.child(thisUserID).child("savedQuestions");
-        ref.child(questionID).setValue(thought);
+
+    public void addQuestionToBoard(String thisUserID, String boardID, String questionID, String thought) {
+        Map updatedData = new HashMap();
+        updatedData.put("users/" + thisUserID + "/savedQuestions/" + questionID, thought);
+        updatedData.put("boards/" + boardID + "/questions/" + questionID, thought);
+
+        databaseReference.updateChildren(updatedData, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    Log.e(TAG, "Problem writing to database: " + databaseError.toString());
+                }
+            }
+        });
+
     }
 
     public void writeAskToDatabase(String questionText, String thisUserID, String sendToID) {
