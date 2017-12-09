@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -41,9 +42,13 @@ public class SeeDetailedQuestion extends AppCompatActivity {
         setContentView(R.layout.activity_ask_write);
         setContentView(R.layout.activity_see_detailed_question);
 
-
-
         extraInfo = getIntent();
+
+        TextView answer = (TextView) findViewById(R.id.detailedQ_answer);
+        answer.setMovementMethod(new ScrollingMovementMethod());
+
+        TextView critique = (TextView) findViewById(R.id.detailedQ_critique);
+        critique.setMovementMethod(new ScrollingMovementMethod());
 
         fillWithQuestionDetails(extraInfo);
 

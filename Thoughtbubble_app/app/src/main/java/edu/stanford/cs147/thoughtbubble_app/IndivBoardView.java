@@ -98,8 +98,6 @@ public class IndivBoardView extends AppCompatActivity implements AdapterView.OnI
 
     private void loadQuestions() {
 
-        System.out.println("3");
-        System.out.println(questionReflections);
         for (Map.Entry<String, String> entry : questionReflections.entrySet()) {
             String questionID = entry.getKey();
             questionIDs.add(questionID);
