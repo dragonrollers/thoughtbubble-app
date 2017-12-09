@@ -87,8 +87,10 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
 
         Log.d(TAG, "unanswered is null: " + (unansweredQuestionAdapter==null));
         Log.d(TAG, "answered is null: " + (answeredQuestionAdapter==null));
+        Log.d(TAG, "listView is null: " + (listView1==null));
 
-        ListView listView1 = (ListView)findViewById(R.id.ask_unanswered_list);
+
+        listView1 = (ListView)findViewById(R.id.ask_unanswered_list);
         listView1.setOnItemClickListener(this);
 
         switchToUnansweredHeader();
@@ -191,6 +193,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
         unansweredView = true;
         Log.d(TAG, "unanswered is null2: " + (unansweredQuestionAdapter==null));
         Log.d(TAG, "answered is null2: " + (answeredQuestionAdapter==null));
+        Log.d(TAG, "listView is null2: " + (listView1==null));
         listView1.setAdapter(unansweredQuestionAdapter);
         Log.d(TAG, "Set unanswered adapter");
         loadUnansweredQuestions();
@@ -203,6 +206,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
         unansweredView = false;
         Log.d(TAG, "unanswered is null3: " + (unansweredQuestionAdapter==null));
         Log.d(TAG, "answered is null3: " + (answeredQuestionAdapter==null));
+        Log.d(TAG, "listView is null3: " + (listView1==null));
         listView1.setAdapter(answeredQuestionAdapter);
         loadAnsweredQuestions();
         answeredQuestionAdapter.notifyDataSetChanged();
