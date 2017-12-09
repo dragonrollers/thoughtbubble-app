@@ -111,7 +111,7 @@ public class AnswerListActivity extends AppCompatActivity implements AdapterView
             startActivity(writeAnswerActivity);
         } else {
             Intent seeDetailedQuestion = new Intent(this, SeeDetailedQuestion.class);
-            //TODO: add the question id as an int to the intent
+            seeDetailedQuestion.putExtra("answererID", clickedQuestion.answererID);
             seeDetailedQuestion.putExtra("questionID", clickedQuestion.questionID);
             seeDetailedQuestion.putExtra("questionText", clickedQuestion.questionText);
             seeDetailedQuestion.putExtra("answerText", clickedQuestion.answerText);
