@@ -36,6 +36,7 @@ public class IndivBoardView extends AppCompatActivity implements AdapterView.OnI
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("1");
         super.onCreate(savedInstanceState);
 
         DBH = DatabaseHelper.getInstance();
@@ -49,6 +50,7 @@ public class IndivBoardView extends AppCompatActivity implements AdapterView.OnI
 
         questions = new ArrayList<>();
         questionIDs = new ArrayList<>();
+
         questionAdapter = new QuestionAdapter(this,
                 R.layout.listview_item_row, questions);
 
@@ -61,11 +63,17 @@ public class IndivBoardView extends AppCompatActivity implements AdapterView.OnI
         Log.d(TAG, "boardName=" + boardName + " boardID=" + boardID);
         TextView title = (TextView) findViewById(R.id.boardTitle);
         title.setText(boardName);
+
         readBoardContent();
+        System.out.println("question");
+        System.out.println(questions);
+        //readBoardContent();
 
     }
 
     private void readBoardContent() {
+
+        System.out.println("2");
 
         DatabaseReference ref = DBH.boards.child(boardID);
         if (currBoardListener == null) {
@@ -89,6 +97,9 @@ public class IndivBoardView extends AppCompatActivity implements AdapterView.OnI
     }
 
     private void loadQuestions() {
+
+        System.out.println("3");
+        System.out.println(questionReflections);
         for (Map.Entry<String, String> entry : questionReflections.entrySet()) {
             String questionID = entry.getKey();
             questionIDs.add(questionID);
@@ -113,6 +124,7 @@ public class IndivBoardView extends AppCompatActivity implements AdapterView.OnI
 
     @Override
     public void onItemClick(AdapterView<?> list, View row, int index, long rowID) {
+
         Question question = questions.get(index);
         String questionID = questionIDs.get(index);
         String reflection = questionReflections.get(questionID);

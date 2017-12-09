@@ -59,9 +59,9 @@ public class QuestionAdapter extends ArrayAdapter<Question> {
             holder = (QuestionHolder)row.getTag();
         }
 
-
+        System.out.println(position);
+        System.out.println(data.toString());
         Question question = data.get(position);
-
         holder.questionContent.setText(question.questionText);
         holder.answerContent.setText(question.answerText);
 
