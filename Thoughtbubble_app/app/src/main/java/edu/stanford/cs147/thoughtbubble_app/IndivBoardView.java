@@ -97,6 +97,7 @@ public class IndivBoardView extends AppCompatActivity implements AdapterView.OnI
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Question question = dataSnapshot.getValue(Question.class);
+                    question.questionID = dataSnapshot.getKey();
                     questions.add(question);
                     questionAdapter.notifyDataSetChanged();
                 }

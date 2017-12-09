@@ -119,11 +119,20 @@ class DatabaseHelper {
     }
 
     public void addQuestionToBoard(String thisUserID, String boardID, String questionID, String thought) {
-        DatabaseReference ref = users.child(thisUserID).child("savedQuestions");
-        ref.child(questionID).setValue(thought);
+        Map updatedData = new HashMap();
+        updatedData.put("users/" + thisUserID + "/savedQuestions/" + questionID, thought);
+        updatedData.put("boards/" + boardID + "/questions/" + questionID, thought);
 
-        ref = boards.child(boardID).child("questions");
-        ref.child(questionID).setValue(thought);
+        databaseReference.updateChildren(updatedData, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    Log.e(TAG, "Problem writing to database: " + databaseError.toString());
+                }
+            }
+        });
+
+
     }
 
     public void writeAskToDatabase(String questionText, String thisUserID, String sendToID) {
