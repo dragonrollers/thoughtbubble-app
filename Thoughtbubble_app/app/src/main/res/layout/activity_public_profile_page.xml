@@ -4,18 +4,19 @@
     android:id="@+id/activity_public_profile_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
     android:orientation="vertical"
     android:paddingBottom="0dp"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    android:background="@color/colorWhite"
     tools:context="edu.stanford.cs147.thoughtbubble_app.PublicProfilePage">
 
+    <!-- Toolbar -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:orientation="horizontal">
 
 
         <ImageView
@@ -24,54 +25,57 @@
             android:layout_height="match_parent"
             android:background="#00cca3"
             android:onClick="Setting"
-            android:src="@drawable/settings"/>
+            android:src="@drawable/settings" />
 
         <Button
             android:id="@+id/Profile"
             android:layout_width="fill_parent"
-            android:layout_weight="1"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:onClick="ProfilePage"
-            android:text="User" />
+            android:text="User"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/Discover"
             android:layout_width="fill_parent"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
+            android:layout_weight="1"
             android:onClick="DiscoverPage"
-            android:text="Discover" />
+            android:text="Discover"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/Ask"
             android:layout_width="fill_parent"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
+            android:layout_weight="1"
             android:onClick="AskPage"
-            android:text="Ask" />
+            android:text="Ask"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/Answer"
             android:layout_width="fill_parent"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
+            android:layout_weight="1"
             android:onClick="AnswerPage"
-            android:text="Answer" />
+            android:text="Answer"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp">
 
         <!-- User Profile -->
         <LinearLayout
@@ -85,15 +89,15 @@
                 android:id="@+id/profile_image"
                 android:layout_width="85dp"
                 android:layout_height="85dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom = "8dp" />
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp" />
 
             <LinearLayout
                 android:id="@+id/personal_profile_name_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/personal_profile_name"
@@ -114,15 +118,21 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:background="@android:color/darker_gray" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ask Question"
             android:layout_gravity="center"
-            android:onClick="askQuestion"/>
+            android:background="@drawable/whitetealbutton"
+            android:onClick="askQuestion"
+            android:text="Ask Question"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:textColor="@color/tbTeal"
+            android:textSize="18dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -134,8 +144,8 @@
         <ListView
             android:id="@+id/feed_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </ListView>
+            android:layout_height="250dp"
+            android:layout_marginTop="8dp"></ListView>
 
 
     </LinearLayout>

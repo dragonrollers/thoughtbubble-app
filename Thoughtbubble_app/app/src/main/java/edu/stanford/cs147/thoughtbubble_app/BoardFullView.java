@@ -164,7 +164,7 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
             String boardName = BoardArray.get(i);
             String boardID = boardIDs.get(i);
             String thisUserID = authHelper.thisUserID;
-            mDatabaseHelper.addQuestionToBoard(thisUserID, questionID, reflection);
+            mDatabaseHelper.addQuestionToBoard(thisUserID, boardID, questionID, reflection);
             Intent indivBoard = new Intent(this, IndivBoardView.class);
             indivBoard.putExtra("CURR_BOARD", boardName);
             indivBoard.putExtra("boardID", boardID);
@@ -178,12 +178,13 @@ public class BoardFullView extends AppCompatActivity implements AdapterView.OnIt
     }
 
     public void NewBoard(View view) {
-        // TODO: SAVE THE NEW BOARD INTO THE DATABASE
-
         FragmentManager fm = getFragmentManager();
         AddNewBoard addNewBoardFragment = new AddNewBoard();
+        Bundle args = new Bundle();
+        args.putString("questionID", questionID);
+        args.putString("reflection", reflection);
+        addNewBoardFragment.setArguments(args);
         addNewBoardFragment.show(fm, null);
-
     }
 }
 
